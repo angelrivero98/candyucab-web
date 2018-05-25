@@ -11,13 +11,16 @@ class RegistrationForm(FlaskForm):
     confim_password = PasswordField('Confirm Password',validators=[DataRequired(),EqualTo('password')])
     submit=SubmitField('Sign Up')
     def validate_username(self,username):
-        cur = Database.cursor_dict()
+
+        db = Database()
+        cur = db.cursor_dict()
         cur.execute("SELECT username from public.user WHERE username = %s;",(username.data,))
         if cur.fetchone():
             raise ValidationError('That username is taken')
 
     def validate_email(self,email):
-        cur = Database.cursor_dict()
+        db = Database()
+        cur = db.cursor_dict()
         cur.execute("SELECT email from public.user WHERE email = %s;",(email.data,))
         if cur.fetchone():
             raise ValidationError('That email is taken')

@@ -5,7 +5,8 @@ import psycopg2,psycopg2.extras
 
 @login_manager.user_loader
 def load_user(user_id):
-    cur = Database.cursor_dict()
+    db = Database()
+    cur = db.cursor_dict()
     cur.execute("SELECT * from public.user WHERE id = %s;",(int(user_id),))
     user = cur.fetchone()
     return User(user)
