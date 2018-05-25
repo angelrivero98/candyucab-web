@@ -9,7 +9,7 @@ from flask_login import login_user,current_user,logout_user,login_required
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html')
+   return render_template('home.html')
 
 @app.route("/register",methods=['GET','POST'])
 def register():
@@ -18,7 +18,8 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        cur = Database.cursor_dict()
+        db = Database()
+        cur = db.cursor_dict()
         try:
             cur.execute("""INSERT INTO public.user (username, email, password)
             VALUES (%s, %s, %s);""",
@@ -40,7 +41,8 @@ def login():
         return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        cur = Database.cursor_dict()
+        db = Database()
+        cur = db.cursor_dict()
         cur.execute("SELECT * from public.user WHERE email = %s;",(form.email.data,))
         user = User(cur.fetchone())
         if user and bcrypt.check_password_hash(user.password,form.password.data):
