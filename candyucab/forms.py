@@ -5,28 +5,28 @@ from candyucab.db import Database
 import psycopg2,psycopg2.extras
 
 class RegistrationForm(FlaskForm):
-    username=StringField('Username',validators=[DataRequired(),Length(min=2,max=20)])
+    username=StringField('Nombre de Usuario',validators=[DataRequired(),Length(min=2,max=20)])
     email = StringField('Email',validators=[DataRequired(),Email()])
-    password = PasswordField('Password',validators=[DataRequired()])
-    confim_password = PasswordField('Confirm Password',validators=[DataRequired(),EqualTo('password')])
-    submit=SubmitField('Sign Up')
+    password = PasswordField('Contraseña',validators=[DataRequired()])
+    confim_password = PasswordField('Confirmar Contraseña',validators=[DataRequired(),EqualTo('password')])
+    submit=SubmitField('Registrate')
     def validate_username(self,username):
 
         db = Database()
         cur = db.cursor_dict()
         cur.execute("SELECT username from public.user WHERE username = %s;",(username.data,))
         if cur.fetchone():
-            raise ValidationError('That username is taken')
+            raise ValidationError('El nombre de usuario ya esta tomado')
 
     def validate_email(self,email):
         db = Database()
         cur = db.cursor_dict()
         cur.execute("SELECT email from public.user WHERE email = %s;",(email.data,))
         if cur.fetchone():
-            raise ValidationError('That email is taken')
+            raise ValidationError('El email ya esta tomado')
 
 class LoginForm(FlaskForm):
-    email = StringField('Email',validators=[DataRequired(),Email()])
+    username = StringField('Username',validators=[DataRequired()])
     password = PasswordField('Password',validators=[DataRequired()])
-    remember =BooleanField('Remember Me')
-    submit=SubmitField('Sign In')
+    remember =BooleanField('Recuerdame')
+    submit=SubmitField('Iniciar')

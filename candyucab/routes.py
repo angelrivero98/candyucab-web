@@ -28,12 +28,12 @@ def register():
             print("ERROR inserting into user")
             print("Tried: INSERT INTO user (username, email, password) VALUES ('%s', '%s', %s);" %
             (form.username.data, form.email.data, hashed_pw) )
-            Database.retroceder()
-        Database.actualizar()
+            db.retroceder()
+        db.actualizar()
 
         flash('Your account have been created','success')
         return redirect(url_for('login'))
-    return render_template('index.html',title='Register',form=form)
+    return render_template('register.html',title='Register',form=form)
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -43,7 +43,7 @@ def login():
     if form.validate_on_submit():
         db = Database()
         cur = db.cursor_dict()
-        cur.execute("SELECT * from public.user WHERE email = %s;",(form.email.data,))
+        cur.execute("SELECT * from public.user WHERE username = %s;",(form.username.data,))
         user = User(cur.fetchone())
         if user and bcrypt.check_password_hash(user.password,form.password.data):
             login_user(user,remember=form.remember.data)
@@ -51,7 +51,7 @@ def login():
             return redirect(url_for('home'))
         else:
             flash('Login Unsuccesful','danger')
-    return render_template('index.html',title='Login',form=form)
+    return render_template('login.html',title='Login',form=form)
 
 @app.route("/logout")
 def logout():
