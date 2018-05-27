@@ -47,7 +47,7 @@ CREATE TABLE personadecontacto (
 );
 
 CREATE TABLE usuario (
-  u_id numeric(8),
+  u_id integer,
   u_username varchar(20) NOT NULL UNIQUE,
   u_password varchar(60) NOT NULL,
   cj_id numeric(8),

@@ -21,13 +21,13 @@ def register():
         db = Database()
         cur = db.cursor_dict()
         try:
-            cur.execute("""INSERT INTO public.user (username, email, password)
-            VALUES (%s, %s, %s);""",
-            (form.username.data, form.email.data, hashed_pw))
+            cur.execute("""INSERT INTO usuario (u_username, u_password)
+            VALUES (%s, %s);""",
+            (form.username.data,hashed_pw))
         except:
             print("ERROR inserting into user")
             print("Tried: INSERT INTO user (username, email, password) VALUES ('%s', '%s', %s);" %
-            (form.username.data, form.email.data, hashed_pw) )
+            (form.username.data, hashed_pw) )
             db.retroceder()
         db.actualizar()
 
@@ -43,9 +43,9 @@ def login():
     if form.validate_on_submit():
         db = Database()
         cur = db.cursor_dict()
-        cur.execute("SELECT * from public.user WHERE username = %s;",(form.username.data,))
+        cur.execute("SELECT * from usuario WHERE u_username = %s;",(form.username.data,))
         user = User(cur.fetchone())
-        if user and bcrypt.check_password_hash(user.password,form.password.data):
+        if user and bcrypt.check_password_hash(user.u_password,form.password.data):
             login_user(user,remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(url_for('home'))

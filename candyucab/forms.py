@@ -6,7 +6,7 @@ import psycopg2,psycopg2.extras
 
 class RegistrationForm(FlaskForm):
     username=StringField('Nombre de Usuario',validators=[DataRequired(),Length(min=2,max=20)])
-    email = StringField('Email',validators=[DataRequired(),Email()])
+    #email = StringField('Email',validators=[DataRequired(),Email()])
     password = PasswordField('Contraseña',validators=[DataRequired()])
     confim_password = PasswordField('Confirmar Contraseña',validators=[DataRequired(),EqualTo('password')])
     submit=SubmitField('Registrate')
@@ -14,16 +14,16 @@ class RegistrationForm(FlaskForm):
 
         db = Database()
         cur = db.cursor_dict()
-        cur.execute("SELECT username from public.user WHERE username = %s;",(username.data,))
+        cur.execute("SELECT u_username from usuario WHERE u_username = %s;",(username.data,))
         if cur.fetchone():
             raise ValidationError('El nombre de usuario ya esta tomado')
 
-    def validate_email(self,email):
-        db = Database()
-        cur = db.cursor_dict()
-        cur.execute("SELECT email from public.user WHERE email = %s;",(email.data,))
-        if cur.fetchone():
-            raise ValidationError('El email ya esta tomado')
+    #def validate_email(self,email):
+        #db = Database()
+        #cur = db.cursor_dict()
+        #cur.execute("SELECT email from public.user WHERE email = %s;",(email.data,))
+        #if cur.fetchone():
+            #raise ValidationError('El email ya esta tomado')
 
 class LoginForm(FlaskForm):
     username = StringField('Username',validators=[DataRequired()])

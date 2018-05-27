@@ -7,7 +7,7 @@ import psycopg2,psycopg2.extras
 def load_user(user_id):
     db = Database()
     cur = db.cursor_dict()
-    cur.execute("SELECT * from public.user WHERE id = %s;",(int(user_id),))
+    cur.execute("SELECT * from usuario WHERE u_id = %s;",(int(user_id),))
     user = cur.fetchone()
     return User(user)
 
@@ -20,7 +20,7 @@ class User (object):
         except KeyError:
             raise AttributeError()
     def get_id(self):
-        return self._user['id']
+        return self._user['u_id']
     def is_active(self):
         return self._user['active']
     def is_anonymous(self):
