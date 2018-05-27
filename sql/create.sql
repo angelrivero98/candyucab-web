@@ -13,7 +13,7 @@ CREATE TABLE clientenatural (
   cn_ap2 varchar(20) NOT NULL,
   l_id numeric(8) NOT NULL,
   t_cod numeric(8),
-  CONSTRAINT pk_cn PRIMARY KEY (cn_id)
+  CONSTRAINT pk_clienten PRIMARY KEY (cn_id)
 );
 
 CREATE TABLE clientejuridico (
@@ -27,7 +27,7 @@ CREATE TABLE clientejuridico (
   l_id numeric(8) NOT NULL,
   l_id2 numeric(8) NOT NULL,
   t_cod numeric(8),
-  CONSTRAINT pk_cj PRIMARY KEY (cj_id)
+  CONSTRAINT pk_clientej PRIMARY KEY (cj_id)
 );
 
 CREATE TABLE telefono (
@@ -35,7 +35,7 @@ CREATE TABLE telefono (
   t_num numeric(10) NOT NULL,
   cj_id numeric(8),
   cn_id numeric(8),
-  CONSTRAINT pk_t PRIMARY KEY (t_id)
+  CONSTRAINT pk_telefono PRIMARY KEY (t_id)
 );
 
 CREATE TABLE personadecontacto (
@@ -43,5 +43,60 @@ CREATE TABLE personadecontacto (
   pc_nombre varchar(20) NOT NULL,
   pc_apellido varchar(20) NOT NULL,
   cj_id numeric(8) NOT NULL,
-  CONSTRAINT pk_pc PRIMARY KEY (pc_id)
+  CONSTRAINT pk_percontacto PRIMARY KEY (pc_id)
+);
+
+CREATE TABLE usuario (
+  u_id numeric(8),
+  u_username varchar(20) NOT NULL UNIQUE,
+  u_password varchar(60) NOT NULL,
+  cj_id numeric(8),
+  cn_id numeric(8),
+  e_id numeric(8),
+  CONSTRAINT pk_usuario PRIMARY KEY (u_id)
+);
+
+CREATE TABLE empleado (
+  e_id numeric(8),
+  e_nombre varchar(20) NOT NULL,
+  e_apellido varchar(20) NOT NULL,
+  e_ci numeric(15) NOT NULL UNIQUE,
+  e_salario numeric(15) NOT NULL,
+  CONSTRAINT pk_empleado PRIMARY KEY (e_id)
+);
+
+CREATE TABLE permiso(
+  p_id numeric(8),
+  p_tipo varchar(15) NOT NULL,
+  CONSTRAINT pk_permiso PRIMARY KEY (p_id)
+);
+
+CREATE TABLE lugar (
+  l_id numeric(8),
+  l_tipo char(1) NOT NULL,
+  l_nombre varchar(15) NOT NULL,
+  fk_lugar numeric(8),
+  CONSTRAINT pk_lugar PRIMARY KEY (l_id),
+  CONSTRAINT fk_lugar_lugar FOREIGN KEY (fk_lugar) references lugar(l_id),
+  CONSTRAINT check_tipo CHECK(l_tipo in ('M','P','E'))
+);
+
+CREATE TABLE departamento (
+  d_id numeric(8),
+  d_nombre varchar(20) NOT NULL,
+  CONSTRAINT pk_departamento PRIMARY KEY (d_id)
+);
+
+CREATE TABLE fabrica (
+  f_id numeric(8),
+  f_nombre varchar(20) NOT NULL,
+  l_id numeric(8) NOT NULL,
+  CONSTRAINT pk_fabrica PRIMARY KEY (f_id)
+);
+
+CREATE TABLE tienda (
+  ti_id numeric(8),
+  ti_tipo varchar(20) NOT NULL,
+  l_id numeric(8) NOT NULL,
+  CONSTRAINT pk_tienda PRIMARY KEY (ti_id)
 );
