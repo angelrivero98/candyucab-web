@@ -44,13 +44,17 @@ def login():
         db = Database()
         cur = db.cursor_dict()
         cur.execute("SELECT * from usuario WHERE u_username = %s;",(form.username.data,))
-        user = User(cur.fetchone())
-        if user and bcrypt.check_password_hash(user.u_password,form.password.data):
-            login_user(user,remember=form.remember.data)
-            next_page = request.args.get('next')
-            return redirect(url_for('home'))
+        user_type = cur.fetchone()
+        if user_type:
+            user = User(user_type)
+            if user and bcrypt.check_password_hash(user.u_password,form.password.data):
+                login_user(user,remember=form.remember.data)
+                next_page = request.args.get('next')
+                return redirect(url_for('home'))
+            else:
+                flash('Contraseña Incorrecta','danger')
         else:
-            flash('Login Unsuccesful','danger')
+            flash('Usuario no encontrado','danger')        
     return render_template('login.html',title='Login',form=form)
 
 @app.route("/logout")
