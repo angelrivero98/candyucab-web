@@ -3,7 +3,6 @@ import psycopg2,psycopg2.extras
 class Database (object):
     def __init__(self):
         self.connectionString = 'dbname=proyecto user=postgres password=angel123 host=localhost'
-        print (self.connectionString)
         try:
             self.conn = psycopg2.connect(self.connectionString)
         except:

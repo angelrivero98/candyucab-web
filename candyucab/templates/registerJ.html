@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../static/estilo1.css">
+    <title>Registro</title>
+  </head>
+  <body style="background-color:#e06666;">
+    {%block content%}
+    <div class="container" style="background-color:white; ">
+          <form class="" action="" method="POST" style="margin: 0 auto; width:40% ">
+            {{form.hidden_tag()}}
+            <fieldset class="form-group">
+              <img src="../static/dulce.png" alt="" class="rounded mx-auto d-block">
+            <h2 class="border-bottom mb-4">Registro: Cliente Juridico</h2>
+                <div class="form-group">
+                {{ form.rif.label(class="form-control-label") }}
+                {% if form.rif.errors%}
+                  {{form.rif(class="form-control form-control-lg is-invalid")}}
+                  <div class="invalid-feddback">
+                    {%for error in form.rif.errors%}
+                      <span>{{error}}</span>
+                    {%endfor%}
+                  </div>
+                {% else %}
+                    {{ form.rif(class="form-control form-control-lg") }}
+                {%endif%}
+              </div>
+              <div class="form-group">
+              {{ form.email.label(class="form-control-label") }}
+              {% if form.email.errors%}
+                {{form.email(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feddback">
+                  {%for error in form.email.errors%}
+                    <span>{{error}}</span>
+                  {%endfor%}
+                </div>
+              {% else %}
+                  {{ form.email(class="form-control form-control-lg") }}
+              {%endif%}
+            </div>
+            <div class="form-group">
+            {{ form.demcom.label(class="form-control-label") }}
+            {% if form.demcom.errors%}
+              {{form.demcom(class="form-control form-control-lg is-invalid")}}
+              <div class="invalid-feddback">
+                {%for error in form.demcom.errors%}
+                  <span>{{error}}</span>
+                {%endfor%}
+              </div>
+            {% else %}
+                {{ form.demcom(class="form-control form-control-lg") }}
+            {%endif%}
+          </div>
+                    <div class="form-group">
+                    {{ form.razsoc.label(class="form-control-label") }}
+                    {% if form.razsoc.errors%}
+                      {{form.razsoc(class="form-control form-control-lg is-invalid")}}
+                      <div class="invalid-feddback">
+                        {%for error in form.razsoc.errors%}
+                          <span>{{error}}</span>
+                        {%endfor%}
+                      </div>
+                    {% else %}
+                        {{ form.razsoc(class="form-control form-control-lg") }}
+                    {%endif%}
+                  </div>
+                  <div class="form-group">
+                  {{ form.pagweb.label(class="form-control-label") }}
+                  {% if form.pagweb.errors%}
+                    {{form.pagweb(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feddback">
+                      {%for error in form.pagweb.errors%}
+                        <span>{{error}}</span>
+                      {%endfor%}
+                    </div>
+                  {% else %}
+                      {{ form.pagweb(class="form-control form-control-lg") }}
+                  {%endif%}
+                </div>
+                <div class="form-group">
+                {{ form.capdis.label(class="form-control-label") }}
+                {% if form.capdis.errors%}
+                  {{form.capdis(class="form-control form-control-lg is-invalid")}}
+                  <div class="invalid-feddback">
+                    {%for error in form.capdis.errors%}
+                      <span>{{error}}</span>
+                    {%endfor%}
+                  </div>
+                {% else %}
+                    {{ form.capdis(class="form-control form-control-lg") }}
+                {%endif%}
+              </div>
+              <div class="form-row">
+                <legend class="border-bottom mb-4">Direccion Fiscal</legend>
+              <div class="col">
+                {{ form.est1.label(class="form-control-label") }}
+                {% if form.est1.errors%}
+                  {{form.est1(class="form-control form-control-lg is-invalid")}}
+                  <div class="invalid-feddback">
+                    {%for error in form.est1.errors%}
+                      <span>{{error}}</span>
+                    {%endfor%}
+                  </div>
+                {% else %}
+                    {{ form.est1(class="form-control form-control-lg") }}
+                {%endif%}
+              </div>
+              <div class="col">
+                {{ form.municipio1.label(class="form-control-label") }}
+                {% if form.municipio1.errors%}
+                  {{form.municipio1(class="form-control form-control-lg is-invalid")}}
+                  <div class="invalid-feddback">
+                    {%for error in form.municipio1.errors%}
+                      <span>{{error}}</span>
+                    {%endfor%}
+                  </div>
+                {% else %}
+                    {{ form.municipio1(class="form-control form-control-lg") }}
+                {%endif%}
+              </div>
+              <div class="col">
+                {{ form.par1.label(class="form-control-label") }}
+                {% if form.par1.errors%}
+                  {{form.par1(class="form-control form-control-lg is-invalid")}}
+                  <div class="invalid-feddback">
+                    {%for error in form.par1.errors%}
+                      <span>{{error}}</span>
+                    {%endfor%}
+                  </div>
+                {% else %}
+                    {{ form.par1(class="form-control form-control-lg") }}
+                {%endif%}
+              </div>
+            </div>
+            <div class="form-row">
+              <legend class="border-bottom mb-4">Direccion Fisica</legend>
+            <div class="col">
+              {{ form.est2.label(class="form-control-label") }}
+              {% if form.est2.errors%}
+                {{form.est2(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feddback">
+                  {%for error in form.est2.errors%}
+                    <span>{{error}}</span>
+                  {%endfor%}
+                </div>
+              {% else %}
+                  {{ form.est2(class="form-control form-control-lg") }}
+              {%endif%}
+            </div>
+            <div class="col">
+              {{ form.municipio2.label(class="form-control-label") }}
+              {% if form.municipio2.errors%}
+                {{form.municipio2(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feddback">
+                  {%for error in form.municipio2.errors%}
+                    <span>{{error}}</span>
+                  {%endfor%}
+                </div>
+              {% else %}
+                  {{ form.municipio2(class="form-control form-control-lg") }}
+              {%endif%}
+            </div>
+            <div class="col">
+              {{ form.par2.label(class="form-control-label") }}
+              {% if form.par2.errors%}
+                {{form.par2(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feddback">
+                  {%for error in form.par2.errors%}
+                    <span>{{error}}</span>
+                  {%endfor%}
+                </div>
+              {% else %}
+                  {{ form.par2(class="form-control form-control-lg") }}
+              {%endif%}
+            </div>
+          </div>
+            <div class="form-group">
+              {{ form.username.label(class="form-control-label") }}
+
+            {% if form.username.errors%}
+              {{form.username(class="form-control form-control-lg is-invalid")}}
+              <div class="invalid-feddback">
+                {%for error in form.username.errors%}
+                  <span>{{error}}</span>
+                {%endfor%}
+              </div>
+            {% else %}
+                {{ form.username(class="form-control form-control-lg") }}
+            {%endif%}
+            </div>
+          <div class="form-group">
+          {{ form.password.label(class="form-control-label") }}
+          {% if form.password.errors%}
+            {{form.password(class="form-control form-control-lg is-invalid")}}
+            <div class="invalid-feddback">
+              {%for error in form.password.errors%}
+                <span>{{error}}</span>
+              {%endfor%}
+            </div>
+          {% else %}
+              {{ form.password(class="form-control form-control-lg") }}
+          {%endif%}
+        </div>
+        <div class="form-group">
+          {{ form.confim_password.label(class="form-control-label") }}
+          {% if form.confim_password.errors%}
+            {{form.confim_password(class="form-control form-control-lg is-invalid")}}
+            <div class="invalid-feddback">
+              {%for error in form.confim_password.errors%}
+                <span>{{error}}</span>
+              {%endfor%}
+            </div>
+          {% else %}
+              {{ form.confim_password(class="form-control form-control-lg") }}
+          {%endif%}
+        </div>
+            </fieldset>
+            <div class="form-group">
+              <div class="form-group">
+          {{ form.submit(class="btn btn-outline-info") }}
+          </div>
+            </div>
+          </form>
+
+    </div>
+    <div class="border-top pt-3">
+      <small class="text-muted">
+        Tienes cuenta? <a class="ml-2" href="{{url_for('login')}}">Ingresar</a>
+      </small>
+
+    </div>
+    {%endblock content%}
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/estilo1.js"></script>
+  </body>
+</html>
