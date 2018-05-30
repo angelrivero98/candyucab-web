@@ -72,12 +72,11 @@ CREATE TABLE permiso(
 );
 
 CREATE TABLE lugar (
-  l_id numeric(8),
+  l_id numeric(10),
   l_tipo char(1) NOT NULL,
-  l_nombre varchar(15) NOT NULL,
-  fk_lugar numeric(8),
+  l_nombre varchar(40) NOT NULL,
+  fk_lugar numeric(10),
   CONSTRAINT pk_lugar PRIMARY KEY (l_id),
-  CONSTRAINT fk_lugar_lugar FOREIGN KEY (fk_lugar) references lugar(l_id),
   CONSTRAINT check_tipo CHECK(l_tipo in ('M','P','E'))
 );
 
@@ -97,6 +96,7 @@ CREATE TABLE fabrica (
 CREATE TABLE tienda (
   ti_id numeric(8),
   ti_tipo varchar(20) NOT NULL,
+  ti_nombre varchar(40) NOT NULL,
   l_id numeric(8) NOT NULL,
   CONSTRAINT pk_tienda PRIMARY KEY (ti_id)
 );
