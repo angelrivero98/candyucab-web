@@ -10,8 +10,10 @@
   <body style="background-color:#e06666;">
     {%block content%}
     <div class="container" style="background-color:white; ">
-      <a href="{{url_for('registerJ')}}" class="col-6 entrada">Cliente Juridico</a>
-      <a href="#" class="col-6 registro">Cliente Natural</a>
+        <div class="form-group">
+          <a href="{{url_for('registerJ')}}" class="btn btn-outline-info">Cliente Juridico</a>
+          <a href="#" class="btn btn-outline-info">Cliente Natural</a>
+      </div>
     </div>
     {%endblock content%}
     <script src="../js/jquery-3.3.1.min.js"></script>

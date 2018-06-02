@@ -1,5 +1,5 @@
 from flask import render_template,url_for,flash,redirect,request
-from candyucab.forms import RegistrationJForm,LoginForm
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,Register2JForm
 from candyucab import app,bcrypt
 from candyucab.user import User
 import psycopg2
@@ -14,6 +14,37 @@ def home():
 @app.route("/register")
 def register():
    return render_template('register.html')
+
+@app.route("/register2/<int:cID>&<int:telefonos>&<int:personas>&<string:tipo>",methods=['GET','POST'])
+def register2(cID,telefonos,personas,tipo):
+    if tipo == 'cj':
+        form = Register2JForm()
+        if form.validate_on_submit():
+            db = Database()
+            cur = db.cursor_dict()
+            for telefono in form.telefonos:
+                if telefono.numero.data != 0:
+                    try:
+                        cur.execute("""INSERT INTO telefono (t_num,cj_id)
+                        VALUES (%s, %s,%s);""",
+                        (telefono.numero.data,cID,))
+                    except:
+                        print("ERROR inserting into telefono")
+                        db.retroceder()
+            for persona in form.personas:
+                try:
+                    cur.execute("""INSERT INTO personadecontacto (pc_nombre,pc_apellido,cj_id)
+                    VALUES (%s, %s,%s);""",
+                    (persona.nombre.data,persona.apellido.data,cID,))
+                except:
+                    print("ERROR inserting into telefono")
+                    db.retroceder()
+            db.actualizar()
+            flash('Sus datos se han cargado correctamente','success')
+            return redirect(url_for('login'))
+
+    return render_template('register2J.html',title='Register',form=form,cID=cID,num_tlf=telefonos,num_per=personas)
+
 
 @app.route("/registerJ",methods=['GET','POST'])
 def registerJ():
@@ -35,14 +66,31 @@ def registerJ():
                     """,(form.est2.data,form.municipio2.data,form.par2.data,))
         dirFisica = cur.fetchone()
         try:
-            cur.execute("""INSERT INTO clientejuridico (cj_rif, cj_email,cj_demcom,cj_razsoc,cj_capdis,cj_pagweb,l_id,l_id2)
-            VALUES (%s, %s,%s,%s,%s,%s,%s,%s);""",
-            (form.rif.data,form.email.data,form.demcom.data,form.razsoc.data,form.capdis.data,form.pagweb.data,dirFiscal['l_id'],dirFisica['l_id'],))
+            cur.execute("""INSERT INTO clientejuridico (cj_rif, cj_email,cj_demcom,cj_razsoc,cj_capdis,cj_pagweb)
+            VALUES (%s, %s,%s,%s,%s,%s);""",
+            (form.rif.data,form.email.data,form.demcom.data,form.razsoc.data,form.capdis.data,form.pagweb.data,))
         except:
             print("ERROR inserting into clientejuridico")
             db.retroceder()
+        db.actualizar()
         cur.execute("SELECT cj_id FROM clientejuridico WHERE cj_email = %s;",(form.email.data,))
         cj = cur.fetchone()
+        #dirFiscal
+        try:
+            cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
+            VALUES (%s, %s,%s);""",
+            (dirFiscal['l_id'],cj['cj_id'],'fiscal',))
+        except:
+            print("ERROR inserting into lugar_clientej fiscal")
+            db.retroceder()
+        #dirFisica
+        try:
+            cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
+            VALUES (%s, %s,%s);""",
+            (dirFisica['l_id'],cj['cj_id'],'fisica',))
+        except:
+            print("ERROR inserting into lugar_clientej fisica")
+            db.retroceder()
         try:
             cur.execute("""INSERT INTO usuario (u_username, u_password,cj_id)
             VALUES (%s, %s,%s);""",
@@ -52,8 +100,8 @@ def registerJ():
             db.retroceder()
         db.actualizar()
 
-        flash('Your account have been created','success')
-        return redirect(url_for('login'))
+        flash('Su cuenta se ha creado exitosamente','success')
+        return redirect(url_for('register2',cID=cj['cj_id'],telefonos=form.telefonos.data,personas=form.personas.data,tipo='cj'))
     return render_template('registerJ.html',title='Register',form=form)
 
 @app.route("/login",methods=['GET','POST'])
