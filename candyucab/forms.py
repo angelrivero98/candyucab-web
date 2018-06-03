@@ -94,7 +94,7 @@ class RegistrationNForm(FlaskForm):
         nom2 = StringField('Segundo Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         ap1 = StringField('Primer Apellido',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         ap2 = StringField('Segundo Apellido',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-
+        ci = IntegerField('Cedula',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         #Direccion
         est1 = StringField('Estado',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         municipio1 = StringField('Municipio',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
@@ -110,16 +110,31 @@ class RegistrationNForm(FlaskForm):
         def validate_email(self,email):
             db = Database()
             cur = db.cursor_dict()
-            cur.execute("SELECT cj_email,cn_email from clientejuridico,clientenatural WHERE cj_email = %s OR cn_email = %s;",(email.data,email.data))
+            cur.execute("SELECT cj_email from clientejuridico WHERE cj_email = %s;",(email.data,))
             if cur.fetchone():
                 raise ValidationError('El email ya esta tomado')
+            else:
+                cur.execute("SELECT cn_email from clientenatural WHERE cn_email = %s;",(email.data,))
+                if cur.fetchone():
+                    raise ValidationError('El email ya esta tomado')
+
+        def validate_ci(self,ci):
+            db = Database()
+            cur = db.cursor_dict()
+            cur.execute("SELECT cn_ci from clientenatural WHERE cn_ci = %s;",(ci.data,))
+            if cur.fetchone():
+                raise ValidationError('La cedula ya esta tomada')           
 
         def validate_rif(self,rif):
             db = Database()
             cur = db.cursor_dict()
-            cur.execute("SELECT cj_rif,cn_rif from clientejuridico,clientenatural WHERE cj_rif = %s OR cn_rif = %s;",(rif.data,rif.data))
+            cur.execute("SELECT cj_rif from clientejuridico WHERE cj_rif = %s;",(rif.data,))
             if cur.fetchone():
                 raise ValidationError('El rif ya esta tomado')
+            else:
+                cur.execute("SELECT cn_rif from clientenatural WHERE cn_rif = %s;",(rif.data,))
+                if cur.fetchone():
+                    raise ValidationError('El rif ya esta tomado')
 
         def validate_est1(self,est1):
             db = Database()

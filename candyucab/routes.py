@@ -1,5 +1,5 @@
 from flask import render_template,url_for,flash,redirect,request
-from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm
 from candyucab import app,bcrypt
 from candyucab.user import User
 import psycopg2
@@ -14,36 +14,6 @@ def home():
 @app.route("/register")
 def register():
    return render_template('register.html')
-
-@app.route("/register2/<int:cID>&<int:telefonos>&<int:personas>&<string:tipo>",methods=['GET','POST'])
-def register2(cID,telefonos,personas,tipo):
-    if tipo == 'cj':
-        form = Register2JForm()
-        if form.validate_on_submit():
-            db = Database()
-            cur = db.cursor_dict()
-            for telefono in form.telefonos:
-                if telefono.numero.data != 0:
-                    try:
-                        cur.execute("""INSERT INTO telefono (t_num,cj_id)
-                        VALUES (%s, %s,%s);""",
-                        (telefono.numero.data,cID,))
-                    except:
-                        print("ERROR inserting into telefono")
-                        db.retroceder()
-            for persona in form.personas:
-                try:
-                    cur.execute("""INSERT INTO personadecontacto (pc_nombre,pc_apellido,cj_id)
-                    VALUES (%s, %s,%s);""",
-                    (persona.nombre.data,persona.apellido.data,cID,))
-                except:
-                    print("ERROR inserting into telefono")
-                    db.retroceder()
-            db.actualizar()
-            flash('Sus datos se han cargado correctamente','success')
-            return redirect(url_for('login'))
-
-    return render_template('register2J.html',title='Register',form=form,cID=cID,num_tlf=telefonos,num_per=personas)
 
 @app.route("/new_tlf",methods=['GET','POST'])
 @login_required
@@ -152,6 +122,43 @@ def registerJ():
         flash('Su cuenta se ha creado exitosamente','success')
         return redirect(url_for('login'))
     return render_template('registerJ.html',title='Register',form=form)
+
+@app.route("/registerN",methods=['GET','POST'])
+def registerN():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RegistrationNForm()
+    if form.validate_on_submit():
+        hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        db = Database()
+        cur = db.cursor_dict()
+        cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                    E.l_nombre = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                    P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                    """,(form.est1.data,form.municipio1.data,form.par1.data,))
+        direccion = cur.fetchone()
+        try:
+            cur.execute("""INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci)
+            VALUES (%s, %s,%s,%s,%s,%s,%s);""",
+            (form.rif.data,form.email.data,form.nom1.data,form.nom2.data,form.ap1.data,form.ap2.data,direccion['l_id'],form.ci.data))
+        except:
+            print("ERROR inserting into clientenatural")
+            db.retroceder()
+        cur.execute("SELECT cn_id FROM clientenatural WHERE cn_email = %s;",(form.email.data,))
+        cn = cur.fetchone()
+        try:
+            cur.execute("""INSERT INTO usuario (u_username, u_password,cn_id)
+            VALUES (%s, %s,%s);""",
+            (form.username.data,hashed_pw,cn['cn_id']))
+        except:
+            print("ERROR inserting into user")
+            db.retroceder()
+        db.actualizar()
+
+        flash('Su cuenta se ha creado exitosamente','success')
+        return redirect(url_for('login'))
+    return render_template('registerN.html',title='Register',form=form)
+
 
 @app.route("/login",methods=['GET','POST'])
 def login():

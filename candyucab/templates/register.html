@@ -10,11 +10,15 @@
   <body style="background-color:#e06666;">
     {%block content%}
     <div class="container" style="background-color:white; ">
+      <form class="" action="" method="POST" style="margin: 0 auto; width:40% ">
+          <img src="../static/dulce.png" alt="" class="rounded mx-auto d-block">
+        <h2 class="border-bottom mb-4">Registro</h2>
         <div class="form-group">
           <a href="{{url_for('registerJ')}}" class="btn btn-outline-info">Cliente Juridico</a>
-          <a href="#" class="btn btn-outline-info">Cliente Natural</a>
+          <a href="{{url_for('registerN')}}" class="btn btn-outline-info">Cliente Natural</a>
       </div>
-    </div>
+    </form>
+      </div>
     {%endblock content%}
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.js"></script>
