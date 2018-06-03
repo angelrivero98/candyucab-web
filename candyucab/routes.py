@@ -1,5 +1,5 @@
 from flask import render_template,url_for,flash,redirect,request
-from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,Register2JForm
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm
 from candyucab import app,bcrypt
 from candyucab.user import User
 import psycopg2
@@ -45,6 +45,55 @@ def register2(cID,telefonos,personas,tipo):
 
     return render_template('register2J.html',title='Register',form=form,cID=cID,num_tlf=telefonos,num_per=personas)
 
+@app.route("/new_tlf",methods=['GET','POST'])
+@login_required
+def new_tlf():
+    form = TlfForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        if current_user.cj_id != 0:
+            try:
+                cur.execute("""INSERT INTO telefono (t_num,cj_id)
+                VALUES (%s, %s);""",
+                (form.numero.data,current_user.cj_id,))
+            except:
+                print("ERROR inserting into telefono")
+                db.retroceder()
+            db.actualizar()
+        else:
+            try:
+                cur.execute("""INSERT INTO telefono (t_num,cn_id)
+                VALUES (%s, %s);""",
+                (form.numero.data,current_user.cn_id,))
+            except:
+                print("ERROR inserting into telefono")
+                db.retroceder()
+            db.actualizar()
+        flash('Su telefono se ha guardado exitosamente','success')
+        return redirect(url_for('home'))
+
+    return render_template('new_tlf.html',title='Nuevo Telefono',form=form)
+
+@app.route("/new_persona",methods=['GET','POST'])
+@login_required
+def new_persona():
+    form = PersonaContactoForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""INSERT INTO personadecontacto (pc_nombre,pc_apellido,cj_id)
+            VALUES (%s, %s,%s);""",
+            (form.nombre.data,form.apellido.data,current_user.cj_id,))
+        except:
+            print("ERROR inserting into telefono")
+            db.retroceder()
+        db.actualizar()
+        flash('Su persona de contacto se ha guardado exitosamente','success')
+        return redirect(url_for('home'))
+
+    return render_template('new_persona.html',title='Nueva Persona',form=form)
 
 @app.route("/registerJ",methods=['GET','POST'])
 def registerJ():
@@ -101,7 +150,7 @@ def registerJ():
         db.actualizar()
 
         flash('Su cuenta se ha creado exitosamente','success')
-        return redirect(url_for('register2',cID=cj['cj_id'],telefonos=form.telefonos.data,personas=form.personas.data,tipo='cj'))
+        return redirect(url_for('login'))
     return render_template('registerJ.html',title='Register',form=form)
 
 @app.route("/login",methods=['GET','POST'])

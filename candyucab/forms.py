@@ -11,34 +11,28 @@ class LoginForm(FlaskForm):
     submit=SubmitField('Iniciar')
 
 class TlfForm(FlaskForm):
-    numero = IntegerField('Telefono',validators=[Optional()],default=0)
+    numero = IntegerField('Ingrese el Telefono sin el 0',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    submit=SubmitField('Añadir Campo')
+
+    def validate_numero(self,numero):
+        if len(str(numero.data)) != 10 :
+            raise ValidationError('El numero de telefono es invalido')
 
 class PersonaContactoForm(FlaskForm):
-    nombre = StringField('Nombre',default='-')
-    apellido = StringField('Apellido',default='-')
-
-class Register2JForm(FlaskForm):
-
-    telefonos = FieldList(FormField(TlfForm))
-    personas = FieldList(FormField(PersonaContactoForm))
-
-    #telefonos = FieldList(FormField(TlfForm),min_entries=self.num_tlf,validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-    #if g.num_per != 0:
-    #    personas = FieldList(FormField(PersonaContactoForm),min_entries=self.num_per,validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    apellido = StringField('Apellido',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
     submit=SubmitField('Añadir Campos')
 
 class RegistrationJForm(FlaskForm):
-        username=StringField('Nombre de Usuario',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=2,max=20)])
+        username=StringField('Nombre de Usuario',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=20)])
         email = StringField('Email',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Email(message='Ingrese un email valido')])
         password = PasswordField('Contraseña',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         confim_password = PasswordField('Confirmar Contraseña',validators=[DataRequired(message='Este campo no puede dejarse vacio'),EqualTo('password')])
-        rif = StringField('RIF',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=2,max=20)])
-        demcom = StringField('Denominacion Comercial',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=2,max=50)])
-        razsoc = StringField('Razon Social',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=2,max=50)])
-        pagweb = StringField('Pagina Web',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=2,max=30)])
+        rif = StringField('RIF',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=20)])
+        demcom = StringField('Denominacion Comercial',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=50)])
+        razsoc = StringField('Razon Social',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=50)])
+        pagweb = StringField('Pagina Web',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=30)])
         capdis = IntegerField('Capital Disponible',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-        telefonos = IntegerField('Ingrese la cantidad de telefonos',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-        personas = IntegerField('Ingrese la cantidad de personas',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         #Direccion Fiscal
         est1 = StringField('Estado',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         municipio1 = StringField('Municipio',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
