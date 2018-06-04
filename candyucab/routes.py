@@ -139,7 +139,7 @@ def registerN():
         direccion = cur.fetchone()
         try:
             cur.execute("""INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci)
-            VALUES (%s, %s,%s,%s,%s,%s,%s);""",
+            VALUES (%s, %s,%s,%s,%s,%s,%s,%s);""",
             (form.rif.data,form.email.data,form.nom1.data,form.nom2.data,form.ap1.data,form.ap2.data,direccion['l_id'],form.ci.data))
         except:
             print("ERROR inserting into clientenatural")
