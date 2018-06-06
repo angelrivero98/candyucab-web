@@ -19,3 +19,6 @@ class Database (object):
 
     def retroceder(self):
         self.conn.rollback()
+
+    def cerrar(self):
+        self.conn.close()    

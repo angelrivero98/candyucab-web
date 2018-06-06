@@ -1,4 +1,4 @@
-from flask import render_template,url_for,flash,redirect,request
+from flask import render_template,url_for,flash,redirect,request,abort
 from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm
 from candyucab import app,bcrypt
 from candyucab.user import User
@@ -10,6 +10,21 @@ from flask_login import login_user,current_user,logout_user,login_required
 @app.route("/home")
 def home():
    return render_template('home.html')
+
+@app.route("/clientes")
+def clientes():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT * FROM clientenatural;")
+    cn = cur.fetchall()
+    cur.execute("SELECT * FROM clientejuridico;")
+    cj = cur.fetchall()
+    db.cerrar()
+    return render_template('clientes.html',title = 'Clientes',cj = cj,cn = cn)
+
+@app.route("/clientes/<int:c_id>")
+def cliente(c_id):
+    return render_template('cliente.html')
 
 @app.route("/register")
 def register():
