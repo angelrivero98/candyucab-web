@@ -1,3 +1,4 @@
+{% from "_render_field.html" import render_field %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -16,185 +17,51 @@
               <img src="../static/dulce.png" alt="" class="rounded mx-auto d-block">
             <h2 class="border-bottom mb-4">Registro:Cliente Natural</h2>
             <div class="form-group">
-            {{ form.rif.label(class="form-control-label") }}
-            {% if form.rif.errors%}
-              {{form.rif(class="form-control form-control-lg is-invalid")}}
-              <div class="invalid-feddback">
-                {%for error in form.rif.errors%}
-                  <span>{{error}}</span>
-                {%endfor%}
-              </div>
-            {% else %}
-                {{ form.rif(class="form-control form-control-lg") }}
-            {%endif%}
+            {{ render_field(form.rif) }}
           </div>
           <div class="form-group">
-          {{ form.email.label(class="form-control-label") }}
-          {% if form.email.errors%}
-            {{form.email(class="form-control form-control-lg is-invalid")}}
-            <div class="invalid-feddback">
-              {%for error in form.email.errors%}
-                <span>{{error}}</span>
-              {%endfor%}
-            </div>
-          {% else %}
-              {{ form.email(class="form-control form-control-lg") }}
-          {%endif%}
+          {{ render_field(form.email)}}
         </div>
             <div class="form-row">
               <legend class="border-bottom mb-4">Nombres</legend>
             <div class="col">
-              {{ form.nom1.label(class="form-control-label") }}
-              {% if form.nom1.errors%}
-                {{form.nom1(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feddback">
-                  {%for error in form.nom1.errors%}
-                    <span>{{error}}</span>
-                  {%endfor%}
-                </div>
-              {% else %}
-                  {{ form.nom1(class="form-control form-control-lg") }}
-              {%endif%}
+              {{ render_field(form.nom1)}}
             </div>
             <div class="col">
-              {{ form.nom2.label(class="form-control-label") }}
-              {% if form.nom2.errors%}
-                {{form.nom2(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feddback">
-                  {%for error in form.nom2.errors%}
-                    <span>{{error}}</span>
-                  {%endfor%}
-                </div>
-              {% else %}
-                  {{ form.nom2(class="form-control form-control-lg") }}
-              {%endif%}
+              {{render_field(form.nom2)}}
             </div>
           </div>
           <div class="form-row">
             <legend class="border-bottom mb-4">Apellidos</legend>
           <div class="col">
-            {{ form.ap1.label(class="form-control-label") }}
-            {% if form.ap1.errors%}
-              {{form.ap1(class="form-control form-control-lg is-invalid")}}
-              <div class="invalid-feddback">
-                {%for error in form.ap1.errors%}
-                  <span>{{error}}</span>
-                {%endfor%}
-              </div>
-            {% else %}
-                {{ form.ap1(class="form-control form-control-lg") }}
-            {%endif%}
+            {{render_field(form.ap1)}}
           </div>
               <div class="col">
-                {{ form.ap2.label(class="form-control-label") }}
-                {% if form.ap2.errors%}
-                  {{form.ap2(class="form-control form-control-lg is-invalid")}}
-                  <div class="invalid-feddback">
-                    {%for error in form.ap2.errors%}
-                      <span>{{error}}</span>
-                    {%endfor%}
-                  </div>
-                {% else %}
-                    {{ form.ap2(class="form-control form-control-lg") }}
-                {%endif%}
+                {{render_field(form.ap2)}}
               </div>
             </div>
             <div class="form-group">
-            {{ form.ci.label(class="form-control-label") }}
-            {% if form.ci.errors%}
-              {{form.ci(class="form-control form-control-lg is-invalid")}}
-              <div class="invalid-feddback">
-                {%for error in form.ci.errors%}
-                  <span>{{error}}</span>
-                {%endfor%}
-              </div>
-            {% else %}
-                {{ form.ci(class="form-control form-control-lg") }}
-            {%endif%}
+            {{ render_field(form.ci)}}
           </div>
             <div class="form-row">
               <legend class="border-bottom mb-4">Direccion Personal</legend>
             <div class="col">
-              {{ form.est1.label(class="form-control-label") }}
-              {% if form.est1.errors%}
-                {{form.est1(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feddback">
-                  {%for error in form.est1.errors%}
-                    <span>{{error}}</span>
-                  {%endfor%}
-                </div>else:
-                cur.execute("SELECT cn_email from clientenatural WHERE cn_email = %s;",(email.data,))
-                if cur.fetchone():
-                    raise ValidationError('El email ya esta tomado')
-              {% else %}
-                  {{ form.est1(class="form-control form-control-lg") }}
-              {%endif%}
+              {{ render_field(form.est1)}}
             </div>
             <div class="col">
-              {{ form.municipio1.label(class="form-control-label") }}
-              {% if form.municipio1.errors%}
-                {{form.municipio1(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feddback">
-                  {%for error in form.municipio1.errors%}
-                    <span>{{error}}</span>
-                  {%endfor%}
-                </div>
-              {% else %}
-                  {{ form.municipio1(class="form-control form-control-lg") }}
-              {%endif%}
+              {{ render_field(form.municipio1)}}
             </div>
             <div class="col">
-              {{ form.par1.label(class="form-control-label") }}
-              {% if form.par1.errors%}
-                {{form.par1(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feddback">
-                  {%for error in form.par1.errors%}
-                    <span>{{error}}</span>
-                  {%endfor%}
-                </div>
-              {% else %}
-                  {{ form.par1(class="form-control form-control-lg") }}
-              {%endif%}
+              {{ render_field(form.par1) }}
             </div>
           </div>
             <div class="form-group">
-              {{ form.username.label(class="form-control-label") }}
-            {% if form.username.errors%}
-              {{form.username(class="form-control form-control-lg is-invalid")}}
-              <div class="invalid-feddback">
-                {%for error in form.username.errors%}
-                  <span>{{error}}</span>
-                {%endfor%}
-              </div>
-            {% else %}
-                {{ form.username(class="form-control form-control-lg") }}
-            {%endif%}
-            </div>
+            {{ render_field(form.username) }}
           <div class="form-group">
-          {{ form.password.label(class="form-control-label") }}
-          {% if form.password.errors%}
-            {{form.password(class="form-control form-control-lg is-invalid")}}
-            <div class="invalid-feddback">
-              {%for error in form.password.errors%}
-                <span>{{error}}</span>
-              {%endfor%}
-            </div>
-          {% else %}
-              {{ form.password(class="form-control form-control-lg") }}
-          {%endif%}
+          {{ render_field(form.password)}}
         </div>
         <div class="form-group">
-          {{ form.confim_password.label(class="form-control-label") }}
-          {% if form.confim_password.errors%}
-            {{form.confim_password(class="form-control form-control-lg is-invalid")}}
-            <div class="invalid-feddback">
-              {%for error in form.confim_password.errors%}
-                <span>{{error}}</span>
-              {%endfor%}
-            </div>
-          {% else %}
-              {{ form.confim_password(class="form-control form-control-lg") }}
-          {%endif%}
+          {{render_field(form.confim_password)}}
         </div>
             </fieldset>
               <div class="form-group">
