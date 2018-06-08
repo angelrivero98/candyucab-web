@@ -2,6 +2,7 @@ ALTER TABLE lugar
   ADD CONSTRAINT fk_lugar_lugar FOREIGN KEY (fk_lugar) references lugar(l_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE clientenatural ADD CONSTRAINT fk_cn_tienda FOREIGN KEY (t_cod) references tienda(ti_id);
+ALTER TABLE clientenatural ADD CONSTRAINT fk_cn_lugar FOREIGN KEY (l_id) references lugar(l_id);
 ALTER TABLE clientejuridico ADD CONSTRAINT fk_cj_tienda FOREIGN KEY (t_cod) references tienda(ti_id);
 ALTER TABLE telefono ADD CONSTRAINT fk_cn_tlf FOREIGN KEY (cn_id) references clientenatural(cn_id);
 ALTER TABLE telefono ADD CONSTRAINT fk_cj_tlf FOREIGN KEY (cj_id) references clientejuridico(cj_id);

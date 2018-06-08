@@ -11,7 +11,7 @@ CREATE TABLE clientenatural (
   cn_nom2 varchar(20) NOT NULL,
   cn_ap1 varchar(20) NOT NULL,
   cn_ap2 varchar(20) NOT NULL,
-  l_id numeric(10) NOT NULL,
+  l_id integer NOT NULL,
   t_cod numeric(8),
   CONSTRAINT pk_clienten PRIMARY KEY (cn_id)
 );
@@ -70,7 +70,7 @@ CREATE TABLE permiso(
 );
 
 CREATE TABLE lugar (
-  l_id numeric(10),
+  l_id integer,
   l_tipo char(1) NOT NULL,
   l_nombre varchar(40) NOT NULL,
   fk_lugar numeric(10),
@@ -96,7 +96,7 @@ CREATE TABLE departamento (
 CREATE TABLE fabrica (
   f_id numeric(8),
   f_nombre varchar(20) NOT NULL,
-  l_id numeric(10) NOT NULL,
+  l_id integer NOT NULL,
   CONSTRAINT pk_fabrica PRIMARY KEY (f_id)
 );
 
@@ -104,6 +104,6 @@ CREATE TABLE tienda (
   ti_id numeric(8),
   ti_tipo varchar(20) NOT NULL,
   ti_nombre varchar(40) NOT NULL,
-  l_id numeric(10) NOT NULL,
+  l_id integer NOT NULL,
   CONSTRAINT pk_tienda PRIMARY KEY (ti_id)
 );

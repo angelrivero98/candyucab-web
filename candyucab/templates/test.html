@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    {% block content %}
+    <form class="" action="" method="POST">
+      {{form.csrf_token}}
+      {{form.estados}}
+      {{form.municipios}}
+      {{form.parroquias}}
+      {{form.submit}}
+    </form>
+    {% endblock content %}
+    <script>
+      let estados = document.getElementById('estados');
+      let municipios = document.getElementById('municipios');
+      let parroquias = document.getElementById('parroquias');
+
+      estados.onchange=function(){
+        estado = estados.value;
+        fetch('/municipio/'+ estado).then(function(response){
+          response.json().then(function(data){
+            let optionHTML = '';
+            for (let municipio of data.municipios){
+                optionHTML+= '<option value"'+ municipio[0]+'">' + municipio[2]+'</option>';
+            }
+
+            municipios.innerHTML = optionHTML;
+          });
+
+
+          });
+        }
+
+        municipios.onchange=function(){
+          municipio = municipios.value;
+          estado = estados.value;
+          fetch('/parroquia/'+ municipio+ '/'+ estado).then(function(response){
+            response.json().then(function(data){
+              let optionHTML = '';
+              for (let parroquia of data.parroquias){
+                  optionHTML+= '<option value"'+ parroquia[0]+'">' + parroquia[2]+'</option>';
+              }
+
+              parroquias.innerHTML = optionHTML;
+            });
+
+
+            });
+          }
+
+    </script>
+  </body>
+</html>

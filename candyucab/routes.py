@@ -1,12 +1,21 @@
-from flask import render_template,url_for,flash,redirect,request,abort
-from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm
+from flask import render_template,url_for,flash,redirect,request,abort,jsonify
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,Form
 from candyucab import app,bcrypt
 from candyucab.user import User
+import json
 import psycopg2
 from candyucab.db import Database
 from flask_login import login_user,current_user,logout_user,login_required
 
-@app.route("/")
+def estados():
+    db =Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT l_id,l_nombre FROM lugar WHERE l_tipo = 'E';")
+    return cur.fetchall()
+
+
+
+
 @app.route("/home")
 def home():
    return render_template('home.html')
@@ -21,6 +30,49 @@ def clientes():
     cj = cur.fetchall()
     db.cerrar()
     return render_template('clientes.html',title = 'Clientes',cj = cj,cn = cn)
+
+@app.route("/test/")
+def test(estado,municipio,parroquia):
+    print(estado)
+    print(municipio)
+    print(parroquia)
+
+@app.route("/",methods=['GET','POST'])
+def index():
+    form = Form()
+    form.estados1.choices = tuple(estados())
+    form.estados2.choices = tuple(estados())
+    if form.validate_on_submit():
+        print(form.estados.data)
+        #return redirect(url_for('test',estado=form.estados.data,municipio=form.municipios.data,parroquia=form.parroquias.data))
+    return render_template('test.html',form=form)
+
+
+@app.route('/municipio/<int:fk_lugar>')
+def municipio(fk_lugar):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT M.* from lugar M WHERE  M.fk_lugar = %s;",(fk_lugar,))
+    municipios = cur.fetchall()
+    db.cerrar()
+    munArray = []
+    for municipio in municipios:
+        munArray.append(municipio)
+
+    return jsonify({'municipios': munArray})
+
+@app.route('/parroquia/<string:municipio>/<int:estado>')
+def parroquia(municipio,estado):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT distinct P.* from lugar M,lugar P,lugar E where M.l_nombre =%s AND P.fk_lugar = M.l_id AND M.fk_lugar = %s ;",(municipio,estado,))
+    parroquias = cur.fetchall()
+    db.cerrar()
+    paqArray = []
+    for parroquia in parroquias:
+        paqArray.append(parroquia)
+
+    return jsonify({'parroquias': paqArray})
 
 @app.route("/clientes/<int:c_id>")
 def cliente(c_id):

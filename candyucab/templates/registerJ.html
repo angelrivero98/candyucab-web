@@ -1,3 +1,4 @@
+{% from "_render_field.html" import render_field %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -105,85 +106,25 @@
               <div class="form-row">
                 <legend class="border-bottom mb-4">Direccion Fiscal</legend>
               <div class="col">
-                {{ form.est1.label(class="form-control-label") }}
-                {% if form.est1.errors%}
-                  {{form.est1(class="form-control form-control-lg is-invalid")}}
-                  <div class="invalid-feddback">
-                    {%for error in form.est1.errors%}
-                      <span>{{error}}</span>
-                    {%endfor%}
-                  </div>
-                {% else %}
-                    {{ form.est1(class="form-control form-control-lg") }}
-                {%endif%}
+                {{ render_field(form.estados1)}}
               </div>
               <div class="col">
-                {{ form.municipio1.label(class="form-control-label") }}
-                {% if form.municipio1.errors%}
-                  {{form.municipio1(class="form-control form-control-lg is-invalid")}}
-                  <div class="invalid-feddback">
-                    {%for error in form.municipio1.errors%}
-                      <span>{{error}}</span>
-                    {%endfor%}
-                  </div>
-                {% else %}
-                    {{ form.municipio1(class="form-control form-control-lg") }}
-                {%endif%}
+                {{ render_field(form.municipios1)}}
               </div>
               <div class="col">
-                {{ form.par1.label(class="form-control-label") }}
-                {% if form.par1.errors%}
-                  {{form.par1(class="form-control form-control-lg is-invalid")}}
-                  <div class="invalid-feddback">
-                    {%for error in form.par1.errors%}
-                      <span>{{error}}</span>
-                    {%endfor%}
-                  </div>
-                {% else %}
-                    {{ form.par1(class="form-control form-control-lg") }}
-                {%endif%}
+                {{ render_field(form.parroquias1)}}
               </div>
             </div>
             <div class="form-row">
               <legend class="border-bottom mb-4">Direccion Fisica</legend>
             <div class="col">
-              {{ form.est2.label(class="form-control-label") }}
-              {% if form.est2.errors%}
-                {{form.est2(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feddback">
-                  {%for error in form.est2.errors%}
-                    <span>{{error}}</span>
-                  {%endfor%}
-                </div>
-              {% else %}
-                  {{ form.est2(class="form-control form-control-lg") }}
-              {%endif%}
+              {{ render_field(form.estados2)}}
             </div>
             <div class="col">
-              {{ form.municipio2.label(class="form-control-label") }}
-              {% if form.municipio2.errors%}
-                {{form.municipio2(class="form-control form-control-lg is-invalid")}}
-                <div class="invalid-feddback">
-                  {%for error in form.municipio2.errors%}
-                    <span>{{error}}</span>
-                  {%endfor%}
-                </div>
-              {% else %}
-                  {{ form.municipio2(class="form-control form-control-lg") }}
-              {%endif%}
+              {{ render_field(form.municipios2)}}
             </div>
             <div class="col">
-              {{ form.par2.label(class="form-control-label") }}
-              {% if form.par2.errors%}
-              {{form.par2(class="form-control form-control-lg is-invalid")}}
-              <div class="invalid-feddback">
-                {%for error in form.par2.errors%}
-                  <span>{{error}}</span>
-                {%endfor%}
-              </div>
-              {% else %}
-                  {{ form.par2(class="form-control form-control-lg") }}
-              {%endif%}
+              {{ render_field(form.parroquias2)}}
             </div>
           </div>
             <div class="form-group">
@@ -244,5 +185,80 @@
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.js"></script>
     <script src="../js/estilo1.js"></script>
+    <script>
+      let estados = document.getElementById('estados1');
+      let municipios = document.getElementById('municipios1');
+      let parroquias = document.getElementById('parroquias1');
+
+      estados.onchange=function(){
+        estado = estados.value;
+        fetch('/municipio/'+ estado).then(function(response){
+          response.json().then(function(data){
+            let optionHTML = '';
+            for (let municipio of data.municipios){
+                optionHTML+= '<option value"'+ municipio[0]+'">' + municipio[2]+'</option>';
+            }
+
+            municipios.innerHTML = optionHTML;
+          });
+
+
+          });
+        }
+
+        municipios.onchange=function(){
+          municipio = municipios.value;
+          estado = estados.value;
+          fetch('/parroquia/'+ municipio+ '/'+ estado).then(function(response){
+            response.json().then(function(data){
+              let optionHTML = '';
+              for (let parroquia of data.parroquias){
+                  optionHTML+= '<option value"'+ parroquia[0]+'">' + parroquia[2]+'</option>';
+              }
+
+              parroquias.innerHTML = optionHTML;
+            });
+
+
+            });
+          }
+      let estados2 = document.getElementById('estados2');
+      let municipios2 = document.getElementById('municipios2');
+      let parroquias2 = document.getElementById('parroquias2');
+
+      estados2.onchange=function(){
+        estado = estados2.value;
+        fetch('/municipio/'+ estado).then(function(response){
+          response.json().then(function(data){
+            let optionHTML = '';
+            for (let municipio of data.municipios){
+                optionHTML+= '<option value"'+ municipio[0]+'">' + municipio[2]+'</option>';
+            }
+
+            municipios2.innerHTML = optionHTML;
+          });
+
+
+          });
+        }
+
+        municipios2.onchange=function(){
+          municipio = municipios2.value;
+          estado = estados2.value;
+          fetch('/parroquia/'+ municipio+ '/'+ estado).then(function(response){
+            response.json().then(function(data){
+              let optionHTML = '';
+              for (let parroquia of data.parroquias){
+                  optionHTML+= '<option value"'+ parroquia[0]+'">' + parroquia[2]+'</option>';
+              }
+
+              parroquias2.innerHTML = optionHTML;
+            });
+
+
+            });
+          }
+
+    </script>
   </body>
 </html>

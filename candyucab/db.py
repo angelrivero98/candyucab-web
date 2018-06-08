@@ -21,4 +21,4 @@ class Database (object):
         self.conn.rollback()
 
     def cerrar(self):
-        self.conn.close()    
+        self.conn.close()
