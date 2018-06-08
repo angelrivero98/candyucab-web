@@ -51,13 +51,13 @@ class RegistrationJForm(FlaskForm):
         pagweb = StringField('Pagina Web',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=30)])
         capdis = IntegerField('Capital Disponible',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         #Direccion Fiscal
-        estados1 = NonValidatingSelectField('Estado',choices=tuple(estados()))
-        municipios1 = NonValidatingSelectField('Municipio',choices=[])
-        parroquias1 = NonValidatingSelectField('Parroquia',choices=[])
+        estados1 = NonValidatingSelectField('Estado',choices=tuple(estados()),validators=[InputRequired()])
+        municipios1 = NonValidatingSelectField('Municipio',choices=[],validators=[InputRequired()])
+        parroquias1 = NonValidatingSelectField('Parroquia',choices=[],validators=[InputRequired()])
         # Direccion Fisica
-        estados2 = NonValidatingSelectField('Estado',choices=tuple(estados()))
-        municipios2 = NonValidatingSelectField('Municipio',choices=[])
-        parroquias2 = NonValidatingSelectField('Parroquia',choices=[])
+        estados2 = NonValidatingSelectField('Estado',choices=tuple(estados()),validators=[InputRequired()])
+        municipios2 = NonValidatingSelectField('Municipio',choices=[],validators=[InputRequired()])
+        parroquias2 = NonValidatingSelectField('Parroquia',choices=[],validators=[InputRequired()])
         #tlf1 = IntegerField('Capital Disponible',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         submit=SubmitField('Registrate')
 
