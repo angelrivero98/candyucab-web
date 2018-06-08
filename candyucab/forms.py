@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,FormField,SelectField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,ValidationError,Optional,InputRequired
 from candyucab.db import Database
-from wtforms_sqlalchemy.fields import QuerySelectField
 import psycopg2,psycopg2.extras
 
 def estados():
@@ -51,13 +50,13 @@ class RegistrationJForm(FlaskForm):
         pagweb = StringField('Pagina Web',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=30)])
         capdis = IntegerField('Capital Disponible',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         #Direccion Fiscal
-        estados1 = NonValidatingSelectField('Estado',choices=tuple(estados()),validators=[InputRequired()])
-        municipios1 = NonValidatingSelectField('Municipio',choices=[],validators=[InputRequired()])
-        parroquias1 = NonValidatingSelectField('Parroquia',choices=[],validators=[InputRequired()])
+        estados1 = NonValidatingSelectField('Estado',choices=tuple(estados()))
+        municipios1 = NonValidatingSelectField('Municipio',choices=[])
+        parroquias1 = NonValidatingSelectField('Parroquia',choices=[])
         # Direccion Fisica
-        estados2 = NonValidatingSelectField('Estado',choices=tuple(estados()),validators=[InputRequired()])
-        municipios2 = NonValidatingSelectField('Municipio',choices=[],validators=[InputRequired()])
-        parroquias2 = NonValidatingSelectField('Parroquia',choices=[],validators=[InputRequired()])
+        estados2 = NonValidatingSelectField('Estado',choices=tuple(estados()))
+        municipios2 = NonValidatingSelectField('Municipio',choices=[])
+        parroquias2 = NonValidatingSelectField('Parroquia',choices=[])
         #tlf1 = IntegerField('Capital Disponible',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         submit=SubmitField('Registrate')
 

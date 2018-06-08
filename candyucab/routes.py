@@ -7,15 +7,7 @@ import psycopg2
 from candyucab.db import Database
 from flask_login import login_user,current_user,logout_user,login_required
 
-def estados():
-    db =Database()
-    cur = db.cursor_dict()
-    cur.execute("SELECT l_id,l_nombre FROM lugar WHERE l_tipo = 'E';")
-    return cur.fetchall()
-
-
-
-
+@app.route("/")
 @app.route("/home")
 def home():
    return render_template('home.html')
@@ -30,23 +22,6 @@ def clientes():
     cj = cur.fetchall()
     db.cerrar()
     return render_template('clientes.html',title = 'Clientes',cj = cj,cn = cn)
-
-@app.route("/test/")
-def test(estado,municipio,parroquia):
-    print(estado)
-    print(municipio)
-    print(parroquia)
-
-@app.route("/",methods=['GET','POST'])
-def index():
-    form = Form()
-    form.estados1.choices = tuple(estados())
-    form.estados2.choices = tuple(estados())
-    if form.validate_on_submit():
-        print(form.estados.data)
-        #return redirect(url_for('test',estado=form.estados.data,municipio=form.municipios.data,parroquia=form.parroquias.data))
-    return render_template('test.html',form=form)
-
 
 @app.route('/municipio/<int:fk_lugar>')
 def municipio(fk_lugar):
@@ -142,14 +117,14 @@ def registerJ():
         db = Database()
         cur = db.cursor_dict()
         cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
-                    E.l_nombre = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                    E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
                     P.l_nombre = %s AND P.fk_lugar = M.l_id;
-                    """,(form.est1.data,form.municipio1.data,form.par1.data,))
+                    """,(form.estados1.data,form.municipios1.data,form.parroquias1.data,))
         dirFiscal = cur.fetchone()
         cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
-                    E.l_nombre = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                    E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
                     P.l_nombre = %s AND P.fk_lugar = M.l_id;
-                    """,(form.est2.data,form.municipio2.data,form.par2.data,))
+                    """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
         dirFisica = cur.fetchone()
         try:
             cur.execute("""INSERT INTO clientejuridico (cj_rif, cj_email,cj_demcom,cj_razsoc,cj_capdis,cj_pagweb)

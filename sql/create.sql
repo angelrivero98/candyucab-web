@@ -73,14 +73,14 @@ CREATE TABLE lugar (
   l_id integer,
   l_tipo char(1) NOT NULL,
   l_nombre varchar(40) NOT NULL,
-  fk_lugar numeric(10),
+  fk_lugar integer,
   CONSTRAINT pk_lugar PRIMARY KEY (l_id),
   CONSTRAINT check_tipo CHECK(l_tipo in ('M','P','E'))
 );
 
 CREATE TABLE jur_lug(
   jl_id SERIAL,
-  l_id numeric(10) NOT NULL,
+  l_id integer NOT NULL,
   cj_id integer NOT NULL,
   jl_tipo varchar(10) NOT NULL,
   CONSTRAINT pk_lugar_clientej PRIMARY KEY (jl_id),
