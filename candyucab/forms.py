@@ -90,6 +90,31 @@ class RegistrationJForm(FlaskForm):
                 if cur.fetchone():
                     raise ValidationError('El rif ya esta tomado')
 
+        def validate_estados1(self,estados1):
+            if (estados1.data == None):
+                raise ValidationError('Este campo no puede dejarse vacio')
+
+        def validate_estados2(self,estados2):
+            if (estados2.data == None):
+                raise ValidationError('Este campo no puede dejarse vacio')
+
+        def validate_municipios1(self,municipios1):
+            if (municipios1.data == None):
+                raise ValidationError('Este campo no puede dejarse vacio')
+
+        def validate_municipios2(self,municipios2):
+            if (municipios2.data == None):
+                raise ValidationError('Este campo no puede dejarse vacio')
+
+        def validate_parroquias1(self,parroquias1):
+            if (parroquias1.data == None):
+                raise ValidationError('Este campo no puede dejarse vacio')
+
+        def validate_parroquias2(self,parroquias2):
+            if (parroquias2.data == None):
+                raise ValidationError('Este campo no puede dejarse vacio')
+
+
 class RegistrationNForm(FlaskForm):
         username=StringField('Nombre de Usuario',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=2,max=20)])
         email = StringField('Email',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Email(message='Ingrese un email valido')])
@@ -102,10 +127,9 @@ class RegistrationNForm(FlaskForm):
         ap2 = StringField('Segundo Apellido',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         ci = IntegerField('Cedula',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
         #Direccion
-        est = SelectField('Estado',choices=[])
-        est1 = StringField('Estado',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-        municipio1 = StringField('Municipio',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-        par1  = StringField('Parroquia',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+        estados = NonValidatingSelectField('Estado',choices=tuple(estados()))
+        municipios = NonValidatingSelectField('Municipio',choices=[])
+        parroquias = NonValidatingSelectField('Parroquia',choices=[])
         submit=SubmitField('Registrate')
         def validate_username(self,username):
             db = Database()
@@ -130,7 +154,9 @@ class RegistrationNForm(FlaskForm):
                 raise ValidationError('El email ya esta tomado')
             else:
                 cur.execute("SELECT cn_email from clientenatural WHERE cn_email = %s;",(email.data,))
-                raise ValidationError('El email ya esta tomado')
+                if cur.fetchone():
+                    raise ValidationError('El email ya esta tomado')
+
 
         def validate_rif(self,rif):
             db = Database()
@@ -140,14 +166,17 @@ class RegistrationNForm(FlaskForm):
                 raise ValidationError('El rif ya esta tomado')
             else:
                 cur.execute("SELECT cn_rif from clientenatural WHERE cn_rif = %s;",(rif.data,))
-                raise ValidationError('El rif ya esta tomado')
+                if cur.fetchone():
+                    raise ValidationError('El rif ya esta tomado')
 
-        def validate_est1(self,est1):
-            db = Database()
-            cur = db.cursor_dict()
-            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
-                        E.l_nombre = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
-                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
-                        """,(est1.data,self.municipio1.data,self.par1.data,))
-            if cur.fetchone() == None:
-                  raise ValidationError('La direccion no existe')
+        def validate_estados(self,estados):
+            if (estados.data == None):
+                raise ValidationError('Este campo no puede dejarse vacio')
+
+        def validate_municipios(self,municipios):
+            if (municipios.data == None):
+                raise ValidationError('Este campo no puede dejarse vacio')
+
+        def validate_parroquias(self,parroquias):
+            if (parroquias.data == None):
+                raise ValidationError('Este campo no puede dejarse vacio')

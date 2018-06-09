@@ -16,9 +16,11 @@ def home():
 def clientes():
     db = Database()
     cur = db.cursor_dict()
-    cur.execute("SELECT * FROM clientenatural;")
+    cur.execute("SELECT C.*,L.l_nombre AS dir FROM clientenatural C,lugar L WHERE L.l_id=C.l_id;")
     cn = cur.fetchall()
-    cur.execute("SELECT * FROM clientejuridico;")
+    cur.execute("""SELECT C.*,fisica.l_nombre as fisica,fiscal.l_nombre as fiscal FROM clientejuridico C,jur_lug FL,jur_lug FA ,lugar as fiscal,lugar as fisica
+                        WHERE (C.cj_id = FL.cj_id  OR C.cj_id = FA.cj_id)
+                        AND (FL.l_id=fiscal.l_id AND FL.jl_tipo='fiscal')  AND (FA.l_id=fisica.l_id AND FA.jl_tipo='fisica') ;""")
     cj = cur.fetchall()
     db.cerrar()
     return render_template('clientes.html',title = 'Clientes',cj = cj,cn = cn)
@@ -49,9 +51,14 @@ def parroquia(municipio,estado):
 
     return jsonify({'parroquias': paqArray})
 
-@app.route("/clientes/<int:c_id>")
-def cliente(c_id):
-    return render_template('cliente.html')
+@app.route("/clientes/<int:c_id>/<string:tipo>")
+def cliente(c_id,tipo):
+    if tipo == 'cj':
+        form
+        return render_template('clienteJ.html')
+    elif tipo == 'cn':
+        form
+        return render_template('clienteN.html')
 
 @app.route("/register")
 def register():
@@ -126,21 +133,24 @@ def registerJ():
                     P.l_nombre = %s AND P.fk_lugar = M.l_id;
                     """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
         dirFisica = cur.fetchone()
+        print(dirFisica['l_id'])
         try:
             cur.execute("""INSERT INTO clientejuridico (cj_rif, cj_email,cj_demcom,cj_razsoc,cj_capdis,cj_pagweb)
-            VALUES (%s, %s,%s,%s,%s,%s);""",
+            VALUES (%s, %s,%s,%s,%s,%s) RETURNING cj_id;""",
             (form.rif.data,form.email.data,form.demcom.data,form.razsoc.data,form.capdis.data,form.pagweb.data,))
         except:
             print("ERROR inserting into clientejuridico")
             db.retroceder()
+        cj = cur.fetchone()[0]
+        print(cj)
         db.actualizar()
-        cur.execute("SELECT cj_id FROM clientejuridico WHERE cj_email = %s;",(form.email.data,))
-        cj = cur.fetchone()
+        #cur.execute("SELECT cj_id FROM clientejuridico WHERE cj_email = %s;",(form.email.data,))
+        #cj = cur.fetchone()
         #dirFiscal
         try:
             cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
             VALUES (%s, %s,%s);""",
-            (dirFiscal['l_id'],cj['cj_id'],'fiscal',))
+            (dirFiscal['l_id'],cj,'fiscal',))
         except:
             print("ERROR inserting into lugar_clientej fiscal")
             db.retroceder()
@@ -148,14 +158,14 @@ def registerJ():
         try:
             cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
             VALUES (%s, %s,%s);""",
-            (dirFisica['l_id'],cj['cj_id'],'fisica',))
+            (dirFisica['l_id'],cj,'fisica',))
         except:
             print("ERROR inserting into lugar_clientej fisica")
             db.retroceder()
         try:
             cur.execute("""INSERT INTO usuario (u_username, u_password,cj_id)
             VALUES (%s, %s,%s);""",
-            (form.username.data,hashed_pw,cj['cj_id']))
+            (form.username.data,hashed_pw,cj))
         except:
             print("ERROR inserting into user")
             db.retroceder()
@@ -175,23 +185,25 @@ def registerN():
         db = Database()
         cur = db.cursor_dict()
         cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
-                    E.l_nombre = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                    E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
                     P.l_nombre = %s AND P.fk_lugar = M.l_id;
-                    """,(form.est1.data,form.municipio1.data,form.par1.data,))
+                    """,(form.estados.data,form.municipios.data,form.parroquias.data,))
         direccion = cur.fetchone()
+        cur = db.cursor()
         try:
             cur.execute("""INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci)
-            VALUES (%s, %s,%s,%s,%s,%s,%s,%s);""",
+            VALUES (%s, %s,%s,%s,%s,%s,%s,%s) RETURNING cn_id;""",
             (form.rif.data,form.email.data,form.nom1.data,form.nom2.data,form.ap1.data,form.ap2.data,direccion['l_id'],form.ci.data))
         except:
             print("ERROR inserting into clientenatural")
             db.retroceder()
-        cur.execute("SELECT cn_id FROM clientenatural WHERE cn_email = %s;",(form.email.data,))
-        cn = cur.fetchone()
+
+        cn = cur.fetchone()[0]
+        db.actualizar()
         try:
             cur.execute("""INSERT INTO usuario (u_username, u_password,cn_id)
             VALUES (%s, %s,%s);""",
-            (form.username.data,hashed_pw,cn['cn_id']))
+            (form.username.data,hashed_pw,cn))
         except:
             print("ERROR inserting into user")
             db.retroceder()

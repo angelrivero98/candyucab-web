@@ -1,3 +1,4 @@
+{% from "_render_field.html" import render_field %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -10,38 +11,25 @@
   <body style="background-color:#e06666;">
     {%block content%}
     <div class="container" style="background-color:white; ">
-
-
           <form class="" action="" method="POST" style="margin: 0 auto; width:40% ">
             {{form.hidden_tag()}}
             <fieldset class="form-group">
               <img src="../static/dulce.png" alt="" class="rounded mx-auto d-block">
             <h2 class="border-bottom mb-4">Inicio de Sesion</h2>
+            {% with messages = get_flashed_messages(with_categories=true)%}
+                  {% if messages%}
+                    {%for category,message in messages%}
+                      <div class="alert alert-{{ category}}">
+                        {{message}}
+                      </div>
+                    {%endfor%}
+                  {%endif%}
+                {% endwith%}
             <div class="form-group">
-              {{ form.username.label(class="form-control-label") }}
-              {% if form.username.errors%}
-                {{form.username(class="form-control form-control-lg is-invalid")}}
-                  <div class="invalid-feddback">
-                {%for error in form.username.errors%}
-                  <span>{{error}}</span>
-                {%endfor%}
-                </div>
-                {% else %}
-                {{ form.username(class="form-control form-control-lg") }}
-                {%endif%}
+                {{ render_field(form.username)}}
             </div>
             <div class="form-group">
-              {{ form.password.label(class="form-control-label") }}
-                {% if form.password.errors%}
-                  {{form.password(class="form-control form-control-lg is-invalid")}}
-                  <div class="invalid-feddback">
-                  {%for error in form.password.errors%}
-                    <span>{{error}}</span>
-                  {%endfor%}
-                </div>
-                {% else %}
-                  {{ form.password(class="form-control form-control-lg") }}
-                {%endif%}
+                {{ render_field(form.password)}}
             </div>
             <div class="form-check">
               {{form.remember(class="form-check-input")}}
@@ -52,6 +40,12 @@
               {{ form.submit(class="btn btn-outline-info") }}
             </div>
           </form>
+          <div class="border-top pt-3">
+            <small class="text-muted">
+              No Tienes Cuenta? <a class="ml-2" href="{{url_for('register')}}">Registrate</a>
+            </small>
+
+          </div>
 
     </div>
 {%endblock content%}

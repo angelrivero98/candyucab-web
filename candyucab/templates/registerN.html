@@ -46,17 +46,18 @@
             <div class="form-row">
               <legend class="border-bottom mb-4">Direccion Personal</legend>
             <div class="col">
-              {{ render_field(form.est1)}}
+              {{ render_field(form.estados)}}
             </div>
             <div class="col">
-              {{ render_field(form.municipio1)}}
+              {{ render_field(form.municipios)}}
             </div>
             <div class="col">
-              {{ render_field(form.par1) }}
+              {{ render_field(form.parroquias) }}
             </div>
           </div>
             <div class="form-group">
             {{ render_field(form.username) }}
+            </div>
           <div class="form-group">
           {{ render_field(form.password)}}
         </div>
@@ -72,12 +73,49 @@
             <small class="text-muted">
               Tienes cuenta? <a class="ml-2" href="{{url_for('login')}}">Ingresar</a>
             </small>
-
           </div>
     </div>
     {%endblock content%}
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.js"></script>
     <script src="../js/estilo1.js"></script>
+    <script>
+      let estados = document.getElementById('estados');
+      let municipios = document.getElementById('municipios');
+      let parroquias = document.getElementById('parroquias');
+
+      estados.onchange=function(){
+        estado = estados.value;
+        fetch('/municipio/'+ estado).then(function(response){
+          response.json().then(function(data){
+            let optionHTML = '';
+            for (let municipio of data.municipios){
+                optionHTML+= '<option value"'+ municipio[0]+'">' + municipio[2]+'</option>';
+            }
+
+            municipios.innerHTML = optionHTML;
+          });
+
+
+          });
+        }
+
+        municipios.onchange=function(){
+          municipio = municipios.value;
+          estado = estados.value;
+          fetch('/parroquia/'+ municipio+ '/'+ estado).then(function(response){
+            response.json().then(function(data){
+              let optionHTML = '';
+              for (let parroquia of data.parroquias){
+                  optionHTML+= '<option value"'+ parroquia[0]+'">' + parroquia[2]+'</option>';
+              }
+
+              parroquias.innerHTML = optionHTML;
+            });
+
+
+            });
+          }
+    </script>
   </body>
 </html>
