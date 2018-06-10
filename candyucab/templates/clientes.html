@@ -19,7 +19,7 @@
   <tbody>
     <tr>
       {% for cliente in cj %}
-      <td>{{cliente['cj_rif']}}</td><td> <a  class="mr-2" href="{{ url_for('cliente',c_id= cliente['cj_id'],tipo='cj') }}">{{cliente['cj_email']}}</a></td>
+      <td>{{cliente['cj_rif']}}</td><td> <a  class="mr-2" href="{{ url_for('update_cliente',c_id= cliente['cj_id'],tipo='cj') }}">{{cliente['cj_email']}}</a></td>
       <td>{{cliente['cj_demcom']}}</td><td>{{cliente['cj_razsoc']}}</td>
       <td>{{cliente['cj_pagweb']}}</td><td>{{cliente['cj_capdis']}}</td><td>{{cliente['fisica']}}</td><td>{{cliente['fiscal']}}</td>
     {% endfor %}
@@ -47,7 +47,7 @@
   <tbody>
     <tr>
       {% for cliente in cn %}
-      <td>{{cliente['cn_rif']}}</td><td> <a class="mr-2" href="{{ url_for('cliente',c_id= cliente['cn_id'],tipo='cn') }}">{{cliente['cn_email']}}</a></td>
+      <td>{{cliente['cn_rif']}}</td><td> <a class="mr-2" href="{{ url_for('update_cliente',c_id= cliente['cn_id'],tipo='cn') }}">{{cliente['cn_email']}}</a></td>
       <td>{{cliente['cn_nom1']}}</td><td>{{cliente['cn_nom2']}}</td>
       <td>{{cliente['cn_ap1']}}</td><td>{{cliente['cn_ap2']}}</td><td>{{cliente['dir']}}</td><td>{{cliente['cn_ci']}}</td>
     {% endfor %}

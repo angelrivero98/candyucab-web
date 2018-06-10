@@ -1,5 +1,5 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
-from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,Form
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm
 from candyucab import app,bcrypt
 from candyucab.user import User
 import json
@@ -7,12 +7,13 @@ import psycopg2
 from candyucab.db import Database
 from flask_login import login_user,current_user,logout_user,login_required
 
+
 @app.route("/")
 @app.route("/home")
 def home():
    return render_template('home.html')
 
-@app.route("/clientes")
+@app.route("/clientes",methods=['GET','POST'])
 def clientes():
     db = Database()
     cur = db.cursor_dict()
@@ -25,7 +26,7 @@ def clientes():
     db.cerrar()
     return render_template('clientes.html',title = 'Clientes',cj = cj,cn = cn)
 
-@app.route('/municipio/<int:fk_lugar>')
+@app.route('/municipio/<int:fk_lugar>',methods=['GET','POST'])
 def municipio(fk_lugar):
     db = Database()
     cur = db.cursor_dict()
@@ -38,7 +39,7 @@ def municipio(fk_lugar):
 
     return jsonify({'municipios': munArray})
 
-@app.route('/parroquia/<string:municipio>/<int:estado>')
+@app.route('/parroquia/<string:municipio>/<int:estado>',methods=['GET','POST'])
 def parroquia(municipio,estado):
     db = Database()
     cur = db.cursor_dict()
@@ -51,14 +52,64 @@ def parroquia(municipio,estado):
 
     return jsonify({'parroquias': paqArray})
 
-@app.route("/clientes/<int:c_id>/<string:tipo>")
-def cliente(c_id,tipo):
+@app.route("/clientes/<int:c_id>/<string:tipo>",methods=['GET','POST'])
+def update_cliente(c_id,tipo):
+    db = Database()
+    cur = db.cursor_dict()
     if tipo == 'cj':
-        form
-        return render_template('clienteJ.html')
+        cur.execute("SELECT * FROM clientejuridico",(c_id,))
+        cliente = cur.fetchone()
+        form = UpdateJForm()
+        form.current_rif.data = cliente['cj_rif']
+        form.current_email.data = cliente['cj_email']
+        if form.validate_on_submit():
+            try:
+                cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
+                (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
+            except:
+                print("ERROR updating into clientejuridico")
+                db.retroceder()
+            db.actualizar()
+            flash('Tu cliente ha sido actualizada','success')
+            return redirect(url_for('clientes'))
+        elif request.method == 'GET':
+            form.rif.data = cliente['cj_rif']
+            form.email.data = cliente['cj_email']
+            form.capdis.data = cliente['cj_capdis']
+            form.demcom.data = cliente['cj_demcom']
+            form.razsoc.data = cliente['cj_razsoc']
+            form.pagweb.data = cliente['cj_pagweb']
+        return render_template('clienteJ.html',form = form)
     elif tipo == 'cn':
-        form
-        return render_template('clienteN.html')
+        cur.execute("SELECT * FROM clientenatural",(c_id,))
+        cliente = cur.fetchone()
+        form = UpdateNForm()
+        if form.validate_on_submit():
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados.data,form.municipios.data,form.parroquias.data,))
+            direccion = cur.fetchone()
+            try:
+                cur.execute("""UPDATE clientenatural SET cn_rif = %s,cn_email = %s,cn_nom1 = %s,cn_nom2 = %s,cn_ap1=%s, cn_ap2=%s,cn_ci = %s,l_id = %s WHERE cn_id= %s;""",
+                (form.rif.data, form.email.data,form.nom1.data,form.nom2.data,form.ap1.data,form.ap2.data,form.ci.data,direccion['l_id'],c_id))
+            except:
+                print("ERROR updating into clientenatural")
+                db.retroceder()
+            db.actualizar()
+            flash('Tu cliente ha sido actualizada','success')
+            return redirect(url_for('clientes'))
+        elif request.method == 'GET':
+            form.rif.data = cliente['cn_rif']
+            form.email.data = cliente['cn_email']
+            form.nom1.data = cliente['cn_nom1']
+            form.nom2.data = cliente['cn_nom2']
+            form.ap1.data = cliente['cn_ap1']
+            form.ap2.data = cliente['cn_ap2']
+            form.ci.data = cliente['cn_ci']
+
+        return render_template('clienteN.html',form = form,title = 'Update Cliente')
+
 
 @app.route("/register")
 def register():
