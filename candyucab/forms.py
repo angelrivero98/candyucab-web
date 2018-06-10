@@ -47,35 +47,41 @@ class UpdateNForm(FlaskForm):
         parroquias = NonValidatingSelectField('Parroquia',choices=[])
         submit=SubmitField('Actualizar')
 
+        current_ci = IntegerField()
+        current_rif = StringField()
+        current_email = StringField()
+
         def validate_ci(self,ci):
             db = Database()
             cur = db.cursor_dict()
-            cur.execute("SELECT cn_ci from clientenatural WHERE cn_ci = %s;",(ci.data,))
-            if cur.fetchone():
-                raise ValidationError('La cedula ya esta tomada')
+            if self.current_ci.data != ci.data:
+                cur.execute("SELECT cn_ci from clientenatural WHERE cn_ci = %s;",(ci.data,))
+                if cur.fetchone():
+                    raise ValidationError('La cedula ya esta tomada')
 
         def validate_email(self,email):
             db = Database()
             cur = db.cursor_dict()
-            cur.execute("SELECT cj_email from clientejuridico WHERE cj_email = %s;",(email.data,))
-            if cur.fetchone():
-                raise ValidationError('El email ya esta tomado')
-            else:
-                cur.execute("SELECT cn_email from clientenatural WHERE cn_email = %s;",(email.data,))
+            if self.current_email.data != email.data:
+                cur.execute("SELECT cj_email from clientejuridico WHERE cj_email = %s;",(email.data,))
                 if cur.fetchone():
                     raise ValidationError('El email ya esta tomado')
-
+                else:
+                    cur.execute("SELECT cn_email from clientenatural WHERE cn_email = %s;",(email.data,))
+                    if cur.fetchone():
+                        raise ValidationError('El email ya esta tomado')
 
         def validate_rif(self,rif):
             db = Database()
             cur = db.cursor_dict()
-            cur.execute("SELECT cj_rif from clientejuridico WHERE cj_rif = %s;",(rif.data,))
-            if cur.fetchone():
-                raise ValidationError('El rif ya esta tomado')
-            else:
-                cur.execute("SELECT cn_rif from clientenatural WHERE cn_rif = %s;",(rif.data,))
+            if self.current_rif.data != rif.data:
+                cur.execute("SELECT cj_rif from clientejuridico WHERE cj_rif = %s;",(rif.data,))
                 if cur.fetchone():
                     raise ValidationError('El rif ya esta tomado')
+                else:
+                    cur.execute("SELECT cn_rif from clientenatural WHERE cn_rif = %s;",(rif.data,))
+                    if cur.fetchone():
+                        raise ValidationError('El rif ya esta tomado')
 
         def validate_estados(self,estados):
             if (estados.data == None):
