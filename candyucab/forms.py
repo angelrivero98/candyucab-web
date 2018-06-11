@@ -22,7 +22,7 @@ class LoginForm(FlaskForm):
 
 class TlfForm(FlaskForm):
     numero = IntegerField('Ingrese el Telefono sin el 0',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-    submit=SubmitField('Añadir Campo')
+    submit=SubmitField('Añadir Telefono')
 
     def validate_numero(self,numero):
         if len(str(numero.data)) != 10 :
@@ -31,7 +31,7 @@ class TlfForm(FlaskForm):
 class PersonaContactoForm(FlaskForm):
     nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
     apellido = StringField('Apellido',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-    submit=SubmitField('Añadir Campos')
+    submit=SubmitField('Añadir Persona')
 
 class UpdateNForm(FlaskForm):
         email = StringField('Email',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Email(message='Ingrese un email valido')])

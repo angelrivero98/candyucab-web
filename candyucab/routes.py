@@ -167,7 +167,7 @@ def new_tlf():
         if current_user.cj_id != 0:
             try:
                 cur.execute("""INSERT INTO telefono (t_num,cj_id)
-                VALUES (%s, %s);""",
+                            VALUES (%s, %s);""",
                 (form.numero.data,current_user.cj_id,))
             except:
                 print("ERROR inserting into telefono")
@@ -176,7 +176,7 @@ def new_tlf():
         else:
             try:
                 cur.execute("""INSERT INTO telefono (t_num,cn_id)
-                VALUES (%s, %s);""",
+                            VALUES (%s, %s);""",
                 (form.numero.data,current_user.cn_id,))
             except:
                 print("ERROR inserting into telefono")
@@ -235,7 +235,6 @@ def registerJ():
             print("ERROR inserting into clientejuridico")
             db.retroceder()
         cj = cur.fetchone()[0]
-        print(cj)
         db.actualizar()
         #cur.execute("SELECT cj_id FROM clientejuridico WHERE cj_email = %s;",(form.email.data,))
         #cj = cur.fetchone()
@@ -305,7 +304,6 @@ def registerN():
         flash('Su cuenta se ha creado exitosamente','success')
         return redirect(url_for('login'))
     return render_template('registerN.html',title='Register',form=form)
-
 
 @app.route("/login",methods=['GET','POST'])
 def login():

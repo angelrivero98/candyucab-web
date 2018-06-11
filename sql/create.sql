@@ -30,7 +30,7 @@ CREATE TABLE clientejuridico (
 
 CREATE TABLE telefono (
   t_id SERIAL,
-  t_num integer NOT NULL,
+  t_num numeric(10) NOT NULL,
   cj_id integer,
   cn_id integer,
   CONSTRAINT pk_telefono PRIMARY KEY (t_id)
