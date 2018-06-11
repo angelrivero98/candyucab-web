@@ -1,11 +1,10 @@
-{% from "_render_field.html" import render_field %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css' )}}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='estilo1.css' )}}">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../static/estilo1.css">
     <title>{{ title }}</title>
   </head>
   <body style="background-color:#e06666;">
@@ -26,7 +25,17 @@
               {%endif%}
             {% endwith%}
             <div class="form-group">
-            {{ render_field(form.numero) }}
+            {{ form.numero.label(class="form-control-label") }}
+            {% if form.numero.errors%}
+              {{form.numero(class="form-control form-control-lg is-invalid")}}
+              <div class="invalid-feddback">
+                {%for error in form.numero.errors%}
+                  <span>{{error}}</span>
+                {%endfor%}
+              </div>
+            {% else %}
+                {{ form.numero(class="form-control form-control-lg") }}
+            {%endif%}
           </div>
         </fieldset>
         <div class="form-group">
@@ -35,8 +44,8 @@
       </form>
     </div>
     {%endblock content%}
-    <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/estilo1.js' )}}"></script>
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/estilo1.js"></script>
   </body>
 </html>
