@@ -147,7 +147,7 @@ def delete_cliente(c_id,tipo):
             cur.execute("DELETE FROM clientenatural WHERE cn_id = %s;",(c_id,))
         except:
             print("ERROR deleting clientenatural")
-            db.actualizar()
+            db.retroceder()
         db.actualizar()
         db.cerrar()
         flash('Tu cliente ha sido eliminado','success')
