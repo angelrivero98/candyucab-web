@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../static/estilo1.css">
+    {%if title%}
+      <title>Candy Ucab - {{title}}</title>
+    {%else%}
+        <title>Candy Ucab</title>
+    {%endif%}
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar sticky-top navbar-light bg-light" style="background-color: #f2f1f1;">
+        <div class="container">
+          <a class="navbar-brand" href="#"><img src="../static/candyucab.png"></a>
+            <div class="navbar-nav">
+              <a class="nav-link" href="{{url_for('home')}}">Home</a>
+              <a class="nav-item nav-link" href="{{url_for('about')}}">About</a>
+            </div>
+    </div>
+  </nav>
+</header>
+<main role="main" class="container">
+<div class="row">
+ <div class="col-md-8">
+   {% with messages = get_flashed_messages(with_categories=true)%}
+     {% if messages%}
+       {%for category,message in messages%}
+         <div class="alert alert-{{ category}}">
+           {{message}}
+         </div>
+       {%endfor%}
+     {%endif%}
+   {% endwith%}
+   {% block content %}{% endblock %}
+ </div>
+</div>
+</main>
+
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/estilo1.js"></script>
+  </body>
+</html>
