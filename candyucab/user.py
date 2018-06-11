@@ -29,12 +29,3 @@ class User (object):
         return True
     def is_admin(self):
         return False
-
-class clientejuridico (object):
-    def __init__(self,clientejuridico):
-        self._clientejuridico = clientejuridico;
-    def __getattr__(self,k):
-        try:
-            return self._user[k]
-        except KeyError:
-            raise AttributeError()

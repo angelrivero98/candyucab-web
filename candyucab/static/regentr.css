@@ -1,206 +1,85 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow');
 
-/*Entrada*/
-input[type=text], input[type=password] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-}
-
-/* Set a style for all buttons */
-#id01 button {
-    background-color: #ea125e;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    font-size: 20px;
-}
-
-#id01 button:hover {
-    opacity: 0.8;
-}
-
-/* Extra styles for the cancel button */
-.cancelbtn {
-    width: auto;
-    padding: 10px 18px;
-    background-color: #f44336;
-}
-
-/* Center the image and position the close button */
-.imgcontainer {
+.cabecera{
+    margin-bottom: 15px;
+    color: #333;
     text-align: center;
-    margin: 24px 0 12px 0;
-    position: relative;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
 }
 
-img.avatar {
-    width: 40%;
-    border-radius: 50%;
+main{
+    font-family: 'PT Sans Narrow', sans-serif;
 }
 
-.container {
-    padding: 16px;
+.estructura{
+    width: 340px;
+    margin: 0 auto;
 }
 
-span.psw {
-    padding-top: 16px;
+.cabecera h1{
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
 }
 
-/* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    padding-top: 60px;
+.formulario .cuerpo{
+    border-top: 1px solid #d8dee2;
+    border-radius: 5px;
 }
 
-/* Modal Content/Box */
-.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-    border: 1px solid #888;
-    width: 40%; /* Could be more or less, depending on screen size */
+.cuerpo{
+    padding: 20px;
+    font-size: 18px;
+    background-color: #fff;
+    border: 1px solid #d8dee2;
 }
 
-/* The Close Button (x) */
-.close {
-    position: absolute;
-    right: 25px;
-    top: 0;
-    color: #000;
-    font-size: 35px;
-    font-weight: bold;
+.cuerpo label{
+    display: block;
+    margin-bottom: 7px;
 }
 
-.close:hover,
-.close:focus {
-    color: red;
-    cursor: pointer;
+label{
+    font-weight: 600;
 }
 
+.cuerpo input{
+    margin-top: 5px;
+    margin-bottom: 15px;
+    height: 35px;
+    padding: 10px;
+}
 
-
-/*Registro*/
-input[type=text], input[type=password] {
+.cuerpo input.form-control{
+    display: block;
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
 }
 
-/* Set a style for all buttons */
-#id02 button {
-    background-color: #ea125e;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
+.cuerpo > div .form-check-label{
+    font-weight: 300;
+    font-size: 17px;
+    margin-left: 10px;
+}
+
+.form-check-input{
+    margin-top: -0.2rem !important;
+}
+
+#submit{
+    margin-top: 20px;
+    margin-bottom: -10px;
+    padding-top: 2.03px;
     font-size: 20px;
+    font-weight: 600;
+    background: #ea125e;
 }
 
-#id02 button:hover {
-    opacity: 0.8;
+.cuerpo.no_esta{
+    border-radius: 5px;
 }
 
-
-/* Center the image and position the close button */
-.imgcontainer {
-    text-align: center;
-    margin: 24px 0 12px 0;
-    position: relative;
+.cuerpo.no_esta a{
+    color: #ea125e;
 }
-
-
-.container {
-    padding: 16px;
-}
-
-span.psw {
-    padding-top: 16px;
-}
-
-/* The Modal (background) */
-.modalr {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    padding-top: 60px;
-}
-
-/* Modal Content/Box */
-.modalr-content {
-    background-color: #fefefe;
-    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-    border: 1px solid #888;
-    width: 40%; /* Could be more or less, depending on screen size */
-}
-
-/* The Close Button (x) */
-.close2 {
-    position: absolute;
-    right: 25px;
-    top: 0;
-    color: #000;
-    font-size: 35px;
-    font-weight: bold;
-}
-
-.close2:hover,
-.close2:focus {
-    color: red;
-    cursor: pointer;
-}
-
-
-/* Add Zoom Animation */
-.animate {
-    -webkit-animation: animatezoom 0.6s;
-    animation: animatezoom 0.6s
-}
-
-@-webkit-keyframes animatezoom {
-    from {-webkit-transform: scale(0)}
-    to {-webkit-transform: scale(1)}
-}
-
-@keyframes animatezoom {
-    from {transform: scale(0)}
-    to {transform: scale(1)}
-}
-
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-    span.psw {
-        display: block;
-        float: none;
-    }
-    .cancelbtn {
-        width: 100%;
-    }
-}
-
