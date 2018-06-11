@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css' )}}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='estilo1.css' )}}">
-    <title>Registro</title>
+    <title>Cliente</title>
   </head>
   <body style="background-color:#e06666;">
     {%block content%}
@@ -14,8 +14,8 @@
           <form class="" action="" method="POST" style="margin: 0 auto; width:40% ">
             {{form.hidden_tag()}}
             <fieldset class="form-group">
-              <img src="../static/dulce.png" alt="" class="rounded mx-auto d-block">
-            <h2 class="border-bottom mb-4">Registro: Cliente Juridico</h2>
+              <img src="{{ url_for('static', filename='dulce.png' )}}" alt="" class="rounded mx-auto d-block">
+            <h2 class="border-bottom mb-4">Actualizar: Cliente Juridico</h2>
             {% with messages = get_flashed_messages(with_categories=true)%}
                   {% if messages%}
                     {%for category,message in messages%}
@@ -67,30 +67,38 @@
               {{ render_field(form.parroquias2)}}
             </div>
           </div>
-            <div class="form-group">
-              {{ render_field(form.username) }}
-            </div>
-          <div class="form-group">
-            {{ render_field(form.password) }}
-
-        </div>
-        <div class="form-group">
-          {{ render_field(form.confim_password) }}
-
-        </div>
       </fieldset>
-      <div class="form-group">
-        <div class="form-group">
-    {{ form.submit(class="btn btn-outline-info") }}
-    </div>
+      <div class="form-row">
+      <div class="form-col">
+        {{ form.submit(class="btn btn-outline-info") }}
+      </div>
+      <div class="form-col">
+        <a class = "btn btn-outline-info" href = "{{url_for ('clientes')}}"> Regresar</a>
+      </div>
+      <div class="form-col">
+        <button class="btn btn-danger btn-sm m-1" type="button" data-toggle="modal" data-target="#deleteModal">Delete</button>
+      </div>
       </div>
     </form>
-    <div class="border-top pt-3">
-      <small class="text-muted">
-        Tienes cuenta? <a class="ml-2" href="{{url_for('login')}}">Ingresar</a>
-      </small>
-
+    <!-- Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Eliminar Cliente?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form class="" action="{{ url_for('delete_cliente',c_id = c_id,tipo = 'cj')}}" method="POST">
+            <input class="btn btn-danger" type="submit" name="" value="Delete">
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
     </div>
     {%endblock content%}
     <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
@@ -171,5 +179,6 @@
           }
 
     </script>
+
   </body>
 </html>
