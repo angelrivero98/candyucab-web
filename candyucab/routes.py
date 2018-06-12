@@ -43,7 +43,7 @@ def municipio(fk_lugar):
 def parroquia(municipio,estado):
     db = Database()
     cur = db.cursor_dict()
-    cur.execute("SELECT distinct P.* from lugar M,lugar P,lugar E where M.l_nombre =%s AND P.fk_lugar = M.l_id AND M.fk_lugar = %s ;",(municipio,estado,))
+    cur.execute("SELECT distinct P.* from lugar M,lugar P,lugar E where M.l_nombre =%s AND P.fk_lugar = M.l_id AND P.l_tipo = 'P' AND M.fk_lugar = %s ;",(municipio,estado,))
     parroquias = cur.fetchall()
     db.cerrar()
     paqArray = []
