@@ -60,6 +60,7 @@ CREATE TABLE empleado (
   e_apellido varchar(20) NOT NULL,
   e_ci numeric(15) NOT NULL UNIQUE,
   e_salario numeric(15) NOT NULL,
+  ti_cod integer NOT NULL,
   CONSTRAINT pk_empleado PRIMARY KEY (e_id)
 );
 
@@ -101,7 +102,7 @@ CREATE TABLE fabrica (
 );
 
 CREATE TABLE tienda (
-  ti_id numeric(8),
+  ti_id SERIAL,
   ti_tipo varchar(20) NOT NULL,
   ti_nombre varchar(40) NOT NULL,
   l_id numeric(10) NOT NULL,

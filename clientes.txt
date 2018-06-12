@@ -1,329 +1,167 @@
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-14933077-2','ncolomer@hotmail.com','Rafael','Rosa','Iniesta','Juan',1232,14647955,1)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-28478236-1','fbonet@yahoo.com','Concepción','Alba','Gaya','Peralta',1575,15699524,1)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-20328423-1','palomaresiker@gmail.com','Adrián','Milagros','Real','Sanmiguel',1038,18818010,2)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-39582313-3','ismael49@gmail.com','Juan José','Alejandra','Sacristán','Jara',740,14448803,2)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-66629310-0','carla60@hotmail.com','Luisa','Fernando','Huertas','Barrena',763,25308443,3)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-37758940-7','domingoagustin@gmail.com','Elena','Fátima','Arias','Aroca',855,11980781,3)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-77501490-5','elena38@yahoo.com','María','Jose Luis','Guerra','Codina',919,13476052,4)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-8557401-9','saravargas@gmail.com','Asunción','Consuelo','Valderrama','Asenjo',986,19730363,4)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-86289678-9','xgaray@hotmail.com','Lourdes','Ángeles','Soriano','Vendrell',1040,16402529,5)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-70664054-7','carlosjulian@yahoo.com','Andrea','Magdalena','Blanco','Salas',745,6134697,5)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-8103107-3','aibanez@hotmail.com','Juan Manuel','Eduardo','Ángel','Gálvez',561,17638252,6)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-27591125-2','castrogonzalo@hotmail.com','Jorge','Nicolás','Hoz','Arcos',1229,4006789,6)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-23091988-0','manuelblanes@gmail.com','Vicente','Felix','Porta','Moll',921,9702636,7)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-72232685-8','ybolanos@hotmail.com','Belen','Dolores','Arnau','Sosa',618,9686641,7)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-97722812-8','purificacionbatlle@gmail.com','Angela','Jose Ramon','Rozas','Puente',487,14601231,8)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-51129276-3','menajorge@gmail.com','Julia','Inmaculada','Pastor','Almagro',1591,3438614,8)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-21029142-1','rafael31@hotmail.com','Virginia','Milagros','Oliveras','Aparicio',1407,4472385,9)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-26007217-4','vaquerorodrigo@gmail.com','Sandra','Jesús','Casas','Cañizares',891,9182176,9)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-91358513-6','gorozco@yahoo.com','Sonia','Lucía','Santana','Abella',860,9594087,10)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-72419796-6','bfalcon@gmail.com','Felipe','Victor','Escalona','Peinado',738,2033773,10)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-89066259-2','olgaroca@yahoo.com','Luisa','Gabriel','Zurita','Pagès',827,3253837,11)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-78632583-8','beatrizsaavedra@gmail.com','Jose Manuel','Aitor','Feliu','Oller',776,13573956,11)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-62021340-1','hurtadovanesa@gmail.com','Susana','Ruben','Donoso','Vega',733,15980057,12)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-15207989-4','pilarroca@gmail.com','Begoña','Luís','Quesada','Cuenca',1577,20292552,12)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-1151398-7','costapaula@gmail.com','Lucía','Irene','Viña','Rebollo',1075,25075673,13)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-95540628-9','queroldaniela@yahoo.com','Julian','Javier','Escribano','Ordóñez',1539,4921592,13)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-94447495-6','encarnacionyuste@hotmail.com','Virginia','Cesar','Pou','Moliner',1499,19591256,14)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-12566340-7','soledad37@hotmail.com','Andrés','Jose Maria','Bueno','Olivera',1584,2150726,14)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-74799252-4','fontteresa@hotmail.com','Gonzalo','Francisco','Cobo','Alvarez',948,18624561,15)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-89873768-8','gpujol@gmail.com','Jordi','Olga','Clemente','Velasco',992,4609454,15)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-84168797-7','carolinaatienza@gmail.com','Elena','Roberto','Viana','Arranz',1513,22161284,16)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-81370858-9','csanz@gmail.com','Jose Miguel','Rodrigo','Costa','Millán',562,5153827,16)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-7851290-1','sgodoy@yahoo.com','Jorge','Aurora','Gracia','Solsona',1439,18971088,17)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-36639220-1','beltransoledad@gmail.com','Francisca','Jose Miguel','Sola','Montalbán',678,9780835,17)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-54892073-0','magdalenayanez@hotmail.com','Joan','Emilia','Zabaleta','Viñas',1274,23178871,18)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-12406303-6','encarnacionpereira@gmail.com','Josep','Jesús','Corominas','Rivero',1410,18129224,18)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-81208433-7','luzfelipe@gmail.com','Pilar','Ana','Avilés','Hoyos',1451,24749667,19)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-28431755-7','juan-antonio64@hotmail.com','Jose Ignacio','Jose Carlos','Blazquez','Barco',1030,2366773,19)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-54307820-6','nieves73@gmail.com','Julio','Cristian','Badía','Machado',1206,4717438,20)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-46080694-7','puriarte@gmail.com','Eva','Anna','Oliveras','Barco',1372,5024243,20)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-39848384-6','gserna@yahoo.com','Jordi','Marc','Jaén','Goñi',1546,21126054,21)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-54038491-3','miguel-angel91@hotmail.com','Agustín','Asunción','Montes','Pi',781,4700534,21)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-54480195-3','marcossoriano@gmail.com','Montserrat','Ángel','Vidal','Figueroa',1324,22875258,22)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-78507518-3','fatimaarroyo@gmail.com','Nuria','Francisca','Crespi','Jordá',1428,7029609,22)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-18569362-9','gregorio90@yahoo.com','Irene','Alfredo','Cabrero','Rosselló',1270,2243467,23)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-13579987-1','encarnacion06@gmail.com','Alfonso','Antonio','Mas','Riera',1131,22961942,23)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-66184115-8','acarmona@gmail.com','Nerea','Encarnacion','Cortina','Quero',1358,7041255,24)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-5202447-7','laura19@gmail.com','Juan','Eugenia','Rico','Martinez',1252,18068963,24)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-80909328-0','gabrielalmeida@hotmail.com','Agustín','Emilio','Armas','Ballesteros',1315,21905657,25)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-77307611-6','pmoraleda@gmail.com','Ignacio','María','Balaguer','Rosado',1184,13811439,25)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-54841936-9','nuribe@yahoo.com','Jose Angel','Juan Antonio','Llano','Carmona',802,4864176,26)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-41701766-2','bpenas@gmail.com','Cesar','Albert','Robledo','Cárdenas',735,9100136,26)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-1153478-8','irene83@yahoo.com','Manuela','Concepción','Echeverría','Codina',743,11637413,27)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-97687698-0','yolandacoello@yahoo.com','Pedro','Nerea','Exposito','Fiol',1410,9047037,27)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-86327087-4','tapiaclara@hotmail.com','Nicolás','Esther','Báez','Palomares',1274,10444538,28)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-43703081-9','amorfernando@yahoo.com','Jose Luis','Alejandro','Tejada','Escudero',982,13492882,28)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-42517327-2','davidcolomer@hotmail.com','Aurora','Marina','Gutierrez','Beltran',1487,5489493,29)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-4824754-8','lillooscar@yahoo.com','Noelia','Elisa','Cervera','Albero',1235,18613030,29)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-73103992-7','xcalderon@hotmail.com','Alejandro','Aitor','Avilés','Ibáñez',890,17951173,30)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-7278303-7','carlagaliano@gmail.com','Marina','Marina','Roig','Vega',1105,9969660,30)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-53131965-0','vilaplanafrancisca@gmail.com','Juana','Inmaculada','Carpio','Bello',1499,11009368,31)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-38042643-8','veronica58@gmail.com','Alejandro','Jose Ramon','Báez','Guillen',592,15782798,31)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-1388302-3','ztrillo@yahoo.com','Begoña','Virginia','Montero','Ayllón',720,5918079,32)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-65472006-1','zcheca@yahoo.com','Jose Antonio','Virginia','Salcedo','Sanchez',540,9403358,32)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-30322721-7','tboada@hotmail.com','Asunción','Trinidad','Bautista','Franch',886,21470345,33)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-35679821-2','montserrat59@gmail.com','Raquel','Samuel','Velázquez','Roda',565,12625575,33)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-93269588-1','ttaboada@gmail.com','Alvaro','Pedro','Mateo','Arco',1185,14232625,34)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-50187587-0','jcruz@yahoo.com','Juan José','Purificación','Martinez','Arnal',1489,13246278,34)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-95968024-9','lorena02@yahoo.com','Ángel','Ángel','Fabra','Riba',994,15669977,35)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-33049565-2','tjara@hotmail.com','Ana','Mónica','Correa','Bustos',1517,15858525,35)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-15193120-2','pagessoledad@hotmail.com','Belen','Felix','Santiago','Oliva',912,17931464,36)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-96737614-4','luisaoliver@hotmail.com','Milagros','Juan Luis','Lara','Quevedo',1331,20304357,36)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-87438255-3','alejandro96@hotmail.com','Carolina','Sonia','Villar','Urrutia',1186,7897755,37)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-3251345-4','xvalenzuela@gmail.com','Jose Maria','Ricardo','Sanjuan','Almagro',738,24411416,37)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-73005708-0','manuelpedro@hotmail.com','Lourdes','Manuel','Quintana','Ramis',515,9199388,38)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-68327008-6','vlasa@hotmail.com','Iker','Nicolás','Rojas','Hidalgo',1559,18632450,38)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-88300207-9','nyuste@gmail.com','Mohamed','Daniela','Vidal','Varela',1304,17843188,39)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-2037750-4','sergio62@hotmail.com','Nuria','Fátima','Colom','Velázquez',1034,4833057,39)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-31057346-7','tomas05@gmail.com','Luz','Jose Antonio','Exposito','Ledesma',1048,4917286,40)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-13188696-9','fernandolumbreras@gmail.com','Daniela','Juan Manuel','Maza','Otero',872,2687912,40)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-49377171-2','angela12@hotmail.com','Fátima','Alfredo','Bayón','Osorio',1209,3432645,41)
-
-INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ('V-32285911-1','felipe15@yahoo.com','Asunción','Paula','Madrid','Belmonte',1337,12287197,41)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-17390424-6','teresagelabert@yahoo.com','Amores and Sons','LtdArranz-Pacheco','https://falcon.com/',377236,1)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-45496907-2','ysimo@hotmail.com','Coll-Pareja','IncAcuña Group','https://www.palmer.com/',545887,1)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-13035611-1','ana43@hotmail.com','Santamaría, Novoa and Ribes','LLCLledó-Cabezas','https://www.oller.org/',297522,2)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-37676758-3','alonsorodrigo@gmail.com','Amores, Amo and Prat','LLCLamas, Palomar and Azorin','https://www.toro.com/',743344,2)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-60224333-3','millaveronica@yahoo.com','Aliaga-Murcia','IncContreras and Sons','https://torrecilla.com/',555373,3)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-87022040-0','bcompany@gmail.com','Quevedo, Mercader and Figueras','and SonsRamirez-Camino','https://clemente.com/',652428,3)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-7507811-3','david50@yahoo.com','Melero Inc','LLCPinilla, Barriga and Blasco','http://www.prat-vilar.net/',443136,4)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-59960569-2','afabregat@yahoo.com','Duran PLC','and SonsPuerta, Andreu and Vizcaíno','https://pineiro-milla.biz/',162891,4)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-75804947-5','inespol@yahoo.com','Galiano-Mena','LtdNicolau LLC','https://tormo.com/',320064,5)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-2805662-5','herranzlucia@gmail.com','Salgado, Higueras and Tur','PLCLumbreras Inc','http://www.zorrilla.org/',783631,5)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-41564438-1','uleon@yahoo.com','Franch, Marín and Sala','and SonsPalomares Group','https://escribano-rey.com/',163927,6)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-36934272-1','natalia99@gmail.com','Ricart Group','IncFerrando Group','http://www.leon-giner.info/',108990,6)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-40207180-8','bcabrero@hotmail.com','Soriano PLC','GroupNavas PLC','http://gascon.biz/',757564,7)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-16858758-1','wmoreno@yahoo.com','Cardona Group','and SonsPineda-Barberá','http://www.casals.org/',645782,7)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-22250229-6','escalonalorenzo@gmail.com','Lamas, Rico and Alcalde','GroupGalan, Díaz and Busquets','http://www.mosquera-acevedo.com/',217934,8)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-15054741-0','sofia80@yahoo.com','Jove, Ros and Gallardo','PLCMendoza Ltd','https://llorente.org/',549773,8)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-98544335-0','marcodiego@hotmail.com','Ripoll-Alemán','GroupColoma-Pazos','https://www.torre.net/',351553,9)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-33024416-5','pcal@yahoo.com','Revilla PLC','PLCVicente LLC','http://www.gallart-granados.info/',663096,9)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-30923473-5','moraledaesther@hotmail.com','Almazán Group','LLCZaragoza and Sons','https://peralta-garcia.net/',280605,10)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-41806975-9','francisco-josecastilla@gmail.com','Coronado Ltd','PLCLorenzo, Balaguer and Tapia','http://romeu-pinol.biz/',322816,10)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-24503656-4','chuguet@hotmail.com','Arco-Téllez','LtdRuano-Cabrero','https://www.ortega.com/',664319,11)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-88388824-3','amoluis-miguel@hotmail.com','Castejón-Ayuso','LtdBaeza-Tormo','http://amoros.com/',886219,11)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-38006414-0','javiersantana@gmail.com','Gallart, Catalá and Manzano','PLCSegarra LLC','https://pineiro.com/',512165,12)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-69665452-1','virginiavillegas@yahoo.com','Vilalta, Pedraza and Fajardo','LLCBarbero, Barrena and Cerezo','http://mateu.com/',292072,12)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-41764479-7','fioldomingo@gmail.com','Bustos, Ortiz and Puente','GroupJuliá, Barrios and Prat','https://arjona-sola.net/',375284,13)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-48735764-3','rocio34@hotmail.com','Solano, Tejada and Peiró','GroupAlberdi-García','https://www.rosa.org/',661745,13)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-70366675-7','villalobossebastian@gmail.com','Salcedo-Mir','LLCVerdugo, Almazán and Carro','http://gonzalez.info/',537794,14)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-98863368-1','cflores@hotmail.com','Valcárcel, Manso and Gelabert','and SonsLarrea Ltd','https://www.bayo-duarte.com/',436343,14)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-6295384-2','balemany@yahoo.com','Gomez-Nevado','LLCFalcón-Agustí','https://verdu-haro.biz/',144211,15)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-11269211-1','francisca00@hotmail.com','Llopis-Saldaña','and SonsArregui-Cantero','http://sans.net/',286642,15)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-72134701-6','caminomanuela@hotmail.com','Vega PLC','IncBejarano, Hernando and Meléndez','http://www.sanchez-sole.com/',816535,16)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-8078122-8','pcoronado@hotmail.com','Sánchez, Berrocal and Barriga','and SonsCasal PLC','https://gimenez.com/',601179,16)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-69563571-3','raularcos@hotmail.com','Manzano, Álamo and Botella','LtdValero-Iglesias','https://vaquero-cueto.org/',640743,17)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-84238404-2','jose-carlosiborra@yahoo.com','Vilanova Ltd','and SonsTorrent Group','https://www.camps.com/',902182,17)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-13961243-4','ikerbenavent@gmail.com','Marín-Cisneros','IncRódenas-Gordillo','http://www.rius.com/',651243,18)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-68230537-0','figuerolatrinidad@yahoo.com','Valentín Inc','GroupMartínez, Romeu and Lucas','https://aguila.com/',434845,18)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-68193774-3','rafael78@gmail.com','Echevarría Ltd','LtdGómez PLC','https://valverde.biz/',863420,19)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-63451205-5','lorena42@hotmail.com','Luz Inc','IncCervera LLC','http://www.rodriguez.com/',799388,19)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-11135073-2','miguel-angel92@hotmail.com','Zorrilla-Perelló','IncGarmendia-Corbacho','http://www.teruel.com/',208237,20)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-59255995-2','espanolroberto@yahoo.com','Paz and Sons','GroupCabo, Ribes and Asensio','http://www.feijoo.net/',881800,20)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-7652012-9','juan-manuel26@gmail.com','Espada Inc','LLCNavas LLC','https://rueda-pinedo.info/',901508,21)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-55658043-9','scastell@gmail.com','Figueroa LLC','LLCRoman Group','http://www.beltran.info/',282690,21)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-39527200-0','juanafonseca@hotmail.com','Castañeda PLC','PLCAlfaro LLC','https://gonzalez-grau.com/',599188,22)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-82833069-7','avazquez@gmail.com','Agudo-Múñiz','LtdCarretero-Terrón','https://alcazar.com/',460343,22)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-90702189-3','jose-angel63@yahoo.com','Madrigal, Alvarado and Mínguez','LtdMarcos, Zurita and Pavón','https://colom.net/',278902,23)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-19828523-5','juana63@hotmail.com','Costa-Ibarra','LtdValderrama, Aguilera and Plaza','https://cuervo.com/',562073,23)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-55140454-5','bmariscal@gmail.com','Estrada, Montenegro and Báez','PLCCortes Inc','https://palma.com/',749475,24)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-94285865-1','belengilabert@yahoo.com','Fonseca PLC','GroupPriego Ltd','https://www.rius.biz/',612067,24)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-18551505-2','veronica82@hotmail.com','Jáuregui PLC','GroupSalazar and Sons','https://carro.info/',752215,25)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-59517470-6','miralleslaura@gmail.com','Niño, Pareja and Luna','PLCCarlos, Ropero and Blanch','https://priego.com/',607217,25)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-67348962-5','icarrasco@gmail.com','Gargallo, Ricart and Nadal','LLCAsensio-Coca','https://www.juan.com/',679165,26)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-36786548-9','kbelmonte@yahoo.com','Benito LLC','GroupGaliano-Marin','https://www.puente.info/',805989,26)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-33761498-3','zapatajordi@yahoo.com','Báez-Camino','GroupAtienza LLC','https://llabres.com/',257728,27)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-33961480-8','dcorral@gmail.com','Giménez-Rivera','PLCGallo, Solé and Roura','https://www.berrocal.com/',641575,27)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-9340957-3','manuel19@hotmail.com','Maldonado, Tur and Malo','GroupPaniagua-Francisco','http://www.pomares-muniz.com/',989036,28)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-70785352-9','hamoros@hotmail.com','Palmer, Barros and Valencia','LLCCastañeda, Verdejo and Atienza','https://www.diego.biz/',567754,28)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-82606886-1','felix26@hotmail.com','Ferrándiz, Samper and Albero','LtdAdadia-Mulet','http://www.hernandez.com/',483625,29)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-67255416-5','carnerofelix@gmail.com','Hervás-Iborra','IncBarrera, Borrell and Maldonado','http://gual.com/',775779,29)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-23178877-0','trillojosefa@hotmail.com','Gabaldón PLC','LtdRoma Group','https://rosell.com/',662511,30)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-24563618-8','arranzjose-angel@yahoo.com','Cardona-Mir','IncSolera PLC','https://www.gaya.info/',652571,30)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-58962986-1','alejandra33@gmail.com','Castillo-Bermejo','PLCVicens, Lloret and Alcaraz','http://pino-canales.org/',738045,31)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-43793097-7','juan-francisco16@yahoo.com','Real-Puerta','GroupTapia-Folch','https://nunez.com/',360119,31)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-79466667-5','angel87@hotmail.com','Sarabia-Ojeda','and SonsUrrutia, Serrano and Pombo','https://www.leal.com/',781691,32)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-64400545-6','zazorin@yahoo.com','Gras, Borja and Orozco','IncMedina-Caro','http://www.batalla.com/',701036,32)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-15790173-2','frutoseva@gmail.com','Sanz-Criado','GroupMartin, Bellido and Neira','https://toro.com/',157292,33)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-20378463-2','valdesconcepcion@hotmail.com','Gomila, Canales and Artigas','LLCBoada-Sola','http://www.rodrigo.com/',199012,33)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-34957783-4','ivanreina@hotmail.com','García Inc','LtdTorrijos-Carro','https://www.comas.com/',755114,34)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-77761479-2','uporcel@gmail.com','Escalona-Vives','GroupSomoza-Maestre','http://garces-penalver.net/',386161,34)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-58573831-2','mdalmau@gmail.com','Olivera-Gisbert','LtdTirado LLC','https://www.iglesias.com/',779190,35)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-52753754-3','mendezrodrigo@hotmail.com','Infante, Frías and Valderrama','and SonsCuervo, Ramirez and Granados','https://www.montana.com/',663681,35)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-81707739-2','nuria01@yahoo.com','Gracia-Campo','and SonsSantos-Pedrosa','https://ayala.biz/',235344,36)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-84842477-6','villanuevajulia@hotmail.com','Falcón PLC','GroupSanz LLC','https://goni-gonzalo.com/',354457,36)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-1947751-9','serraisabel@gmail.com','Villaverde and Sons','PLCTéllez-Céspedes','https://www.villalonga.org/',772951,37)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-71014016-2','iniestafrancisco-jose@hotmail.com','Mulet LLC','LtdSalcedo, Morera and Soler','http://moles-laguna.com/',362259,37)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-20429622-4','albert99@gmail.com','Meléndez PLC','and SonsRodrigo-Morillo','https://seco.net/',427705,38)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-52580559-7','marcabril@gmail.com','Nevado, Vara and Jiménez','LtdAlemany Group','https://www.sanz-julia.net/',528616,38)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-36249412-4','frivero@yahoo.com','Martínez Ltd','and SonsSotelo, Arévalo and Gil','http://losada.com/',223943,39)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-99882640-8','nievessoto@hotmail.com','Buendía Group','LtdFalcón PLC','http://gibert.com/',979906,39)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-85557121-8','rosario48@yahoo.com','Portero, Castell and Blanes','LtdSanjuan PLC','http://lumbreras.org/',906206,40)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-48757762-8','jordi02@gmail.com','Sanmiguel Ltd','PLCPerales Inc','https://www.rodriguez.info/',581457,40)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-18058149-9','francisco-josegibert@yahoo.com','Mateo-Rivas','PLCRico, Lucas and Montserrat','https://www.aznar-luz.com/',149506,41)
-
-INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES ('J-93170925-6','uriartejose-angel@yahoo.com','Figueras-Anguita','GroupBarros-Sanchez','https://tomas.com/',996179,41)
-
+INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES
+('V-80831624-2','osorioanna@hotmail.com','Daniela','Mariano','Gárate','Doménech',784,25685725,1),
+('V-54952509-5','correatomas@hotmail.com','Francisco Javier','Ramon','Catalán','Donoso',1391,2457789,1),
+('V-99128801-2','khurtado@yahoo.com','Jose Ignacio','Belen','Alsina','Gallardo',1353,9358887,2),
+('V-54737192-4','juan-manuelnadal@hotmail.com','Sofia','Lorenzo','Lara','Rodriguez',1049,10284508,2),
+('V-55105085-8','victor-manuelpalmer@gmail.com','Ramon','Miguel Ángel','Ledesma','Leon',1354,6855779,3),
+('V-10570073-2','dcasanova@yahoo.com','Lourdes','Elisa','Fortuny','Segovia',788,17175075,3),
+('V-43152589-3','bustosjose-luis@hotmail.com','Joan','Concepción','Mendez','Sola',613,10428272,4),
+('V-95733104-1','hamaya@hotmail.com','Roberto','Mohamed','Fiol','Armas',1382,11740038,4),
+('V-44242871-0','bertranjosep@hotmail.com','Luis Miguel','Samuel','Beltrán','Checa',1434,7852588,5),
+('V-98795689-1','ghervas@yahoo.com','Consuelo','Victor','Seco','Lobato',722,2371801,5),
+('V-54294982-5','juan-joseaguirre@gmail.com','Mercedes','Claudia','Llobet','Pacheco',1134,14812063,6),
+('V-18847106-3','margarita53@yahoo.com','Silvia','Alfredo','Coll','Aragonés',550,22405614,6),
+('V-39088461-7','mario87@yahoo.com','Antonia','Sebastian','Vélez','Moya',1159,14852823,7),
+('V-57092195-0','farregregorio@yahoo.com','Juan Antonio','Celia','Ballesteros','Llano',1600,9519261,7),
+('V-31391229-4','elillo@hotmail.com','Juan José','Isabel','Valverde','Gonzalo',890,10524171,8),
+('V-33898920-3','veronicazabaleta@gmail.com','Lorenzo','Rosario','Cerezo','Osuna',516,18446877,8),
+('V-86200254-8','itome@gmail.com','Jose Maria','Cristian','Lerma','Vives',698,13952331,9),
+('V-7199953-1','oaramburu@gmail.com','Lourdes','Pedro','Fabregat','Gascón',880,4696890,9),
+('V-52178138-5','felixvilaplana@yahoo.com','Jaime','Adrián','Martin','Mata',1440,11879177,10),
+('V-70738001-5','sonia69@gmail.com','Aitor','Felipe','Segovia','Pardo',769,21869157,10),
+('V-15985420-2','soledad73@hotmail.com','Ruben','Sandra','Pallarès','Castañeda',1293,18202953,11),
+('V-85928697-4','jesus42@hotmail.com','Miriam','Dolores','Echevarría','Riera',1479,10544646,11),
+('V-12973964-7','javier75@hotmail.com','Josep','Adriana','Olmo','Roman',944,11397022,12),
+('V-49461695-1','gonzalezmiriam@hotmail.com','Fátima','Clara','Santana','Moll',730,10149147,12),
+('V-50777593-3','susanapareja@yahoo.com','Samuel','Fátima','Vizcaíno','Alcázar',1508,21473236,13),
+('V-34591331-2','marina48@yahoo.com','Clara','Susana','Hernández','Arroyo',589,18275899,13),
+('V-61200169-3','yrossello@yahoo.com','Laura','Dolores','Torrents','Uriarte',607,17187380,14),
+('V-33227057-9','ibanezcelia@hotmail.com','Aitor','Rafael','Millán','Salas',1098,9204433,14),
+('V-10054082-3','sara53@hotmail.com','Aitor','Juan Carlos','Raya','Alonso',910,1227851,15),
+('V-43225322-5','menendezeduardo@hotmail.com','Juan Carlos','Lucía','Diaz','Ros',1284,15877897,15),
+('V-34412729-5','ivancadenas@yahoo.com','Adriana','Nerea','Campo','Bonilla',726,3402982,16),
+('V-10336409-6','canalesrocio@hotmail.com','Dolores','Concepción','Echevarría','Verdú',1522,8593750,16),
+('V-12458198-2','osoriomiguel-angel@yahoo.com','Marc','Domingo','Prada','Doménech',1315,13030826,17),
+('V-74479931-7','bernatsalvador@hotmail.com','Gabriel','Jose Ramon','Guillen','Estevez',1150,6827280,17),
+('V-95071606-7','ismael69@gmail.com','Beatriz','Silvia','Pazos','Sanmiguel',726,12483346,18),
+('V-95586526-8','sofia71@gmail.com','Milagros','Francisco Javier','Bermúdez','Lobato',781,13041192,18),
+('V-38797203-3','nalfonso@yahoo.com','Sofia','Jose Maria','Capdevila','Flores',643,4374085,19),
+('V-72650328-6','rafael85@yahoo.com','María','Gregorio','Villa','Ugarte',1392,19051965,19),
+('V-36208750-9','guillermomontalban@hotmail.com','Jose Carlos','Alicia','Peñas','Crespo',1211,6845140,20),
+('V-6769213-0','mramon@yahoo.com','Isabel','Rosario','Vendrell','Ortuño',769,10892805,20),
+('V-8282423-0','lpadilla@yahoo.com','Juan Carlos','Gonzalo','Arce','Bautista',855,16040834,21),
+('V-95494167-8','sanchezfrancisco-jose@yahoo.com','Carlos','Victor Manuel','Briones','Calderon',1237,4930888,21),
+('V-40736957-3','damores@gmail.com','Nicolás','Luis Miguel','Zabala','Alcaraz',1215,9547704,22),
+('V-27075950-4','aiglesias@gmail.com','Luis Miguel','Paula','Linares','Aznar',1370,10564173,22),
+('V-80949032-8','jose-carlosbaez@gmail.com','Celia','Juan','Benitez','Cazorla',783,7469109,23),
+('V-36289404-7','dballesteros@yahoo.com','Sara','Juan Carlos','Español','Rovira',948,19338050,23),
+('V-60786780-1','blanca27@hotmail.com','Gema','Jose Francisco','Berrocal','Abril',1508,14801762,24),
+('V-12188943-5','adrian81@yahoo.com','Jorge','Jose Miguel','Escolano','Perez',1450,22606394,24),
+('V-16449708-0','jinfante@yahoo.com','Dolores','Asunción','Reig','Salcedo',1291,16489001,25),
+('V-58769767-0','rropero@yahoo.com','Jose Antonio','Pablo','Delgado','Bárcena',1449,12698804,25),
+('V-61631837-2','adriana14@yahoo.com','Juan Luis','Alex','Torre','Vilaplana',1066,8879031,26),
+('V-97537889-9','hectormontenegro@yahoo.com','Josep','Nerea','Aparicio','Lluch',738,4319012,26),
+('V-79517493-8','eugenianogueira@hotmail.com','Luís','Jose Angel','Mateos','Navarro',1040,24425782,27),
+('V-88680846-3','claracalatayud@yahoo.com','Mercedes','Julia','Bayón','Sola',637,22539977,27),
+('V-24734249-8','palomojose-ramon@hotmail.com','Jose Luis','Joaquin','Andreu','Barceló',732,2779144,28),
+('V-51871206-2','concepcionhurtado@gmail.com','Samuel','Mohamed','Alberto','Ortiz',642,16659070,28),
+('V-47181951-7','pablomanzano@yahoo.com','Jose Angel','Martin','Céspedes','Alberola',645,19877581,29),
+('V-17229128-6','xpriego@hotmail.com','Francisco Javier','Mario','Ríos','Ballesteros',1169,8735779,29),
+('V-11175052-0','lidiaarellano@gmail.com','Pilar','Marina','Núñez','Riera',1521,12070470,30),
+('V-17217529-4','gematorralba@yahoo.com','Isabel','Silvia','Trillo','Echevarría',747,9127991,30),
+('V-5115294-3','sofia27@hotmail.com','Yolanda','Celia','Jáuregui','Hoz',1073,18274506,31),
+('V-58082826-5','mateojose-luis@yahoo.com','Tomás','Luís','Barbero','Valcárcel',749,24256337,31),
+('V-91110667-9','danielacasals@hotmail.com','Ricardo','Jose Maria','Fernández','Criado',1592,17785626,32),
+('V-39018638-9','gregorio96@hotmail.com','Noelia','Jose Manuel','Murillo','Garay',1564,19919046,32),
+('V-51378637-7','fredondo@gmail.com','Patricia','Emilia','Jara','Arjona',1073,1253286,33),
+('V-46208642-1','nsoria@yahoo.com','Ismael','David','Cortés','Querol',703,18118027,33),
+('V-51268237-9','canetcesar@yahoo.com','Virginia','Milagros','Benitez','Revilla',1435,19774935,34),
+('V-73419402-1','llabresmar@gmail.com','Ricardo','Teresa','Sevilla','Jaume',979,11801222,34),
+('V-58783602-6','vcespedes@hotmail.com','Mario','Alba','Galvez','Zabaleta',866,22843584,35),
+('V-85675993-9','marcos87@gmail.com','Cristina','Francisco Javier','Alfonso','Solera',690,20331591,35),
+('V-46898328-8','vianasalvador@hotmail.com','Antonia','Mónica','Cal','Lucas',829,10886352,36),
+('V-90949909-5','sguardiola@yahoo.com','Jose Angel','Alex','Aguilera','Cabrera',955,4692420,36),
+('V-60094146-7','jose-maria50@hotmail.com','Rocio','Vicenta','Rivero','Velázquez',1304,14949936,37),
+('V-57673965-6','zmontserrat@hotmail.com','Alvaro','Cristian','Flor','Cepeda',561,16340810,37),
+('V-78469430-9','miguel90@gmail.com','Jaime','Sandra','Esteban','Pinilla',970,12939602,38),
+('V-23878556-2','estevezrocio@gmail.com','Catalina','Felix','Ribes','Amor',1279,9689903,38),
+('V-16032580-2','victor85@gmail.com','Juan Antonio','Guillermo','Esparza','Ávila',680,8103013,39),
+('V-56904936-7','inmaculada17@gmail.com','Esther','Sara','Ibañez','Murillo',1485,5693221,39),
+('V-42655249-0','miguel-angelguillen@gmail.com','Elena','Jose Francisco','Amat','Pol',596,12114177,40),
+('V-42213802-2','boadamireia@yahoo.com','Isabel','Martin','Varela','Rosado',841,21606549,40),
+('V-24271498-9','francisca33@yahoo.com','Jesús','Juan Manuel','Peralta','Jover',1155,17816449,41),
+('V-30874725-4','sonia18@hotmail.com','Carolina','Jordi','Carro','Cazorla',1313,22575672,41);
+
+INSERT INTO clientejuridico (cj_rif, cj_email,cj_razsoc,cj_demcom,cj_pagweb,cj_capdis,ti_cod) VALUES
+('J-17000951-5','quevedojuana@yahoo.com','Naranjo LLC','and SonsMenéndez Inc','http://www.losa.info/',860271,1),
+('J-92626319-6','galanjuan-francisco@hotmail.com','Mayoral, Chico and Almagro','IncFerreras-Pedraza','http://www.coll.org/',377185,1),
+('J-97110388-9','scamino@gmail.com','Martinez-Mena','LLCAlegria-Correa','https://arroyo.com/',925049,2),
+('J-27914199-4','gema24@hotmail.com','Salmerón LLC','and SonsToro, Garcés and Asensio','https://www.bilbao-campo.com/',267290,2),
+('J-51808938-9','dalmauangeles@hotmail.com','Piña Inc','GroupGarcés LLC','https://garcia.com/',274998,3),
+('J-88286533-7','felipecalderon@hotmail.com','Dalmau Inc','PLCLobo and Sons','https://www.hernandez.com/',444209,3),
+('J-59472598-4','previlla@hotmail.com','Almansa, Sanz and Ortuño','LtdExposito-Recio','http://www.lobato.org/',456086,4),
+('J-48668977-3','adrian18@gmail.com','Almazán, Gelabert and Nebot','LtdCoca, Peñas and Baeza','http://www.ripoll.info/',144130,4),
+('J-53454704-7','wcanete@yahoo.com','Villa-Guitart','PLCTejada-Arellano','http://narvaez-caro.org/',914565,5),
+('J-12032162-9','trinidad23@gmail.com','Batalla, Rosa and Castelló','and SonsValenzuela-Otero','http://bayon.com/',828369,5),
+('J-45119889-6','francisco-joselago@yahoo.com','Cabeza LLC','GroupLlanos LLC','https://www.martin.com/',568220,6),
+('J-58646300-0','robertofernandez@hotmail.com','Fuster and Sons','LtdSaez-Haro','https://pina.net/',778905,6),
+('J-64156266-3','vandreu@yahoo.com','Miguel PLC','LtdManjón-Arrieta','https://www.pol-castillo.com/',733015,7),
+('J-83454224-5','vergarafatima@hotmail.com','Francisco-Rovira','LLCMontesinos, Querol and Sanabria','http://www.guardia-prats.com/',928461,7),
+('J-51048667-9','cortinaluis-miguel@hotmail.com','Burgos Group','IncMesa Inc','https://www.gomis.biz/',862184,8),
+('J-70280121-9','julianmanjon@yahoo.com','Landa and Sons','LtdAcuña, León and Cabrero','https://rojas.com/',413644,8),
+('J-35266005-1','tcaballero@gmail.com','Villa-Hernandez','IncIborra, Campos and Márquez','https://www.falco-verdugo.com/',639048,9),
+('J-88717160-9','qcodina@hotmail.com','Nevado-Portero','PLCRamis, Puga and Toledo','http://www.otero.net/',689765,9),
+('J-90022252-3','julianvina@yahoo.com','Salazar-Arellano','and SonsBoix PLC','https://www.calleja-santamaria.net/',520968,10),
+('J-51540192-8','mohamedarranz@yahoo.com','Porcel-Tenorio','PLCTorrijos, Díez and Vicente','https://diaz-echevarria.org/',454348,10),
+('J-60318848-9','nerealucena@hotmail.com','Llano and Sons','PLCVila, Gámez and Hoz','http://arrieta.com/',752533,11),
+('J-43884851-9','alvaropazos@gmail.com','Pizarro LLC','and SonsAlarcón-Blanes','http://www.mendizabal.org/',899339,11),
+('J-27712692-1','xavier44@gmail.com','Mariscal, Ocaña and Llabrés','PLCGranados LLC','https://feliu-tenorio.com/',248396,12),
+('J-69492534-7','kanaya@yahoo.com','Manzanares, Arco and Esparza','LLCGuillén-Ripoll','https://alvarado.com/',916420,12),
+('J-49666540-9','solavirginia@yahoo.com','Llabrés Ltd','LLCSilva and Sons','http://huguet.com/',579871,13),
+('J-51342632-3','encarnacionjordan@hotmail.com','Porta, Peralta and Arteaga','LLCZabaleta-Fernández','http://tudela-molins.com/',334931,13),
+('J-74235947-0','pilarllopis@hotmail.com','Núñez, Perera and Gimeno','GroupAnaya-Águila','https://ferrer.com/',857496,14),
+('J-38146110-4','angela35@hotmail.com','Sureda-Nebot','LtdBoada-Collado','http://noguera-montoya.com/',232275,14),
+('J-90711721-5','ybelmonte@yahoo.com','Tomé LLC','IncValderrama-Huertas','http://www.luis.org/',912586,15),
+('J-16577348-6','daniela69@hotmail.com','Corral, Albero and Aragón','LLCPareja Inc','https://www.baron-melendez.com/',757547,15),
+('J-3598091-2','purificacioncardona@hotmail.com','Berenguer-Álvaro','and SonsRovira-Palau','https://www.amat.com/',517117,16),
+('J-65987361-3','wguitart@yahoo.com','Vazquez, Marin and Rodriguez','PLCSaura Ltd','https://adadia.com/',831120,16),
+('J-28275324-4','albert90@hotmail.com','Montserrat LLC','GroupFernández-Paniagua','https://www.mur.com/',471981,17),
+('J-26802271-7','miguel-angelvizcaino@hotmail.com','Carbonell, Lobato and Machado','LLCIzquierdo-Miró','http://www.alcantara-seco.com/',911746,17),
+('J-52159561-9','asuncion39@yahoo.com','Álvarez-Angulo','IncAgustín and Sons','http://www.nebot.info/',855893,18),
+('J-41914106-5','ltolosa@hotmail.com','Amigó-Jimenez','LLCLaguna-Bertrán','http://www.borrell.com/',676916,18),
+('J-90152723-5','vduarte@hotmail.com','Bayo, Santamaría and Álvarez','and SonsJerez and Sons','http://landa-corbacho.biz/',435951,19),
+('J-78250706-3','sacristanjose-maria@hotmail.com','Gargallo, Cámara and Alba','IncPáez-Fabra','https://www.pinol.biz/',119272,19),
+('J-1253278-5','alba33@hotmail.com','Robles, Rueda and Parra','LLCZamorano, Baeza and Ledesma','https://www.mariscal-velez.com/',467403,20),
+('J-2628193-2','jpena@hotmail.com','Carbó, Pazos and Torrijos','GroupNúñez, Lladó and Dalmau','https://www.ramis.biz/',157781,20),
+('J-31844992-9','colliker@hotmail.com','Gámez, Roma and Aller','PLCPorcel-Cortés','http://www.torrent-cespedes.com/',294366,21),
+('J-52497419-1','crespisonia@hotmail.com','Valentín-Martin','LtdEspañol and Sons','https://www.espanol.com/',614070,21),
+('J-68048617-3','vmilla@hotmail.com','Dávila-Saavedra','PLCPiñeiro, Gutiérrez and Osorio','http://www.carreras.biz/',531501,22),
+('J-86413742-0','eugeniaquevedo@hotmail.com','Larrea, Muro and Portillo','PLCLluch-Sainz','https://cisneros.com/',140190,22),
+('J-53571190-3','samuel11@gmail.com','Aguiló-Jurado','GroupArribas Group','http://sevilla.com/',164205,23),
+('J-40010150-9','mariallabres@hotmail.com','Piñol, Castillo and Escrivá','LLCAsensio Ltd','https://capdevila-aguirre.com/',490026,23),
+('J-90815462-3','wmartinez@gmail.com','Azorin-Pina','GroupCano PLC','http://figueras.com/',884001,24),
+('J-31309524-4','aharo@hotmail.com','Pineda, Castejón and Coca','PLCColoma Inc','https://www.bueno.info/',753252,24),
+('J-1193574-3','tplana@hotmail.com','Adadia Group','GroupVelázquez, Marí and Arco','http://www.anaya.com/',101021,25),
+('J-43129497-4','soledadbilbao@yahoo.com','Alberola, Huerta and Salgado','IncGutierrez Group','http://valenciano.net/',899270,25),
+('J-25252465-1','ltorralba@hotmail.com','Verdejo, Pereira and Sans','GroupLarrea Ltd','https://www.ayllon.info/',600200,26),
+('J-49492078-5','pedrerojose-maria@hotmail.com','Fernández PLC','IncSanz-Roldan','https://www.zaragoza.info/',906693,26),
+('J-89194642-8','joseprios@yahoo.com','Enríquez, Pinedo and Alemany','LtdZabala-Chaparro','https://www.soler.net/',544803,27),
+('J-41687179-0','nicolasdomenech@gmail.com','Olivares-Ángel','LLCCampoy, Bautista and Fajardo','http://hernandez.com/',538049,27),
+('J-56974022-1','ggual@hotmail.com','Arco, Ferreras and Cabo','PLCCorrea-Amigó','https://www.ribas.com/',108373,28),
+('J-80080822-3','kmateo@yahoo.com','Cabo, Espejo and Vergara','GroupTena-Arranz','https://www.arce-zapata.com/',831921,28),
+('J-37339572-4','dcanas@hotmail.com','Andres-Beltrán','LtdCánovas, Barriga and Castell','https://www.giralt.com/',459989,29),
+('J-45930928-3','abrilangeles@yahoo.com','Casals, Arregui and Araujo','PLCBarral, Cabrera and Manzano','http://ramirez-mesa.com/',820959,29),
+('J-29281241-4','ivarela@hotmail.com','Ramos and Sons','PLCGodoy Ltd','https://corbacho.com/',420796,30),
+('J-13199858-2','victoria18@hotmail.com','Cabrero-Bernal','PLCGalan, Sosa and Galan','http://www.tolosa.com/',835014,30),
+('J-90614190-2','oscarduenas@hotmail.com','Jara-Sevilla','IncMorán, Torrecilla and Avilés','https://www.camacho.org/',132401,31),
+('J-12573495-7','andressegovia@yahoo.com','Flor Inc','IncGiner-Ferrer','http://www.nunez.com/',508121,31),
+('J-70245568-0','javiertenorio@yahoo.com','Laguna-Busquets','and SonsBastida, Ortiz and Solano','https://www.recio.com/',475021,32),
+('J-13539780-5','lorenzobonet@yahoo.com','Carrión, Granados and Llobet','and SonsSancho Group','http://www.rosell-viana.com/',608930,32),
+('J-50099620-0','ismaelchamorro@gmail.com','Roura-Pozo','LLCGirona, Alfonso and Ferreras','https://varela.net/',718902,33),
+('J-64664183-6','kdominguez@yahoo.com','Campillo, Alcázar and Llorens','LtdVera-Rosa','http://www.ortuno-colomer.com/',428603,33),
+('J-59416646-7','ricardo69@hotmail.com','Palau, Andrés and Torralba','GroupMorales PLC','https://www.soto.com/',517700,34),
+('J-27514555-2','francoluz@yahoo.com','Bueno-Bou','IncRomeu Inc','https://www.salamanca.com/',578215,34),
+('J-87278682-6','jose-miguel69@gmail.com','Millán-Martí','PLCArregui-Alemán','http://bou-andres.com/',701644,35),
+('J-27244756-3','victoriapinto@gmail.com','Domingo Group','PLCPerales LLC','https://www.ros.com/',864502,35),
+('J-29920033-4','vanesaaraujo@yahoo.com','Zabaleta, Lozano and Alcántara','GroupMendoza, Arjona and Campillo','https://cervera.com/',670342,36),
+('J-94462151-6','martiniglesias@gmail.com','Valderrama and Sons','GroupConesa-Soto','http://villar.org/',655022,36),
+('J-91525577-8','nerea72@yahoo.com','Saldaña, Barba and Ferreras','and SonsEspada, Flor and Pastor','https://marquez.com/',918156,37),
+('J-77140970-3','rodenasfelipe@hotmail.com','Agudo, Santamaría and Plaza','PLCNovoa-Ropero','https://santamaria.org/',402577,37),
+('J-80796005-8','adriana83@yahoo.com','Laguna, Navarrete and Gaya','LLCSevilla Ltd','http://pizarro-andres.com/',419890,38),
+('J-17721108-3','manuela64@yahoo.com','Echevarría Group','LtdCasal Inc','https://casado-canales.org/',555003,38),
+('J-46055502-2','francisco62@gmail.com','Carrera, Lucena and Pedrosa','GroupTovar Inc','http://www.castells-gamez.com/',448182,39),
+('J-56569044-2','alemanyalfonso@hotmail.com','Madrigal-Larrea','GroupZaragoza, Exposito and Gomez','https://www.chaparro-llobet.biz/',853880,39),
+('J-39146018-3','nmendoza@gmail.com','Cárdenas and Sons','GroupDiéguez-Benavent','http://www.bosch.biz/',511929,40),
+('J-50592814-8','aurora27@hotmail.com','Leiva PLC','LtdMiró PLC','http://www.barcelo.org/',347657,40),
+('J-98256738-0','bgallego@gmail.com','Márquez LLC','and SonsCalvet, Bru and Quirós','https://www.madrigal.net/',294340,41),
+('J-10055046-9','miguel-angel05@hotmail.com','Parra-Alfaro','PLCFrancisco LLC','https://www.llobet.org/',992291,41);
