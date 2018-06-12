@@ -1,8 +1,7 @@
 from faker import Faker
 import random
+from dateGenerator import randomDate,strTimeProp
 fake = Faker('es_ES')
-
-#hs.write("\n")
 
 myfile = open("clientes.txt","a")
 myfile.write("INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod) VALUES ")
@@ -51,5 +50,17 @@ for _ in range(41):
     for i in range(4):
         insert_e = "('{}','{}',{},{},{}),"
         myfile.write(insert_e.format(fake.first_name(),fake.last_name(),str(random.randint(1000000,21999999)),str(random.randint(10000,100000)),str(_+1)))
+        myfile.write("\n")
+myfile.close()
+
+myfile = open("asistencia.txt","a")
+myfile.write("INSERT INTO asistencia (as_fecha_entrada, as_fecha_salida,e_id) VALUES ")
+myfile.write("\n")
+for _ in range(164):
+    for i in range(20):
+        insert_a = "({},{},{}),"
+        date = "{}-06-2018 {}:00"
+        myfile.write(insert_a.format(randomDate(date.format(str(i+1),"5"),date.format(str(i+1),"10"), random.random()),
+                    randomDate(date.format(str(i+1),"12"),date.format(str(i+1),"20"), random.random()),str(_+1)))
         myfile.write("\n")
 myfile.close()
