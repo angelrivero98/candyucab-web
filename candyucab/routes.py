@@ -22,9 +22,138 @@ def clientes():
     db.cerrar()
     return render_template('clientes.html',title = 'Clientes',cj = cj,cn = cn)
 
+<<<<<<< HEAD
 @app.route("/clientes/<int:c_id>")
 def cliente(c_id):
     return render_template('cliente.html')
+=======
+@app.route('/municipio/<int:fk_lugar>',methods=['GET','POST'])
+def municipio(fk_lugar):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT M.* from lugar M WHERE  M.fk_lugar = %s;",(fk_lugar,))
+    municipios = cur.fetchall()
+    db.cerrar()
+    munArray = []
+    for municipio in municipios:
+        munArray.append(municipio)
+
+    return jsonify({'municipios': munArray})
+
+@app.route('/parroquia/<string:municipio>/<int:estado>',methods=['GET','POST'])
+def parroquia(municipio,estado):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT distinct P.* from lugar M,lugar P,lugar E where M.l_nombre =%s AND P.fk_lugar = M.l_id AND P.l_tipo = 'P' AND M.fk_lugar = %s ;",(municipio,estado,))
+    parroquias = cur.fetchall()
+    db.cerrar()
+    paqArray = []
+    for parroquia in parroquias:
+        paqArray.append(parroquia)
+
+    return jsonify({'parroquias': paqArray})
+
+@app.route("/clientes/<int:c_id>/<string:tipo>",methods=['GET','POST'])
+def update_cliente(c_id,tipo):
+    db = Database()
+    cur = db.cursor_dict()
+    if tipo == 'cj':
+        cur.execute("SELECT * FROM clientejuridico",(c_id,))
+        cliente = cur.fetchone()
+        form = UpdateJForm()
+        form.current_rif.data = cliente['cj_rif']
+        form.current_email.data = cliente['cj_email']
+        if form.validate_on_submit():
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados1.data,form.municipios1.data,form.parroquias1.data,))
+            dirFiscal = cur.fetchone()
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
+            dirFisica = cur.fetchone()
+
+            try:
+                cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
+                (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
+            except:
+                print("ERROR updating into clientejuridico")
+                db.retroceder()
+            db.actualizar()
+            flash('Tu cliente ha sido actualizada','success')
+            return redirect(url_for('clientes'))
+        elif request.method == 'GET':
+            form.rif.data = cliente['cj_rif']
+            form.email.data = cliente['cj_email']
+            form.capdis.data = cliente['cj_capdis']
+            form.demcom.data = cliente['cj_demcom']
+            form.razsoc.data = cliente['cj_razsoc']
+            form.pagweb.data = cliente['cj_pagweb']
+        return render_template('clienteJ.html',form = form,c_id = c_id)
+    elif tipo == 'cn':
+
+        cur.execute("SELECT * FROM clientenatural",(c_id,))
+        cliente = cur.fetchone()
+        form = UpdateNForm()
+        form.current_rif.data = cliente['cn_rif']
+        form.current_email.data = cliente['cn_email']
+        form.current_ci.data = cliente['cn_ci']
+        if form.validate_on_submit():
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados.data,form.municipios.data,form.parroquias.data,))
+            direccion = cur.fetchone()
+            if direccion == None:
+                direccion = cliente
+            try:
+                cur.execute("""UPDATE clientenatural SET cn_rif = %s,cn_email = %s,cn_nom1 = %s,cn_nom2 = %s,cn_ap1=%s, cn_ap2=%s,cn_ci = %s,l_id = %s WHERE cn_id= %s;""",
+                (form.rif.data, form.email.data,form.nom1.data,form.nom2.data,form.ap1.data,form.ap2.data,form.ci.data,direccion['l_id'],c_id))
+            except:
+                print("ERROR updating into clientenatural")
+                db.retroceder()
+            db.actualizar()
+            flash('Tu cliente ha sido actualizada','success')
+            return redirect(url_for('clientes'))
+        elif request.method == 'GET':
+            form.rif.data = cliente['cn_rif']
+            form.email.data = cliente['cn_email']
+            form.nom1.data = cliente['cn_nom1']
+            form.nom2.data = cliente['cn_nom2']
+            form.ap1.data = cliente['cn_ap1']
+            form.ap2.data = cliente['cn_ap2']
+            form.ci.data = cliente['cn_ci']
+
+        return render_template('clienteN.html',form = form,c_id = c_id)
+
+@app.route("/clientes/<int:c_id>/<string:tipo>/delete",methods=['GET','POST'])
+def delete_cliente(c_id,tipo):
+    db = Database()
+    cur = db.cursor_dict()
+    if tipo == 'cj':
+        try:
+            cur.execute("DELETE FROM clientejuridico WHERE cj_id = %s;",(c_id,))
+        except:
+            print("ERROR deleting clientejuridico")
+            db.retroceder()
+        db.actualizar()
+        db.cerrar()
+        flash('Tu cliente ha sido eliminado','success')
+        return redirect(url_for('clientes'))
+    elif tipo == 'cn':
+        print(c_id)
+        try:
+            cur.execute("DELETE FROM clientenatural WHERE cn_id = %s;",(c_id,))
+        except:
+            print("ERROR deleting clientenatural")
+            db.retroceder()
+        db.actualizar()
+        db.cerrar()
+        flash('Tu cliente ha sido eliminado','success')
+        return redirect(url_for('clientes'))
+>>>>>>> 19c64345d5ffeec56569c78f51ed6b0ce02f8b81
 
 @app.route("/register")
 def register():
