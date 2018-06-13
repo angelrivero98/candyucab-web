@@ -1,18 +1,19 @@
 from flask_wtf import FlaskForm
+
 from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,,SelectField,FormField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,ValidationError,Optional,InputRequired
 from candyucab.db import Database
 import psycopg2,psycopg2.extras
 
 class LoginForm(FlaskForm):
-    username = StringField('Username',validators=[DataRequired()])
-    password = PasswordField('Password',validators=[DataRequired()])
-    remember =BooleanField('Recuerdame')
+    username = StringField('Nombre de Usuario',validators=[DataRequired()])
+    password = PasswordField('Contraseña',validators=[DataRequired()])
+    remember =BooleanField('Recuérdame')
     submit=SubmitField('Iniciar')
 
 class TlfForm(FlaskForm):
     numero = IntegerField('Ingrese el Telefono sin el 0',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-    submit=SubmitField('Añadir Telefono')
+    submit=SubmitField('Añadir Campo')
 
     def validate_numero(self,numero):
         if len(str(numero.data)) != 10 :

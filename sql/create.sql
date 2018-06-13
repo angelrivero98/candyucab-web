@@ -11,8 +11,8 @@ CREATE TABLE clientenatural (
   cn_nom2 varchar(20) NOT NULL,
   cn_ap1 varchar(20) NOT NULL,
   cn_ap2 varchar(20) NOT NULL,
-  l_id integer NOT NULL,
-  ti_cod integer,
+  l_id numeric(10) NOT NULL,
+  t_cod numeric(8),
   CONSTRAINT pk_clienten PRIMARY KEY (cn_id)
 );
 
@@ -24,7 +24,7 @@ CREATE TABLE clientejuridico (
   cj_razsoc varchar(50) NOT NULL,
   cj_pagweb varchar(30) NOT NULL,
   cj_capdis numeric(20) NOT NULL,
-  ti_cod integer,
+  t_cod numeric(8),
   CONSTRAINT pk_clientej PRIMARY KEY (cj_id)
 );
 
@@ -64,23 +64,23 @@ CREATE TABLE empleado (
 );
 
 CREATE TABLE permiso(
-  p_id SERIAL,
+  p_id numeric(8),
   p_tipo varchar(15) NOT NULL,
   CONSTRAINT pk_permiso PRIMARY KEY (p_id)
 );
 
 CREATE TABLE lugar (
-  l_id integer,
+  l_id numeric(10),
   l_tipo char(1) NOT NULL,
   l_nombre varchar(40) NOT NULL,
-  fk_lugar integer,
+  fk_lugar numeric(10),
   CONSTRAINT pk_lugar PRIMARY KEY (l_id),
   CONSTRAINT check_tipo CHECK(l_tipo in ('M','P','E'))
 );
 
 CREATE TABLE jur_lug(
   jl_id SERIAL,
-  l_id integer NOT NULL,
+  l_id numeric(10) NOT NULL,
   cj_id integer NOT NULL,
   jl_tipo varchar(10) NOT NULL,
   CONSTRAINT pk_lugar_clientej PRIMARY KEY (jl_id),
@@ -88,22 +88,22 @@ CREATE TABLE jur_lug(
 );
 
 CREATE TABLE departamento (
-  d_id SERIAL,
+  d_id numeric(8),
   d_nombre varchar(20) NOT NULL,
   CONSTRAINT pk_departamento PRIMARY KEY (d_id)
 );
 
 CREATE TABLE fabrica (
-  f_id SERIAL,
+  f_id numeric(8),
   f_nombre varchar(20) NOT NULL,
-  l_id integer NOT NULL,
+  l_id numeric(10) NOT NULL,
   CONSTRAINT pk_fabrica PRIMARY KEY (f_id)
 );
 
 CREATE TABLE tienda (
-  ti_id SERIAL,
+  ti_id numeric(8),
   ti_tipo varchar(20) NOT NULL,
   ti_nombre varchar(40) NOT NULL,
-  l_id integer NOT NULL,
+  l_id numeric(10) NOT NULL,
   CONSTRAINT pk_tienda PRIMARY KEY (ti_id)
 );
