@@ -58,7 +58,7 @@ myfile.write("INSERT INTO asistencia (as_fecha_entrada, as_fecha_salida,e_id) VA
 myfile.write("\n")
 for _ in range(164):
     for i in range(20):
-        insert_a = "({},{},{}),"
+        insert_a = "('{}','{}',{}),"
         date = "{}-06-2018 {}:00"
         myfile.write(insert_a.format(randomDate(date.format(str(i+1),"5"),date.format(str(i+1),"10"), random.random()),
                     randomDate(date.format(str(i+1),"12"),date.format(str(i+1),"20"), random.random()),str(_+1)))
