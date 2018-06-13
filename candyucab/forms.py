@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,,SelectField,FormField
+from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,SelectField,FormField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,ValidationError,Optional,InputRequired
 from candyucab.db import Database
 import psycopg2,psycopg2.extras
