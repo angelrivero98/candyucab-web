@@ -56,7 +56,7 @@ myfile.close()
 myfile = open("asistencia.txt","a")
 myfile.write("INSERT INTO asistencia (as_fecha_entrada, as_fecha_salida,e_id) VALUES ")
 myfile.write("\n")
-for _ in range(164):
+for _ in range(4):
     for i in range(20):
         insert_a = "('{}','{}',{}),"
         date = "{}-06-2018 {}:00"
