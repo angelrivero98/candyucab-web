@@ -1,18 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,FormField,SelectField
+from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,,SelectField,FormField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,ValidationError,Optional,InputRequired
 from candyucab.db import Database
 import psycopg2,psycopg2.extras
-
-def estados():
-    db =Database()
-    cur = db.cursor_dict()
-    cur.execute("SELECT l_id,l_nombre FROM lugar WHERE l_tipo = 'E';")
-    return cur.fetchall()
-
-class NonValidatingSelectField(SelectField):
-    def pre_validate(self, form):
-        pass
 
 class LoginForm(FlaskForm):
     username = StringField('Username',validators=[DataRequired()])
@@ -32,6 +22,17 @@ class PersonaContactoForm(FlaskForm):
     nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
     apellido = StringField('Apellido',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
     submit=SubmitField('Añadir Persona')
+
+def estados():
+    db =Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT l_id,l_nombre FROM lugar WHERE l_tipo = 'E';")
+    return cur.fetchall()
+
+class NonValidatingSelectField(SelectField):
+    def pre_validate(self, form):
+        pass
+
 
 class UpdateNForm(FlaskForm):
         email = StringField('Email',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Email(message='Ingrese un email valido')])
