@@ -134,6 +134,7 @@ CREATE TABLE asistencia (
   as_cod SERIAL,
   as_fecha_entrada TIMESTAMP NOT NULL,
   as_fecha_salida TIMESTAMP NOT NULL,
+  e_id integer NOT NULL,
   CONSTRAINT pk_asistencia PRIMARY KEY (as_cod)
 );
 
@@ -141,6 +142,7 @@ CREATE TABLE beneficio (
   b_id SERIAL,
   b_ingreso numeric(10) NOT NULL,
   b_nombre varchar(30) NOT NULL,
+  e_id integer NOT NULL,
   CONSTRAINT pk_beneficio PRIMARY KEY (r_id)
 );
 
@@ -149,6 +151,7 @@ CREATE TABLE horario (
   h_fecha_entrada TIMESTAMP NOT NULL,
   h_fecha_salida TIMESTAMP NOT NULL,
   h_dia varchar(20) NOT NULL,
+  e_id integer NOT NULL,
   CONSTRAINT pk_horario PRIMARY KEY (h_id)
 );
 
@@ -178,6 +181,7 @@ CREATE TABLE anaquel (
 CREATE TABLE inventario (
   i_id SERIAL,
   i_cant numeric(20) NOT NULL,
+  an_id integer NOT NULL,
   ti_id integer NOT NULL,
   p_id integer NOT NULL,
   CONSTRAINT pk_inventario PRIMARY KEY (i_id)
@@ -203,6 +207,8 @@ CREATE TABLE tarjetacredito (
   tc_num numeric(16) NOT NULL,
   tc_codseg numeric(3) NOT NULL,
   tc_fvenc DATE NOT NULL,
+  cj_id integer NOT NULL,
+  cn_id integer NOT NULL,
   CONSTRAINT pk_tarjetac PRIMARY KEY (tc_id)
 );
 
@@ -212,6 +218,8 @@ CREATE TABLE tarjetadebito (
   td_num numeric(16) NOT NULL,
   td_banco varchar(20) NOT NULL,
   td_fvenc DATE NOT NULL,
+  cj_id integer NOT NULL,
+  cn_id integer NOT NULL,
   CONSTRAINT pk_tarjetad PRIMARY KEY (td_id)
 );
 
@@ -220,6 +228,8 @@ CREATE TABLE cheque (
   ch_ncompl varchar(60) NOT NULL,
   ch_num numeric(16) NOT NULL,
   ch_faplicar DATE NOT NULL,
+  cj_id integer NOT NULL,
+  cn_id integer NOT NULL,
   CONSTRAINT pk_cheque PRIMARY KEY (ch_id)
 );
 
@@ -258,6 +268,7 @@ CREATE TABLE pagovirtual (
   pv_fpago DATE NOT NULL,
   cv_id integer NOT NULL,
   tc_id integer,
+  o_id integer NOT NULL,
   CONSTRAINT pk_pvirtual PRIMARY KEY (p_id)
 );
 
@@ -329,5 +340,6 @@ CREATE TABLE reposicion (
   re_id SERIAL,
   f_id integer,
   i_id integer,
+  o_id integer NOT NULL,
   CONSTRAINT pk_reposicion PRIMARY KEY (re_id)
 );
