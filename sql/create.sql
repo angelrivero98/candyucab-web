@@ -106,6 +106,7 @@ CREATE TABLE tienda (
   ti_tipo varchar(20) NOT NULL,
   ti_nombre varchar(40) NOT NULL,
   l_id integer NOT NULL,
+  CONSTRAINT check_tipo_tienda CHECK (ti_tipo IN ('Mini Candy Shop','Candy Shop')),
   CONSTRAINT pk_tienda PRIMARY KEY (ti_id)
 );
 
@@ -125,13 +126,7 @@ CREATE TABLE rol_per (
 CREATE TABLE permiso (
   per_id SERIAL,
   per_funcion varchar(30) NOT NULL,
-  CONSTRAINT pk_rol PRIMARY KEY (per_id)
-);
-
-CREATE TABLE rol (
-  r_id SERIAL,
-  r_tipo varchar(30) NOT NULL,
-  CONSTRAINT pk_rol PRIMARY KEY (r_id)
+  CONSTRAINT pk_permiso PRIMARY KEY (per_id)
 );
 
 CREATE TABLE asistencia (
@@ -145,7 +140,7 @@ CREATE TABLE beneficio (
   b_id SERIAL,
   b_ingreso numeric(10) NOT NULL,
   b_nombre varchar(30) NOT NULL,
-  CONSTRAINT pk_rol PRIMARY KEY (r_id)
+  CONSTRAINT pk_beneficio PRIMARY KEY (r_id)
 );
 
 CREATE TABLE horario (
@@ -153,15 +148,9 @@ CREATE TABLE horario (
   h_fecha_entrada TIMESTAMP NOT NULL,
   h_fecha_salida TIMESTAMP NOT NULL,
   h_dia varchar(20) NOT NULL,
-  CONSTRAINT pk_asistencia PRIMARY KEY (h_id)
+  CONSTRAINT pk_horario PRIMARY KEY (h_id)
 );
 
-CREATE TABLE asistencia (
-  as_cod SERIAL,
-  as_fecha_entrada TIMESTAMP NOT NULL,
-  as_fecha_salida TIMESTAMP NOT NULL,
-  CONSTRAINT pk_asistencia PRIMARY KEY (as_cod)
-);
 
 CREATE TABLE diariodulce (
   d_id SERIAL,
