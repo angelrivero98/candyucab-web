@@ -154,10 +154,11 @@ CREATE TABLE horario (
 
 
 CREATE TABLE diariodulce (
-  d_id SERIAL,
-  d_femision DATE NOT NULL,
-  d_ffinal DATE NOT NULL,
-  CONSTRAINT pk_diarioducle PRIMARY KEY (d_cod)
+  dd_id SERIAL,
+  dd_femision DATE NOT NULL DEFAULT CURRENT_DATE,
+  dd_ffinal DATE NOT NULL,
+  e_id integer NOT NULL,
+  CONSTRAINT pk_diarioducle PRIMARY KEY (dd_id)
 );
 
 CREATE TABLE pasillo (
@@ -185,7 +186,7 @@ CREATE TABLE inventario (
 CREATE TABLE pro_diario (
   pd_id SERIAL,
   pd_descuento numeric(10) NOT NULL,
-  d_id integer NOT NULL,
+  dd_id integer NOT NULL,
   p_id integer,
   CONSTRAINT pk_pro_diario PRIMARY KEY (pd_id)
 );

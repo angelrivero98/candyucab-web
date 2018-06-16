@@ -73,7 +73,7 @@ count = 0
 for _ in range(41):
     insert_c = "('{}',{},{}),"
     for i in range(2):
-        if _ < 10
+        if _ < 10:
             num_c = "0{}-0000000{}"
         else:
             num_c = "{}-0000000{}"
@@ -90,7 +90,7 @@ count = 0
 for _ in range(41):
     insert_c = "('{}',{},{}),"
     for i in range(2):
-        if _ < 10
+        if _ < 10:
             num_c = "0{}-0000000{}"
         else:
             num_c = "{}-0000000{}"
@@ -105,7 +105,9 @@ myfile.write("INSERT INTO usuario (u_username, u_password,cn_id) VALUES ")
 myfile.write("\n")
 for _ in range(41):
     insert_u = "('{}','{}',{}),"
-    myfile.write(insert_u.format(fake.simple_profile()['username'],fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True),str(_+3)))
+    myfile.write(insert_u.format(fake.simple_profile()['username'],
+                    fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True)
+                    ,str(_+1)))
     myfile.write("\n")
 
 myfile.write("\n")
@@ -113,7 +115,7 @@ myfile.write("INSERT INTO usuario (u_username, u_password,cj_id) VALUES ")
 myfile.write("\n")
 for _ in range(41):
     insert_u = "('{}','{}',{}),"
-    myfile.write(insert_u.format(fake.simple_profile()['username'],fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True),str(_+3)))
+    myfile.write(insert_u.format(fake.simple_profile()['username'],fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True),str(_+1)))
     myfile.write("\n")
 
 myfile.write("\n")
