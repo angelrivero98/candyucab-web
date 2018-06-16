@@ -39,8 +39,17 @@ for _ in range(41):
                     str(random.randint(100000,1000000)),str(_+1)))
     myfile.write("\n")
 
+myfile.close()
 
-
+myfile = open ("direccionCJ.txt","a")
+myfile.write("INSERT INTO jur_lug (l_id,cj_id,jl_tipo) VALUES ")
+myfile.write("\n")
+tipo_dir = ['fiscal','fisica']
+insert_jl = "({},{},'{}')"
+for _ in range(82):
+    for i in range(2):
+        myfile.write(insert_e.format(str(random.randint(463,1600)),str(_+1),tipo_dir[i+1]))
+        myfile.write("\n")
 myfile.close()
 #empleados, recordar colocar el ; al final del insert
 myfile = open("empleados.txt","a")
@@ -73,7 +82,7 @@ count = 0
 for _ in range(41):
     insert_c = "('{}',{},{}),"
     for i in range(2):
-        if _ < 10:
+        if _+1 < 10:
             num_c = "0{}-0000000{}"
         else:
             num_c = "{}-0000000{}"
@@ -90,7 +99,7 @@ count = 0
 for _ in range(41):
     insert_c = "('{}',{},{}),"
     for i in range(2):
-        if _ < 10:
+        if _+1 < 10:
             num_c = "0{}-0000000{}"
         else:
             num_c = "{}-0000000{}"
@@ -103,7 +112,7 @@ myfile.close()
 myfile = open("usuarios.txt","a")
 myfile.write("INSERT INTO usuario (u_username, u_password,cn_id) VALUES ")
 myfile.write("\n")
-for _ in range(41):
+for _ in range(82):
     insert_u = "('{}','{}',{}),"
     myfile.write(insert_u.format(fake.simple_profile()['username'],
                     fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True)
@@ -113,7 +122,7 @@ for _ in range(41):
 myfile.write("\n")
 myfile.write("INSERT INTO usuario (u_username, u_password,cj_id) VALUES ")
 myfile.write("\n")
-for _ in range(41):
+for _ in range(82):
     insert_u = "('{}','{}',{}),"
     myfile.write(insert_u.format(fake.simple_profile()['username'],fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True),str(_+1)))
     myfile.write("\n")
@@ -134,4 +143,49 @@ for _ in range(164):
     insert_u = "({},{}),"
     myfile.write(insert_u.format(str(_+1),str(random.randint(1,10))))
     myfile.write("\n")
+myfile.close()
+
+myfile = open("departamentos.txt","a")
+myfile.write("INSERT INTO departamento (d_nombre,ti_cod) VALUES ")
+myfile.write("\n")
+insert = "('{}',{}),"
+depts = ['Ventas en Linea','Talento Humano','Despacho','Entrega','Pedidos Internos']
+for _ in range(41):
+    for i in range(5):
+        myfile.write(insert.format(depts[i+1],str(_+1)))
+        myfile.write("\n")
+
+myfile.close()
+
+myfile = open("metodos.txt","a")
+myfile.write("INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,cn_id) VALUES ")
+myfile.write("\n")
+insert = "({},'{}',{},'{}',{}),"
+for _ in range(82):
+    myfile.write(insert.format(fake.credit_card_number(),
+                fake.credit_card_expire(start="now", end="+10y", date_format="%d-%m-%Y"),
+                fake.credit_card_security_code(),fake.name(),str(_+1)))
+    myfile.write("\n")
+
+myfile.write("\n")
+myfile.write("INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,cj_id) VALUES ")
+myfile.write("\n")
+insert = "({},'{}',{},'{}',{}),"
+for _ in range(82):
+    myfile.write(insert.format(fake.credit_card_number(),
+                fake.credit_card_expire(start="now", end="+10y", date_format="%d-%m-%Y"),
+                fake.credit_card_security_code(),fake.name(),str(_+1)))
+    myfile.write("\n")
+
+myfile.close()
+
+myfile = open ("personas.txt","a")
+myfile.write("INSERT INTO personadecontacto (pc_nombre,pc_apellido,cj_id) VALUES ")
+myfile.write("\n")
+insert = "('{}','{}',{})"
+for _ in range(82):
+    for i in range(2):
+        myfile.write(insert.format(fake.first_name(),fake.last_name(),str(_+1)))
+        myfile.write("\n")
+
 myfile.close()

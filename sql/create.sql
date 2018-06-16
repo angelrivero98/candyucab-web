@@ -189,7 +189,7 @@ CREATE TABLE inventario (
 
 CREATE TABLE pro_diario (
   pd_id SERIAL,
-  pd_descuento numeric(10) NOT NULL,
+  pd_descuento numeric(2,1) NOT NULL,
   dd_id integer NOT NULL,
   p_id integer,
   CONSTRAINT pk_pro_diario PRIMARY KEY (pd_id)
@@ -197,7 +197,7 @@ CREATE TABLE pro_diario (
 
 CREATE TABLE presupuesto (
   pre_id SERIAL,
-  pre_femision DATE NOT NULL,
+  pre_femision DATE NOT NULL DEFAULT CURRENT_DATE,
   CONSTRAINT pk_presupuesto PRIMARY KEY (pre_id)
 );
 
@@ -207,8 +207,8 @@ CREATE TABLE tarjetacredito (
   tc_num numeric(16) NOT NULL,
   tc_codseg numeric(3) NOT NULL,
   tc_fvenc DATE NOT NULL,
-  cj_id integer NOT NULL,
-  cn_id integer NOT NULL,
+  cj_id integer,
+  cn_id integer,
   CONSTRAINT pk_tarjetac PRIMARY KEY (tc_id)
 );
 
@@ -218,8 +218,8 @@ CREATE TABLE tarjetadebito (
   td_num numeric(16) NOT NULL,
   td_banco varchar(20) NOT NULL,
   td_fvenc DATE NOT NULL,
-  cj_id integer NOT NULL,
-  cn_id integer NOT NULL,
+  cj_id integer,
+  cn_id integer,
   CONSTRAINT pk_tarjetad PRIMARY KEY (td_id)
 );
 
@@ -228,8 +228,8 @@ CREATE TABLE cheque (
   ch_ncompl varchar(60) NOT NULL,
   ch_num numeric(16) NOT NULL,
   ch_faplicar DATE NOT NULL,
-  cj_id integer NOT NULL,
-  cn_id integer NOT NULL,
+  cj_id integer,
+  cn_id integer,
   CONSTRAINT pk_cheque PRIMARY KEY (ch_id)
 );
 
@@ -259,12 +259,13 @@ CREATE TABLE compravirtual (
   u_id integer NOT NULL,
   pre2_id integer,
   p_id integer NOT NULL,
+  i_id integer,
   CONSTRAINT pk_cvirtual PRIMARY KEY (cv_id)
 );
 
 CREATE TABLE pagovirtual (
   pv_id SERIAL,
-  pv_puntos numeric(10) NOT NULL,
+  pv_puntos numeric(10),
   pv_fpago DATE NOT NULL,
   cv_id integer NOT NULL,
   tc_id integer,
