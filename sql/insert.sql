@@ -1544,4 +1544,141 @@ INSERT INTO tienda (ti_id,ti_tipo,ti_nombre,l_id) VALUES
 (38,'Mini Candy Shop','Candy Maiquetía',1448),
 (39,'Mini Candy Shop','Candy Carúpano',1242),
 (40,'Mini Candy Shop','Candy Coro',854),
-(41,'Mini Candy Shop','Candy Trujillo',1427),
+(41,'Mini Candy Shop','Candy Trujillo',1427);
+
+INSERT INTO tipo_producto (tp_id,tp_nombre) VALUES
+(1, 'Chupeta'),
+(2,'Caramelo Duro'),
+(3,'Pastilla'),
+(4,'Caramelo Blando'),
+(5,'Chicle'),
+(6,'Gomita');
+
+INSERT INTO producto (p_nombre,p_imagen,p_precio,p_desc,tp_id) VALUES
+('Chupetas Rimbombin','rimbombin.png',100,'El famoso caramelo con
+palo ideado por Enric Bernat en 1958 sigue
+de actualidad en nuestros días. Personajes como Johan Cruyff, Rivaldo, Harrison Ford o Jorge Lorenzo
+han protagonizado campañas o se les ha visto en público saboreando
+Chupetas Rimbombin. El logo de Chupetas Rimbombin que
+conocemos hoy en día fue rediseñado por Salvador Paluiski en
+1980, envolviendolo con la forma de margarita que conocemos.
+Hoy en día, además de los clásicos, también podemos
+encontrarlos rellenos de chicle, de chocolate y en formato
+sin azúcar.',1),
+('Ricolin','ricolin.png',120,'Los primeros Ricolin se fabricaron
+en la década de 1990, como supresores de la
+tos. Hoy en día Ricolin es la marca líder
+en el segmento de los caramelos de bolsillo
+en Venezuela. A sus sabores clásicos
+mentolados y cítricos ahora añaden sabores
+frutales como fresa y lima en formato con y
+sin azúcar, y todos con contenido en
+vitamina C.',2),
+('Los Firi Firi','firifiri.png',80,'Se introducen en el mercado en 1994, teniendo
+como objetivo un público adulto. Son pastillas que
+proporcionan frescura, y en ello basan
+sus campañas publicitarias. Desde el
+año 1994 hasta hoy hemos visto
+cantidad de campañas divertidas de
+firi firi siempre basadas en su slogan
+“sin firi firi no hay beso”. A partir
+de los primeros firi firi tabs de
+sabor menta, han ido apareciendo
+nuevos sabores,todos sin azúcar.',3),
+('Chupetas de Corazón','chupetacorazon.png',130,'En el año 2005 decidimos
+apostar; gracias al éxito del caramelo
+Ricura; a la combinación del dulce y picante,
+por eso se crean unas chupetas en forma de
+corazón que tienen aspecto sutil pero es el
+resultado de combinar un suave sabor de fresa con polvo
+efervescente picante.',1),
+('Pirulitos','pirulito.png',90,'Son caramelos blandos que
+reciben su nombre por la forma alargada
+con la que se presentan. Tradicionalmente
+eran de sabor fresa, a los que más tarde
+se añadieron el sabor naranja y el cola, a
+los que ahora se añaden los de melocotón,
+patilla y manzana.',4),
+('Ricura','ricura.png',70,'Se introducen en el mercado en el año 2002 como una
+edición especial, por su particular
+combinación de sabores, tanto fue el éxito
+que son parte de la producción actual de la
+fábrica. Es una bola de caramelo picante con
+centro de chicle. Permanecen dentro del Top
+10 a nivel nacional y está entre los
+favoritos a nivel internacional.',2),
+('El Original','original.png',110,'El caramelo balsámico de Candy UCAB. Un producto
+clásico de confitería adulta, que aúna un sabor refrescante y
+agradable con el efecto de
+aliviar la irritación de
+garganta y despejar las vías
+respiratorias. Candy UCAB los
+comercializa con y sin azúcar.
+Elaborados a partir de Menta
+Piperita, la variedad de menta
+más refrescante, están
+disponibles en varios sabores:
+menta fresca, eucalipto, miel y mentol, limón y melisa,
+naranja y limón fresh con xylitol.',2),
+('Dulcin','dulcin.png',95,'La receta original es procedente de España del año
+1961, pero Candy hizo una adaptación de la receta con
+productos locales (venezolanos) son los
+caramelos blandos más conocidos de
+Candy UCAB, con los que muchos nos
+iniciamos en el mundo de los caramelos.
+Son caramelos masticables de forma
+cuadrada y muy coloridos, asociando
+cada color a un sabor correspondiente,
+siendo estos fresa, piña, limón, naranja y cereza.',4),
+('Choco Candy','choco.png',135,'Los primeros caramelos Choco se
+fabricaron en una pequeña confitería de
+Valencia en la década de los 80, eran pequeñas
+pastillas de café con leche a las que se les
+atribuían efectos positivos para combatir
+resfriados. Candy en el año 2005 adaptó la receta agregando
+un ingrediente especial (el chocolate). Hoy en día los
+caramelos Choco son líderes en caramelos de chocolate, y
+cuenta con una amplia variedad de sabores: tradicional, café
+expresso, capuccino, fresas con nata, menta, nata y mousse de
+limón todos con base de chocolate.',3),
+('Blue','blue.png',150,'Al término de la guerra civil, Javier Ramírez regresó
+a Navarra tras un exilio en Francia. Fue entonces cuando
+inventó un caramelo que hoy día sigue siendo un éxito en
+España y en el mundo, el caramelo
+de piñones de la fábrica El
+Caserío. En El Caserío de Tafalla
+siguen produciendo sus caramelos
+de forma casi artesanal, siempre
+con productos naturales. Hoy en
+día su variedad es muy amplia,
+además del caramelo de piñones
+tienen disponibles otros de cremas, pastillas de café con
+leche, caramelos ligeros, toffers, caramelos de chocolate con
+piñones, caramelos de cortesía e incluso un caramelo especial
+con el que colaboran en la lucha contra el Alzheimer. Candy
+para el 2007 hizo la tropicalización de la receta y creo Blue
+un caramelo de café con centro de arequipe.',2)
+
+INSERT INTO rol (r_tipo) VALUES
+('Administrador'),
+('Cajero'),
+('Gerente'),
+('Talento Humano'),
+('Jefe de Compras'),
+('Despachador'),
+('Gerente Promociones'),
+('Gerente General'),
+('Supervisor'),
+('Empleado Razo');
+
+INSERT INTO historial (h_precio,h_fecha) VALUES
+(10,'01-06-2018'),
+(20,'02-06-2018'),
+(30,'03-06-2018'),
+(40,'04-06-2018'),
+(50,'05-06-2018'),
+(60,'06-06-2018'),
+(70,'07-06-2018'),
+(80,'08-06-2018'),
+(90,'06-06-2018'),
+(100,'07-06-2018');

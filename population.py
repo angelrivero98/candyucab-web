@@ -64,3 +64,72 @@ for _ in range(4):
                     randomDate(date.format(str(i+1),"12"),date.format(str(i+1),"20"), random.random()),str(_+1)))
         myfile.write("\n")
 myfile.close()
+
+myfile = open("carnet.txt","a")
+myfile.write("INSERT INTO carnet (car_num, cj_id,d_id) VALUES ")
+myfile.write("\n")
+dept = 1
+count = 0
+for _ in range(41):
+    insert_c = "('{}',{},{}),"
+    for i in range(2):
+        if _ < 10
+            num_c = "0{}-0000000{}"
+        else:
+            num_c = "{}-0000000{}"
+        count = count+1
+        myfile.write(insert_c.format(num_c.format(str(_+1),str(i+1)),str(count),str(dept)))
+        myfile.write("\n")
+    dept = dept+5
+
+myfile.write("\n")
+myfile.write("INSERT INTO carnet (car_num, cn_id,d_id) VALUES ")
+myfile.write("\n")
+dept = 1
+count = 0
+for _ in range(41):
+    insert_c = "('{}',{},{}),"
+    for i in range(2):
+        if _ < 10
+            num_c = "0{}-0000000{}"
+        else:
+            num_c = "{}-0000000{}"
+        count = count+1
+        myfile.write(insert_c.format(num_c.format(str(_+1),str(i+3)),str(count),str(dept)))
+        myfile.write("\n")
+    dept = dept+5
+myfile.close()
+
+myfile = open("usuarios.txt","a")
+myfile.write("INSERT INTO usuario (u_username, u_password,cn_id) VALUES ")
+myfile.write("\n")
+for _ in range(41):
+    insert_u = "('{}','{}',{}),"
+    myfile.write(insert_u.format(fake.simple_profile()['username'],fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True),str(_+3)))
+    myfile.write("\n")
+
+myfile.write("\n")
+myfile.write("INSERT INTO usuario (u_username, u_password,cj_id) VALUES ")
+myfile.write("\n")
+for _ in range(41):
+    insert_u = "('{}','{}',{}),"
+    myfile.write(insert_u.format(fake.simple_profile()['username'],fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True),str(_+3)))
+    myfile.write("\n")
+
+myfile.write("\n")
+myfile.write("INSERT INTO usuario (u_username, u_password,e_id) VALUES ")
+myfile.write("\n")
+for _ in range(164):
+    insert_u = "('{}','{}',{}),"
+    myfile.write(insert_u.format(fake.simple_profile()['username'],fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True),str(_+1)))
+    myfile.write("\n")
+myfile.close()
+
+myfile = open("puntos.txt","a")
+myfile.write("INSERT INTO puntos (car_id,h_id) VALUES ")
+myfile.write("\n")
+for _ in range(164):
+    insert_u = "({},{}),"
+    myfile.write(insert_u.format(str(_+1),str(random.randint(1,10))))
+    myfile.write("\n")
+myfile.close()

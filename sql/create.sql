@@ -51,6 +51,7 @@ CREATE TABLE usuario (
   cj_id integer,
   cn_id integer,
   e_id integer,
+  r_id integer,
   CONSTRAINT pk_usuario PRIMARY KEY (u_id)
 );
 
@@ -268,6 +269,7 @@ CREATE TABLE factura (
 
 CREATE TABLE carnet (
   car_id SERIAL,
+  car_num varchar(11) NOT NULL,
   cj_id integer,
   cn_id integer,
   d_id integer NOT NULL,
@@ -303,8 +305,7 @@ CREATE TABLE pedido (
 
 CREATE TABLE punto (
   pu_id SERIAL,
-  pu_valor numeric(10) NOT NULL,
-  pf_id integer NOT NULL,
+  pf_id integer,
   car_id integer NOT NULL,
   h_id integer NOT NULL,
   CONSTRAINT pk_punto PRIMARY KEY (pu_id)
