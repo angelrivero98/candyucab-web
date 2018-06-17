@@ -58,7 +58,7 @@ def update_cliente(c_id,tipo):
     db = Database()
     cur = db.cursor_dict()
     if tipo == 'cj':
-        cur.execute("SELECT * FROM clientejuridico",(c_id,))
+        cur.execute("SELECT * FROM clientejuridico WHERE cj_id = %s",(c_id,))
         cliente = cur.fetchone()
         form = UpdateJForm()
         form.current_rif.data = cliente['cj_rif']
@@ -94,7 +94,7 @@ def update_cliente(c_id,tipo):
         return render_template('clienteJ.html',form = form,c_id = c_id)
     elif tipo == 'cn':
 
-        cur.execute("SELECT * FROM clientenatural",(c_id,))
+        cur.execute("SELECT * FROM clientenatural WHERE cn_id = %s",(c_id,))
         cliente = cur.fetchone()
         form = UpdateNForm()
         form.current_rif.data = cliente['cn_rif']
