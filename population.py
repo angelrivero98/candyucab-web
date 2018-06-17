@@ -45,15 +45,15 @@ myfile = open ("direccionCJ.txt","a")
 myfile.write("INSERT INTO jur_lug (l_id,cj_id,jl_tipo) VALUES ")
 myfile.write("\n")
 tipo_dir = ['fiscal','fisica']
-insert_jl = "({},{},'{}')"
+insert_jl = "({},{},'{}'),"
 for _ in range(82):
     for i in range(2):
-        myfile.write(insert_e.format(str(random.randint(463,1600)),str(_+1),tipo_dir[i+1]))
+        myfile.write(insert_jl.format(str(random.randint(463,1600)),str(_+1),tipo_dir[i]))
         myfile.write("\n")
 myfile.close()
 #empleados, recordar colocar el ; al final del insert
 myfile = open("empleados.txt","a")
-myfile.write("INSERT INTO empleado (e_nombre, e_apellido,e_ci,e_salario,ti_cod) VALUES ")
+myfile.write("INSERT INTO empleado (e_nombre, e_apellido,e_ci,e_salario,ti_id) VALUES ")
 myfile.write("\n")
 for _ in range(41):
     for i in range(4):
@@ -137,7 +137,7 @@ for _ in range(164):
 myfile.close()
 
 myfile = open("puntos.txt","a")
-myfile.write("INSERT INTO puntos (car_id,h_id) VALUES ")
+myfile.write("INSERT INTO punto (car_id,h_id) VALUES ")
 myfile.write("\n")
 for _ in range(164):
     insert_u = "({},{}),"
@@ -152,7 +152,7 @@ insert = "('{}',{}),"
 depts = ['Ventas en Linea','Talento Humano','Despacho','Entrega','Pedidos Internos']
 for _ in range(41):
     for i in range(5):
-        myfile.write(insert.format(depts[i+1],str(_+1)))
+        myfile.write(insert.format(depts[i],str(_+1)))
         myfile.write("\n")
 
 myfile.close()
@@ -182,10 +182,51 @@ myfile.close()
 myfile = open ("personas.txt","a")
 myfile.write("INSERT INTO personadecontacto (pc_nombre,pc_apellido,cj_id) VALUES ")
 myfile.write("\n")
-insert = "('{}','{}',{})"
+insert = "('{}','{}',{}),"
 for _ in range(82):
     for i in range(2):
         myfile.write(insert.format(fake.first_name(),fake.last_name(),str(_+1)))
         myfile.write("\n")
+
+myfile.close()
+
+myfile = open("permisos.txt","a")
+myfile.write("INSERT INTO permiso (per_funcion) VALUES ")
+myfile.write("\n")
+insert = "('{} {}'),"
+crud = ['CREATE','READ','INSERT','DELETE']
+entidades = ['cliente','empleado','usuario','tienda','diariodulce','producto','departamento','carnet',
+            'punto','tipo_producto','rol','inventario','orden','estatus','pedido','reposicion','pagovirtual',
+            'pagofisico','comprafisica','compravirtual','factura']
+for _ in range(21):
+    for i in range(4):
+        myfile.write(insert.format(crud[i],entidades[_]))
+        myfile.write("\n")
+myfile.close()
+
+myfile = open ("inventarios.txt","a")
+myfile.write("INSERT INTO inventario (i_cant,p_id,ti_id,an_id) VALUES ")
+myfile.write("\n")
+insert = "({},{},{},{}),"
+for _ in range(41):
+    for i in range(10):
+        myfile.write(insert.format(str(random.randint(350,1000)),str(i+1),str(_+1),str(_+1)))
+        myfile.write("\n")
+
+myfile.write("\n")
+myfile.write("INSERT INTO pasillo (pas_nombre,ti_id) VALUES ")
+myfile.write("\n")
+insert = "('{}',{}),"
+for _ in range(41):
+    myfile.write(insert.format("A",str(_+1)))
+    myfile.write("\n")
+
+myfile.write("\n")
+myfile.write("INSERT INTO anaquel (an_nombre,pas_id) VALUES ")
+myfile.write("\n")
+insert = "('{}',{}),"
+for _ in range(41):
+    myfile.write(insert.format("1",str(_+1)))
+    myfile.write("\n")
 
 myfile.close()

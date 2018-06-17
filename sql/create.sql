@@ -22,7 +22,7 @@ CREATE TABLE clientejuridico (
   cj_email varchar(50) NOT NULL UNIQUE,
   cj_demcom varchar(50) NOT NULL,
   cj_razsoc varchar(50) NOT NULL,
-  cj_pagweb varchar(30) NOT NULL,
+  cj_pagweb varchar(50) NOT NULL,
   cj_capdis numeric(20) NOT NULL,
   ti_cod integer,
   CONSTRAINT pk_clientej PRIMARY KEY (cj_id)
@@ -46,7 +46,7 @@ CREATE TABLE personadecontacto (
 
 CREATE TABLE usuario (
   u_id SERIAL,
-  u_username varchar(20) NOT NULL UNIQUE,
+  u_username varchar(40) NOT NULL UNIQUE,
   u_password varchar(60) NOT NULL,
   cj_id integer,
   cn_id integer,
@@ -61,13 +61,8 @@ CREATE TABLE empleado (
   e_apellido varchar(20) NOT NULL,
   e_ci numeric(15) NOT NULL UNIQUE,
   e_salario numeric(15) NOT NULL,
+  ti_id integer NOT NULL,
   CONSTRAINT pk_empleado PRIMARY KEY (e_id)
-);
-
-CREATE TABLE permiso(
-  p_id SERIAL,
-  p_tipo varchar(15) NOT NULL,
-  CONSTRAINT pk_permiso PRIMARY KEY (p_id)
 );
 
 CREATE TABLE lugar (
@@ -143,7 +138,7 @@ CREATE TABLE beneficio (
   b_ingreso numeric(10) NOT NULL,
   b_nombre varchar(30) NOT NULL,
   e_id integer NOT NULL,
-  CONSTRAINT pk_beneficio PRIMARY KEY (r_id)
+  CONSTRAINT pk_beneficio PRIMARY KEY (b_id)
 );
 
 CREATE TABLE horario (
@@ -154,7 +149,6 @@ CREATE TABLE horario (
   e_id integer NOT NULL,
   CONSTRAINT pk_horario PRIMARY KEY (h_id)
 );
-
 
 CREATE TABLE diariodulce (
   dd_id SERIAL,
@@ -204,7 +198,7 @@ CREATE TABLE presupuesto (
 CREATE TABLE tarjetacredito (
   tc_id SERIAL,
   tc_ncompl varchar(60) NOT NULL,
-  tc_num numeric(16) NOT NULL,
+  tc_num numeric(20) NOT NULL,
   tc_codseg numeric(3) NOT NULL,
   tc_fvenc DATE NOT NULL,
   cj_id integer,
@@ -215,7 +209,7 @@ CREATE TABLE tarjetacredito (
 CREATE TABLE tarjetadebito (
   td_id SERIAL,
   td_ncompl varchar(60) NOT NULL,
-  td_num numeric(16) NOT NULL,
+  td_num numeric(20) NOT NULL,
   td_banco varchar(20) NOT NULL,
   td_fvenc DATE NOT NULL,
   cj_id integer,
@@ -245,7 +239,7 @@ CREATE TABLE producto (
 
 CREATE TABLE comprafisica (
   cf_id SERIAL,
-  cf_fcompra DATE NOT NULL,
+  cf_fcompra DATE NOT NULL DEFAULT CURRENT_DATE,
   cj_id integer,
   cn_id integer,
   i_id integer NOT NULL,
@@ -270,7 +264,7 @@ CREATE TABLE pagovirtual (
   cv_id integer NOT NULL,
   tc_id integer,
   o_id integer NOT NULL,
-  CONSTRAINT pk_pvirtual PRIMARY KEY (p_id)
+  CONSTRAINT pk_pvirtual PRIMARY KEY (pv_id)
 );
 
 CREATE TABLE factura (
@@ -343,4 +337,15 @@ CREATE TABLE reposicion (
   i_id integer,
   o_id integer NOT NULL,
   CONSTRAINT pk_reposicion PRIMARY KEY (re_id)
+);
+
+CREATE TABLE pagofisico (
+  pf_id SERIAL,
+  pf_monto numeric(20) NOT NULL,
+  pf_fecha DATE NOT NULL DEFAULT CURRENT_DATE,
+  cf_id integer NOT NULL,
+  tc_id integer,
+  td_id integer,
+  ch_id integer,
+  CONSTRAINT pk_pagofisico PRIMARY KEY (pf_id)
 );
