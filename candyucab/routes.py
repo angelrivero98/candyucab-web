@@ -17,11 +17,12 @@ def home():
 def clientes():
     db = Database()
     cur = db.cursor_dict()
-    cur.execute("SELECT C.*,L.l_nombre AS dir FROM clientenatural C,lugar L WHERE L.l_id=C.l_id;")
+    cur.execute("SELECT C.*,L.l_nombre AS dir FROM clientenatural C,lugar L WHERE L.l_id=C.l_id ORDER BY C.cn_id;")
     cn = cur.fetchall()
-    cur.execute("""SELECT C.*,fisica.l_nombre as fisica,fiscal.l_nombre as fiscal FROM clientejuridico C,jur_lug FL,jur_lug FA ,lugar as fiscal,lugar as fisica
-                        WHERE (C.cj_id = FL.cj_id  OR C.cj_id = FA.cj_id)
-                        AND (FL.l_id=fiscal.l_id AND FL.jl_tipo='fiscal')  AND (FA.l_id=fisica.l_id AND FA.jl_tipo='fisica') ;""")
+    cur.execute(""" SELECT C.*, fl.l_nombre as fiscal, fa.l_nombre as fisica from clientejuridico C,lugar fl, jur_lug jll,
+                    lugar fa,jur_lug jla where C.cj_id = jll.cj_id AND fl.l_id = jll.l_id AND jll.jl_tipo = 'fiscal'
+                    AND C.cj_id = jla.cj_id AND fa.l_id = jla.l_id AND jla.jl_tipo = 'fisica'
+                    ORDER BY cj_id;""")
     cj = cur.fetchall()
     db.cerrar()
     return render_template('clientes.html',title = 'Clientes',cj = cj,cn = cn)
