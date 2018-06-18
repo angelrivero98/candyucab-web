@@ -242,13 +242,6 @@ class TiendaJForm(FlaskForm):
         tienda = NonValidatingSelectField('Seleccione la tienda',choices=tuple(tiendas()))
         submit=SubmitField('Registrar Cliente')
 
-        def validate_username(self,username):
-            db = Database()
-            cur = db.cursor_dict()
-            cur.execute("SELECT u_username from usuario WHERE u_username = %s;",(username.data,))
-            if cur.fetchone():
-                raise ValidationError('El nombre de usuario ya esta tomado')
-
         def validate_email(self,email):
             db = Database()
             cur = db.cursor_dict()

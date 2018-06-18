@@ -15,7 +15,7 @@
     <header class="site-header">
       <nav class="navbar sticky-top navbar-light bg-light" style="background-color: #f2f1f1;">
         <div class="container">
-          <a class="navbar-brand" href="#"><img src="../static/candyucab.png"></a>
+          <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='candyucab.png' )}}"></a>
             <div class="navbar-nav">
               <a class="nav-link" href="{{url_for('home')}}">Home</a>
             </div>
