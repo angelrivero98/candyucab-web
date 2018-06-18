@@ -1,58 +1,57 @@
 {%extends "layout.html"%}
 {%block content%}
 <h3>Cliente Juridicos</h3>
-<div class="table-responsive">
 
-<table class="table">
+<table class="table table-hover table-sm table-responsive">
   <thead>
     <tr>
-      <th>RIF  </th>
-      <th>Email</th>
-      <th>Denominacion Comercial</th>
-      <th>Razon Social</th>
-      <th>Pagina Web</th>
-      <th>Capital Disponible</th>
-      <th>Direccion Fisica</th>
-      <th>Direccion Fiscal</th>
+      <th scope="col">RIF  </th>
+      <th scope="col">Email</th>
+      <th scope="col">Denominacion Comercial</th>
+      <th scope="col">Razon Social</th>
+      <th scope="col">Pagina Web</th>
+      <th scope="col">Capital Disponible</th>
+      <th scope="col">Direccion Fisica</th>
+      <th scope="col">Direccion Fiscal</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
       {% for cliente in cj %}
-      <td>{{cliente['cj_rif']}}</td><td> <a  class="mr-2" href="{{ url_for('update_cliente',c_id= cliente['cj_id'],tipo='cj') }}">{{cliente['cj_email']}}</a></td>
+      <tr>
+      <th scope="row">{{cliente['cj_rif']}}</th><td> <a  class="mr-2" href="{{ url_for('update_cliente',c_id= cliente['cj_id'],tipo='cj') }}">{{cliente['cj_email']}}</a></td>
       <td>{{cliente['cj_demcom']}}</td><td>{{cliente['cj_razsoc']}}</td>
       <td>{{cliente['cj_pagweb']}}</td><td>{{cliente['cj_capdis']}}</td><td>{{cliente['fisica']}}</td><td>{{cliente['fiscal']}}</td>
+      </tr>
     {% endfor %}
     </tr>
   </tbody>
 </table>
-</div>
+
 
 <h3>Cliente Naturales</h3>
-<div class="table-responsive">
 
-<table class="table">
+<table class="table table-hover table-sm">
   <thead>
     <tr>
-      <th>RIF</th>
-      <th>Email</th>
-      <th>Primer Nombre</th>
-      <th>Segundo Nombre</th>
-      <th>Primer Apellido</th>
-      <th>Segundo Apellido</th>
-      <th>Direccion</th>
-      <th>Cedula</th>
+      <th scope="col">RIF</th>
+      <th scope="col">Email</th>
+      <th scope="col">Primer Nombre</th>
+      <th scope="col">Segundo Nombre</th>
+      <th scope="col">Primer Apellido</th>
+      <th scope="col">Segundo Apellido</th>
+      <th scope="col">Direccion</th>
+      <th scope="col">Cedula</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
       {% for cliente in cn %}
-      <td>{{cliente['cn_rif']}}</td><td> <a class="mr-2" href="{{ url_for('update_cliente',c_id= cliente['cn_id'],tipo='cn') }}">{{cliente['cn_email']}}</a></td>
+      <tr>
+      <th scope="row">{{cliente['cn_rif']}}</th><td> <a class="mr-2" href="{{ url_for('update_cliente',c_id= cliente['cn_id'],tipo='cn') }}">{{cliente['cn_email']}}</a></td>
       <td>{{cliente['cn_nom1']}}</td><td>{{cliente['cn_nom2']}}</td>
       <td>{{cliente['cn_ap1']}}</td><td>{{cliente['cn_ap2']}}</td><td>{{cliente['dir']}}</td><td>{{cliente['cn_ci']}}</td>
-    {% endfor %}
     </tr>
+    {% endfor %}
   </tbody>
 </table>
-</div>
+
 {%endblock content%}

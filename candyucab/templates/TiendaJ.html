@@ -83,13 +83,7 @@
             </div>
           </div>
           <div class="form-group">
-          {{ render_field(form.username) }}
-        </div>
-            <div class="form-group">
-            {{ render_field(form.password) }}
-          </div>
-          <div class="form-group">
-          {{ render_field(form.confim_password) }}
+          {{ render_field(form.tienda) }}
         </div>
         <div class="form-group">
           {{ form.submit(class="btn btn-primary btn-block") }}
@@ -97,10 +91,6 @@
             </fieldset>
 
         </form>
-        <p class="cuerpo no_esta mt-3">
-            ¿Tienes cuenta?
-            <a href="{{ url_for('login') }}">Ingresa Aqui<a>
-        </p>
     </main>
     {%endblock content%}
     <script src="{{ url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
