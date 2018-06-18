@@ -198,7 +198,7 @@ CREATE TABLE presupuesto (
 CREATE TABLE tarjetacredito (
   tc_id SERIAL,
   tc_ncompl varchar(60) NOT NULL,
-  tc_num numeric(30) NOT NULL,
+  tc_num numeric(40) NOT NULL,
   tc_codseg numeric(5) NOT NULL,
   tc_fvenc DATE NOT NULL,
   cj_id integer,
@@ -220,7 +220,7 @@ CREATE TABLE tarjetadebito (
 CREATE TABLE cheque (
   ch_id SERIAL,
   ch_ncompl varchar(60) NOT NULL,
-  ch_num varchar(40) NOT NULL,
+  ch_num numeric(40) NOT NULL,
   ch_faplicar DATE NOT NULL,
   cj_id integer,
   cn_id integer,
