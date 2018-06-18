@@ -1,7 +1,7 @@
 ﻿DROP DATABASE IF EXISTS proyecto;
 CREATE DATABASE proyecto;
 \c proyecto;
-
+SET DATESTYLE TO ISO,DMY;
 CREATE TABLE clientenatural (
   cn_id SERIAL,
   cn_rif varchar(15) NOT NULL UNIQUE,

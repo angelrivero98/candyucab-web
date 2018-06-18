@@ -1,5 +1,5 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
-from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm
 from candyucab import app,bcrypt
 from candyucab.user import User
 import json
@@ -64,6 +64,14 @@ def update_cliente(c_id,tipo):
         form.current_rif.data = cliente['cj_rif']
         form.current_email.data = cliente['cj_email']
         if form.validate_on_submit():
+            try:
+                cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
+                (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
+            except:
+                print("ERROR updating into clientejuridico")
+                db.retroceder()
+            db.actualizar()
+
             cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
                         E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
                         P.l_nombre = %s AND P.fk_lugar = M.l_id;
@@ -74,13 +82,21 @@ def update_cliente(c_id,tipo):
                         P.l_nombre = %s AND P.fk_lugar = M.l_id;
                         """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
             dirFisica = cur.fetchone()
+            if dirFisica != None:
+                try:
+                    cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fisica';""",
+                    (dirFisica['l_id'],c_id,))
+                except:
+                    print("ERROR updating into lugar_clientej fisica")
+                    db.retroceder()
 
-            try:
-                cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
-                (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
-            except:
-                print("ERROR updating into clientejuridico")
-                db.retroceder()
+            if dirFiscal != None:
+                try:
+                    cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fiscal';""",
+                    (dirFiscal['l_id'],c_id,))
+                except:
+                    print("ERROR updating into lugar_clientej fiscal")
+                    db.retroceder()
             db.actualizar()
             flash('Tu cliente ha sido actualizada','success')
             return redirect(url_for('clientes'))
@@ -153,6 +169,80 @@ def delete_cliente(c_id,tipo):
         db.cerrar()
         flash('Tu cliente ha sido eliminado','success')
         return redirect(url_for('clientes'))
+
+@app.route("/clientes/register/<string:tipo>",methods=['GET','POST'])
+def registro(tipo):
+    db = Database()
+    cur = db.cursor_dict()
+    if tipo == 'cj':
+        form = TiendaJForm()
+        if form.validate_on_submit():
+            db = Database()
+            cur = db.cursor_dict()
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados1.data,form.municipios1.data,form.parroquias1.data,))
+            dirFiscal = cur.fetchone()
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
+            dirFisica = cur.fetchone()
+            cur = db.cursor()
+            try:
+                cur.execute("""INSERT INTO clientejuridico (cj_rif, cj_email,cj_demcom,cj_razsoc,cj_capdis,cj_pagweb,ti_cod)
+                VALUES (%s, %s,%s,%s,%s,%s) RETURNING cj_id;""",
+                (form.rif.data,form.email.data,form.demcom.data,form.razsoc.data,form.capdis.data,form.pagweb.data,form.tienda.data))
+            except:
+                print("ERROR inserting into clientejuridico")
+                db.retroceder()
+            cj = cur.fetchone()[0]
+            db.actualizar()
+            try:
+                cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
+                VALUES (%s, %s,%s);""",
+                (dirFiscal['l_id'],cj,'fiscal',))
+            except:
+                print("ERROR inserting into lugar_clientej fiscal")
+                db.retroceder()
+            #dirFisica
+            try:
+                cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
+                VALUES (%s, %s,%s);""",
+                (dirFisica['l_id'],cj,'fisica',))
+            except:
+                print("ERROR inserting into lugar_clientej fisica")
+                db.retroceder()
+            db.actualizar()
+
+            flash('Su cuenta se ha creado exitosamente','success')
+            return redirect(url_for('clientes'))
+        return render_template('TiendaJ.html',title='Register',form=form)
+    elif tipo == 'cn':
+        form = TiendaNForm()
+        if form.validate_on_submit():
+            db = Database()
+            cur = db.cursor_dict()
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados.data,form.municipios.data,form.parroquias.data,))
+            direccion = cur.fetchone()
+            cur = db.cursor()
+            try:
+                cur.execute("""INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod)
+                VALUES (%s, %s,%s,%s,%s,%s,%s,%s) RETURNING cn_id;""",
+                (form.rif.data,form.email.data,form.nom1.data,form.nom2.data,form.ap1.data,form.ap2.data,direccion['l_id'],form.ci.data,form.tienda.data))
+            except:
+                print("ERROR inserting into clientenatural")
+                db.retroceder()
+
+            cn = cur.fetchone()[0]
+            db.actualizar()
+            flash('Su cuenta se ha creado exitosamente','success')
+            return redirect(url_for('clientes'))
+        return render_template('TiendaN.html',title='Register',form=form)
 
 @app.route("/register")
 def register():
@@ -227,7 +317,7 @@ def registerJ():
                     P.l_nombre = %s AND P.fk_lugar = M.l_id;
                     """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
         dirFisica = cur.fetchone()
-        print(dirFisica['l_id'])
+        cur = db.cursor()
         try:
             cur.execute("""INSERT INTO clientejuridico (cj_rif, cj_email,cj_demcom,cj_razsoc,cj_capdis,cj_pagweb)
             VALUES (%s, %s,%s,%s,%s,%s) RETURNING cj_id;""",
@@ -237,9 +327,6 @@ def registerJ():
             db.retroceder()
         cj = cur.fetchone()[0]
         db.actualizar()
-        #cur.execute("SELECT cj_id FROM clientejuridico WHERE cj_email = %s;",(form.email.data,))
-        #cj = cur.fetchone()
-        #dirFiscal
         try:
             cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
             VALUES (%s, %s,%s);""",
