@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,FormField,SelectField
+from flask_wtf.file import FileField,FileAllowed
+from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,FormField,SelectField,TextAreaField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,ValidationError,Optional,InputRequired
 from candyucab.db import Database
 import psycopg2,psycopg2.extras
@@ -22,9 +23,18 @@ def tipo_productos():
     cur.execute("SELECT * FROM tipo_producto;")
     return cur.fetchall()
 
+
 class NonValidatingSelectField(SelectField):
     def pre_validate(self, form):
         pass
+
+class ProductoForm(FlaskForm):
+    picture = FileField('Ingrese foto del caramelo',validators=[FileAllowed(['jpg','png'])])
+    nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    desc = TextAreaField('Descripcion del caramelo',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    tp = NonValidatingSelectField('Tipo de producto',choices=tuple(tipo_productos()))
+    precio = IntegerField('Precio del producto',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    submit=SubmitField('Añadir Producto')
 
 class LoginForm(FlaskForm):
     username = StringField('Username',validators=[DataRequired()])

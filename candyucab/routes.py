@@ -1,8 +1,10 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
-from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm,ProductoForm
 from candyucab import app,bcrypt
 from candyucab.user import User
-import json
+import secrets
+import os
+from PIL import Image
 import psycopg2
 from candyucab.db import Database
 from flask_login import login_user,current_user,logout_user,login_required
@@ -12,6 +14,90 @@ from flask_login import login_user,current_user,logout_user,login_required
 @app.route("/home")
 def home():
    return render_template('home.html')
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _,f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path,'static/images',picture_fn)
+    output_size = (125,125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+@app.route("/productos/<int:p_id>/update",methods=['GET','POST'])
+def update_producto(p_id):
+    form = ProductoForm()
+    db =Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT * FROM producto WHERE p_id =%s;",(p_id,))
+    producto = cur.fetchone()
+    if form.validate_on_submit():
+        if form.picture.data :
+            picture_file = save_picture(form.picture.data)
+            try:
+                cur.execute("""UPDATE producto SET p_nombre = %s,p_imagen=%s,p_desc=%s,p_precio=%s,tp_id =%s WHERE p_id =%s;""",
+                (form.nombre.data,picture_file,form.desc.data,form.precio.data,form.tp.data,p_id))
+            except:
+                print("ERROR updating into producto")
+                db.retroceder()
+            db.actualizar()
+        else:
+            try:
+                cur.execute("""UPDATE producto SET p_nombre = %s,p_desc=%s,p_precio=%s,tp_id =%s WHERE p_id=%s;""",
+                (form.nombre.data,form.desc.data,form.precio.data,form.tp.data,p_id))
+            except:
+                print("ERROR updating into producto")
+                db.retroceder()
+            db.actualizar()
+        flash('Su producto se ha actualizado exitosamente','success')
+        return redirect(url_for('productos'))
+    elif request.method == 'GET':
+        form.nombre.data = producto['p_nombre']
+        form.desc.data = producto['p_desc']
+        form.precio.data = producto['p_precio']
+    return render_template('createProducto.html',form=form,p_id = p_id)
+
+@app.route("/productos/<int:p_id>/delete",methods=['GET','POST'])
+def delete_producto(p_id):
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("DELETE FROM producto WHERE p_id = %s;",(p_id,))
+    except:
+        print("ERROR deleting into producto")
+        db.retroceder()
+    db.actualizar()
+    return redirect(url_for('productos'))
+
+@app.route("/productos",methods=['GET','POST'])
+def productos():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT T.tp_nombre,P.* FROM producto P,tipo_producto T WHERE P.tp_id = T.tp_id;")
+    productos = cur.fetchall()
+    return render_template('productos.html',productos = productos)
+
+@app.route("/productos/registro",methods=['GET','POST'])
+def create_producto():
+    form = ProductoForm()
+    if form.validate_on_submit():
+        picture_file = save_picture(form.picture.data)
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""INSERT INTO producto (p_nombre,p_imagen,p_desc,p_precio,tp_id)
+                        VALUES (%s, %s,%s,%s,%s);""",
+            (form.nombre.data,picture_file,form.desc.data,form.precio.data,form.tp.data))
+        except:
+            print("ERROR inserting into producto")
+            db.retroceder()
+        db.actualizar()
+        flash('Su producto se ha creado exitosamente','success')
+        return redirect(url_for('productos'))
+    return render_template('createProducto.html',form=form)
 
 @app.route("/clientes",methods=['GET','POST'])
 def clientes():
