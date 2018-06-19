@@ -27,6 +27,22 @@ def save_picture(form_picture):
 
     return picture_fn
 
+@app.route("/tiendas/registro",methods=['GET','POST'])
+def create_tienda():
+    pass
+
+@app.route("/tiendas/<int:ti_id>",methods=['GET','POST'])
+def update_tienda(ti_id):
+    pass
+@app.route("/tiendas",methods=['GET','POST'])
+def tiendas():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT T.*,L.l_nombre AS dir FROM tienda T,lugar L WHERE L.l_id=T.l_id ORDER BY T.ti_id;")
+    tiendas = cur.fetchall()
+    db.cerrar()
+    return render_template('tiendas.html',tiendas=tiendas)
+
 @app.route("/productos/<int:p_id>/update",methods=['GET','POST'])
 def update_producto(p_id):
     form = ProductoForm()

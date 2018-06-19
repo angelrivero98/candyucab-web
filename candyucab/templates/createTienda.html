@@ -1,7 +1,7 @@
 {%extends "layout2.html"%}
 {% from "_render_field.html" import render_field %}
 {% block content %}
-<form class="formulario" method="POST" enctype="multipart/form-data">
+<form class="formulario" method="POST">
     {{ form.hidden_tag() }}
     <div class="text-center cabecera p-0">
         <h1>Ingrese datos del producto</h1>
@@ -20,49 +20,50 @@
         {{ render_field(form.nombre) }}
       </div>
       <div class="form-group">
-      {{ render_field(form.precio) }}
+      {{ render_field(form.tipo) }}
     </div>
-      <div class="form-group">
-        {{ render_field(form.desc) }}
-      </div>
-      <div class="form-group">
-      {{ render_field(form.tp) }}
+    <div class="form-row">
+      <legend class="border-bottom mb-4">Direccion</legend>
+    <div class="col">
+      {{ render_field(form.estados)}}
     </div>
-    <div class="form-group">
-              {{ form.picture.label() }}
-              {{ form.picture(class="form-control-file") }}
-              {% if form.picture.errors %}
-                  {% for error in form.picture.errors %}
-                      <span class="text-danger">{{ error }}</span></br>
-                  {% endfor %}
-              {% endif %}
-      </div>
+    <div class="col">
+      {{ render_field(form.municipios)}}
+    </div>
+    <div class="col">
+      {{ render_field(form.parroquias)}}
+    </div>
+  </div>
 <div class="form-group">
   {{ form.submit(class="btn btn-primary btn-block") }}
 </div>
     </fieldset>
 
 </form>
+<p class="cuerpo no_esta mt-3">
+    <a href="{{ url_for('tiendas') }}">Ver Tiendas<a>
+</p>
+{% if ti_id %}
+<div class="form-col">
+  <button class="btn btn-danger btn-sm m-1" type="button" data-toggle="modal" data-target="#deleteModal">Delete</button>
+</div>
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Eliminar Producto?</h5>
+        <h5 class="modal-title" id="deleteModalLabel">Eliminar Tienda?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <form class="" action="{{ url_for('delete_producto',p_id = p_id)}}" method="POST">
+        <form class="" action="{{ url_for('delete_tienda',ti_id = ti_id)}}" method="POST">
           <input class="btn btn-danger" type="submit" name="" value="Delete">
         </form>
       </div>
     </div>
   </div>
 </div>
-  </div>
-<p class="cuerpo no_esta mt-3">
-    <a href="{{ url_for('productos') }}">Ver Productos<a>
-</p>
+{%endif%}
 {% endblock %}

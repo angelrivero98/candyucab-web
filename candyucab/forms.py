@@ -28,6 +28,38 @@ class NonValidatingSelectField(SelectField):
     def pre_validate(self, form):
         pass
 
+class TiendaForm(FlaskForm):
+    nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    estados = NonValidatingSelectField('Estado',choices=tuple(estados()))
+    municipios = NonValidatingSelectField('Municipio',choices=[])
+    parroquias = NonValidatingSelectField('Parroquia',choices=[])
+    tipo = SelectField('Tipo de tienda',choices=[(2,'Mini Candy Shop'),(1,'Candy Shop')])
+    submit=SubmitField('Registrar')
+
+    def validate_estados(self,estados):
+        x =str(estados.data)
+        if x == 'None':
+            raise ValidationError('Este campo no puede dejarse vacio')
+
+    def validate_municipios(self,municipios):
+        x =str(municipios.data)
+        if x == 'None':
+            raise ValidationError('Este campo no puede dejarse vacio')
+
+    def validate_parroquias(self,parroquias):
+        x =str(parroquias.data)
+        if x == 'None':
+            raise ValidationError('Este campo no puede dejarse vacio')
+
+class UpdateTiendaForm(FlaskForm):
+    nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    estados = NonValidatingSelectField('Estado',choices=tuple(estados()))
+    municipios = NonValidatingSelectField('Municipio',choices=[])
+    parroquias = NonValidatingSelectField('Parroquia',choices=[])
+    tipo = SelectField('Tipo de tienda',choices=[(2,'Mini Candy Shop'),(1,'Candy Shop')])
+    submit=SubmitField('Actualizar')
+
+
 class ProductoForm(FlaskForm):
     picture = FileField('Ingrese foto del caramelo',validators=[FileAllowed(['jpg','png'])])
     nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
