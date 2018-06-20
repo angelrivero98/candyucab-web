@@ -183,7 +183,7 @@ CREATE TABLE inventario (
 
 CREATE TABLE pro_diario (
   pd_id SERIAL,
-  pd_descuento numeric(2,1) NOT NULL,
+  pd_descuento numeric(4,2) NOT NULL,
   dd_id integer NOT NULL,
   p_id integer,
   CONSTRAINT pk_pro_diario PRIMARY KEY (pd_id)
