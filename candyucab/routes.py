@@ -1,9 +1,11 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
-from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm,ProductoForm
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm
+from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm
 from candyucab import app,bcrypt
 from candyucab.user import User
 import secrets
 import os
+import pyexcel as p
 from PIL import Image
 import psycopg2
 from candyucab.db import Database
@@ -27,13 +29,103 @@ def save_picture(form_picture):
 
     return picture_fn
 
+@app.route("/asistencia",methods=['GET','POST'])
+def asistencia():
+    form = AsistenciaForm()
+    db = Database()
+    cur = db.cursor_dict()
+    if form.validate_on_submit():
+        records = p.iget_records(file_name=form.excel.data.filename)
+        for record in records:
+            if record['CEDULA'] != '':
+                cur.execute("SELECT e_id from empleado WHERE e_ci=%s;",(int(float(record['CEDULA'])),))
+                id = cur.fetchone()
+                insert = "to_timestamp({}, 'DD-MM-YYYY HH24:MI')"
+                if record['FECHA_HORA_SALIDA'] != '' and record['FECHA_HORA_ENTRADA'] != '':
+                    try:
+                        cur.execute("""INSERT INTO asistencia (as_fecha_entrada,as_fecha_salida,e_id) VALUES
+                            (to_timestamp(%s, 'DD-MM-YYYY HH24:MI'),to_timestamp(%s, 'DD-MM-YYYY HH24:MI'),%s);""",
+                            (record['FECHA_HORA_ENTRADA'],record['FECHA_HORA_SALIDA'],id['e_id'],))
+                    except:
+                        print("ERROR inserting into asistencia")
+                        db.retroceder()
+                    db.actualizar()
+        return redirect(url_for('home'))
+
+    return render_template('asistencia.html',form=form)
+
 @app.route("/tiendas/registro",methods=['GET','POST'])
 def create_tienda():
-    pass
+    form = TiendaForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                    E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                    P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                    """,(form.estados.data,form.municipios.data,form.parroquias.data,))
+        direccion = cur.fetchone()
+        if int(form.tipo.data) == 1:
+            tipo = 'Candy Shop'
+        else:
+            tipo = 'Mini Candy Shop'
+        try:
+            cur.execute("""INSERT INTO tienda (ti_nombre,ti_tipo,l_id)
+                        VALUES (%s, %s,%s);""",
+                        (form.nombre.data,tipo,direccion['l_id'],))
+        except:
+            print("ERROR inserting into tienda")
+            db.retroceder()
+        db.actualizar()
+        flash('Su tienda se ha creado exitosamente','success')
+        return redirect(url_for('tiendas'))
+    return render_template('createTienda.html',form=form)
 
-@app.route("/tiendas/<int:ti_id>",methods=['GET','POST'])
+@app.route("/tiendas/<int:ti_id>/delete",methods=['GET','POST'])
+def delete_tienda(ti_id):
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("DELETE FROM tienda WHERE ti_id = %s;",(ti_id,))
+    except:
+        print("ERROR deleting into tienda")
+        db.retroceder()
+    db.actualizar()
+    return redirect(url_for('tiendas'))
+
+@app.route("/tiendas/<int:ti_id>/update",methods=['GET','POST'])
 def update_tienda(ti_id):
-    pass
+    form = UpdateTiendaForm()
+    db =Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT * FROM tienda WHERE ti_id =%s;",(ti_id,))
+    tienda = cur.fetchone()
+    if form.validate_on_submit():
+        cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                    E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                    P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                    """,(form.estados.data,form.municipios.data,form.parroquias.data,))
+        direccion = cur.fetchone()
+        if direccion == None:
+            direccion = tienda
+        if int(form.tipo.data) == 1:
+            tipo = 'Candy Shop'
+        else:
+            tipo = 'Mini Candy Shop'
+
+        try:
+            cur.execute("""UPDATE tienda SET ti_nombre=%s,ti_tipo=%s,l_id=%s WHERE ti_id=%s;""",
+                        (form.nombre.data,tipo,direccion['l_id'],ti_id,))
+        except:
+            print("ERROR updating into tienda")
+            db.retroceder()
+        db.actualizar()
+        flash('Su tienda se ha actualizado exitosamente','success')
+        return redirect(url_for('tiendas'))
+    elif request.method == 'GET':
+        form.nombre.data = tienda['ti_nombre']
+    return render_template('createTienda.html',form=form,ti_id = ti_id)
+
 @app.route("/tiendas",methods=['GET','POST'])
 def tiendas():
     db = Database()
@@ -100,18 +192,21 @@ def productos():
 def create_producto():
     form = ProductoForm()
     if form.validate_on_submit():
-        picture_file = save_picture(form.picture.data)
-        db = Database()
-        cur = db.cursor_dict()
-        try:
-            cur.execute("""INSERT INTO producto (p_nombre,p_imagen,p_desc,p_precio,tp_id)
-                        VALUES (%s, %s,%s,%s,%s);""",
-            (form.nombre.data,picture_file,form.desc.data,form.precio.data,form.tp.data))
-        except:
-            print("ERROR inserting into producto")
-            db.retroceder()
-        db.actualizar()
-        flash('Su producto se ha creado exitosamente','success')
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            db = Database()
+            cur = db.cursor_dict()
+            try:
+                cur.execute("""INSERT INTO producto (p_nombre,p_imagen,p_desc,p_precio,tp_id)
+                            VALUES (%s, %s,%s,%s,%s);""",
+                            (form.nombre.data,picture_file,form.desc.data,form.precio.data,form.tp.data))
+            except:
+                print("ERROR inserting into producto")
+                db.retroceder()
+            db.actualizar()
+            flash('Su producto se ha creado exitosamente','success')
+        else:
+            flash('Su producto no se ha guardado porque no se suministro imagen','danger')
         return redirect(url_for('productos'))
     return render_template('createProducto.html',form=form)
 
@@ -743,12 +838,20 @@ def login():
         user_type = cur.fetchone()
         if user_type:
             user = User(user_type)
-            if user and bcrypt.check_password_hash(user.u_password,form.password.data):
-                login_user(user,remember=form.remember.data)
-                next_page = request.args.get('next')
-                return redirect(url_for('home'))
+            if user.u_id > 328:
+                if user and bcrypt.check_password_hash(user.u_password,form.password.data):
+                    login_user(user,remember=form.remember.data)
+                    next_page = request.args.get('next')
+                    return redirect(url_for('home'))
+                else:
+                    flash('Contraseña Incorrecta','danger')
             else:
-                flash('Contraseña Incorrecta','danger')
+                if user and user.u_password == form.password.data:
+                    login_user(user,remember=form.remember.data)
+                    next_page = request.args.get('next')
+                    return redirect(url_for('home'))
+                else:
+                    flash('Contraseña Incorrecta','danger')
         else:
             flash('Usuario no encontrado','danger')
     return render_template('login.html',title='Login',form=form)

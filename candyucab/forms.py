@@ -28,12 +28,20 @@ class NonValidatingSelectField(SelectField):
     def pre_validate(self, form):
         pass
 
+class UpdateTiendaForm(FlaskForm):
+    nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    estados = NonValidatingSelectField('Estado',choices=tuple(estados()))
+    municipios = NonValidatingSelectField('Municipio',choices=[])
+    parroquias = NonValidatingSelectField('Parroquia',choices=[])
+    tipo = NonValidatingSelectField('Tipo de tienda',choices=[(2,'Mini Candy Shop'),(1,'Candy Shop')])
+    submit=SubmitField('Actualizar')
+
 class TiendaForm(FlaskForm):
     nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
     estados = NonValidatingSelectField('Estado',choices=tuple(estados()))
     municipios = NonValidatingSelectField('Municipio',choices=[])
     parroquias = NonValidatingSelectField('Parroquia',choices=[])
-    tipo = SelectField('Tipo de tienda',choices=[(2,'Mini Candy Shop'),(1,'Candy Shop')])
+    tipo = NonValidatingSelectField('Tipo de tienda',choices=[(2,'Mini Candy Shop'),(1,'Candy Shop')])
     submit=SubmitField('Registrar')
 
     def validate_estados(self,estados):
@@ -51,14 +59,9 @@ class TiendaForm(FlaskForm):
         if x == 'None':
             raise ValidationError('Este campo no puede dejarse vacio')
 
-class UpdateTiendaForm(FlaskForm):
-    nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-    estados = NonValidatingSelectField('Estado',choices=tuple(estados()))
-    municipios = NonValidatingSelectField('Municipio',choices=[])
-    parroquias = NonValidatingSelectField('Parroquia',choices=[])
-    tipo = SelectField('Tipo de tienda',choices=[(2,'Mini Candy Shop'),(1,'Candy Shop')])
-    submit=SubmitField('Actualizar')
-
+class AsistenciaForm(FlaskForm):
+    excel = FileField('Ingrese el archivo excel',validators=[FileAllowed(['xlsx','xls'])])
+    submit=SubmitField('Registar asistencia')
 
 class ProductoForm(FlaskForm):
     picture = FileField('Ingrese foto del caramelo',validators=[FileAllowed(['jpg','png'])])
