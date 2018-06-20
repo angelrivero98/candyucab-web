@@ -81,7 +81,7 @@ def delete_oferta(pd_id,e_id):
 def ofertas(e_id):
     db = Database()
     cur = db.cursor_dict()
-    cur.execute("SELECT * FROM diariodulce WHERE dd_femision = CURRENT_DATE;")
+    cur.execute("SELECT * FROM diariodulce WHERE CURRENT_DATE between dd_femision and dd_ffinal;")
     diario = cur.fetchone()
     if diario:
         cur.execute("SELECT P.p_nombre,P.p_precio, PD.* from pro_diario PD,producto P where PD.dd_id = %s AND P.p_id=PD.p_id;",(diario['dd_id'],))
