@@ -214,12 +214,11 @@ def create_producto():
 def clientes():
     db = Database()
     cur = db.cursor_dict()
-    cur.execute("SELECT C.*,L.l_nombre AS dir FROM clientenatural C,lugar L WHERE L.l_id=C.l_id ORDER BY C.cn_id;")
+    cur.execute("SELECT C.*,L.l_nombre AS dir FROM clientenatural C,lugar L WHERE L.l_id=C.l_id;")
     cn = cur.fetchall()
-    cur.execute(""" SELECT C.*, fl.l_nombre as fiscal, fa.l_nombre as fisica from clientejuridico C,lugar fl, jur_lug jll,
-                    lugar fa,jur_lug jla where C.cj_id = jll.cj_id AND fl.l_id = jll.l_id AND jll.jl_tipo = 'fiscal'
-                    AND C.cj_id = jla.cj_id AND fa.l_id = jla.l_id AND jla.jl_tipo = 'fisica'
-                    ORDER BY cj_id;""")
+    cur.execute("""SELECT C.*,fisica.l_nombre as fisica,fiscal.l_nombre as fiscal FROM clientejuridico C,jur_lug FL,jur_lug FA ,lugar as fiscal,lugar as fisica
+                        WHERE (C.cj_id = FL.cj_id  OR C.cj_id = FA.cj_id)
+                        AND (FL.l_id=fiscal.l_id AND FL.jl_tipo='fiscal')  AND (FA.l_id=fisica.l_id AND FA.jl_tipo='fisica') ;""")
     cj = cur.fetchall()
     db.cerrar()
     return render_template('clientes.html',title = 'Clientes',cj = cj,cn = cn)
@@ -255,20 +254,12 @@ def update_cliente(c_id,tipo):
     db = Database()
     cur = db.cursor_dict()
     if tipo == 'cj':
-        cur.execute("SELECT * FROM clientejuridico WHERE cj_id = %s",(c_id,))
+        cur.execute("SELECT * FROM clientejuridico",(c_id,))
         cliente = cur.fetchone()
         form = UpdateJForm()
         form.current_rif.data = cliente['cj_rif']
         form.current_email.data = cliente['cj_email']
         if form.validate_on_submit():
-            try:
-                cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
-                (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
-            except:
-                print("ERROR updating into clientejuridico")
-                db.retroceder()
-            db.actualizar()
-
             cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
                         E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
                         P.l_nombre = %s AND P.fk_lugar = M.l_id;
@@ -279,21 +270,13 @@ def update_cliente(c_id,tipo):
                         P.l_nombre = %s AND P.fk_lugar = M.l_id;
                         """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
             dirFisica = cur.fetchone()
-            if dirFisica != None:
-                try:
-                    cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fisica';""",
-                    (dirFisica['l_id'],c_id,))
-                except:
-                    print("ERROR updating into lugar_clientej fisica")
-                    db.retroceder()
 
-            if dirFiscal != None:
-                try:
-                    cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fiscal';""",
-                    (dirFiscal['l_id'],c_id,))
-                except:
-                    print("ERROR updating into lugar_clientej fiscal")
-                    db.retroceder()
+            try:
+                cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
+                (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
+            except:
+                print("ERROR updating into clientejuridico")
+                db.retroceder()
             db.actualizar()
             flash('Tu cliente ha sido actualizada','success')
             return redirect(url_for('clientes'))
@@ -307,7 +290,7 @@ def update_cliente(c_id,tipo):
         return render_template('clienteJ.html',form = form,c_id = c_id)
     elif tipo == 'cn':
 
-        cur.execute("SELECT * FROM clientenatural WHERE cn_id = %s",(c_id,))
+        cur.execute("SELECT * FROM clientenatural",(c_id,))
         cliente = cur.fetchone()
         form = UpdateNForm()
         form.current_rif.data = cliente['cn_rif']
@@ -750,7 +733,7 @@ def registerJ():
                     P.l_nombre = %s AND P.fk_lugar = M.l_id;
                     """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
         dirFisica = cur.fetchone()
-        cur = db.cursor()
+        print(dirFisica['l_id'])
         try:
             cur.execute("""INSERT INTO clientejuridico (cj_rif, cj_email,cj_demcom,cj_razsoc,cj_capdis,cj_pagweb)
             VALUES (%s, %s,%s,%s,%s,%s) RETURNING cj_id;""",
@@ -760,6 +743,9 @@ def registerJ():
             db.retroceder()
         cj = cur.fetchone()[0]
         db.actualizar()
+        #cur.execute("SELECT cj_id FROM clientejuridico WHERE cj_email = %s;",(form.email.data,))
+        #cj = cur.fetchone()
+        #dirFiscal
         try:
             cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
             VALUES (%s, %s,%s);""",
@@ -855,6 +841,29 @@ def login():
         else:
             flash('Usuario no encontrado','danger')
     return render_template('login.html',title='Login',form=form)
+
+
+@app.route('/nombre_tienda',methods=['GET','POST'])
+def nombre_tienda():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT ti_nombre, ti_tipo, l_nombre, ti_id from tienda, lugar WHERE tienda.l_id=lugar.l_id")
+    nombre_tiendas = cur.fetchall()
+    db.cerrar()
+    nomArray = []
+    for nombre in nombre_tiendas:
+        nomArray.append(nombre)
+
+    return jsonify({'nombre_tiendas': nomArray})
+
+
+@app.route("/cliente_home",methods=['GET','POST'])
+def cliente_home():
+    return render_template('cliente_home.html')
+
+@app.route("/inventario", methods=['GET', 'POST'])
+def inventario():
+    return render_template('inventario.html')
 
 @app.route("/logout")
 def logout():

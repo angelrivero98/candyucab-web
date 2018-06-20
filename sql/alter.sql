@@ -1,12 +1,9 @@
-ALTER TABLE lugar
-  ADD CONSTRAINT fk_lugar_lugar FOREIGN KEY (fk_lugar) references lugar(l_id) ON DELETE CASCADE ON UPDATE CASCADE;
-
+﻿
+ALTER TABLE lugar ADD CONSTRAINT fk_lugar_lugar FOREIGN KEY (fk_lugar) references lugar(l_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE clientenatural ADD CONSTRAINT fk_cn_tienda FOREIGN KEY (ti_cod) references tienda(ti_id) ON DELETE CASCADE;
 ALTER TABLE clientenatural ADD CONSTRAINT fk_cn_lugar FOREIGN KEY (l_id) references lugar(l_id) ON DELETE CASCADE;
 ALTER TABLE clientejuridico ADD CONSTRAINT fk_cj_tienda FOREIGN KEY (ti_cod) references tienda(ti_id) ON DELETE CASCADE;
-ALTER TABLE telefono ADD CONSTRAINT fk_cn_tlf FOREIGN KEY (cn_id) references clientenatural(cn_id) ON DELETE CASCADE;
 ALTER TABLE telefono ADD CONSTRAINT fk_cj_tlf FOREIGN KEY (cj_id) references clientejuridico(cj_id)ON DELETE CASCADE ;
-ALTER TABLE personadecontacto ADD CONSTRAINT fk_cj_pc FOREIGN KEY (cj_id) references clientejuridico(cj_id) ON DELETE CASCADE;
 ALTER TABLE usuario ADD CONSTRAINT fk_cn_user FOREIGN KEY (cn_id) references clientenatural(cn_id) ON DELETE CASCADE;
 ALTER TABLE usuario ADD CONSTRAINT fk_cj_user FOREIGN KEY (cj_id) references clientejuridico(cj_id) ON DELETE CASCADE;
 ALTER TABLE usuario ADD CONSTRAINT fk_e_user FOREIGN KEY (e_id) references empleado(e_id) ON DELETE CASCADE;
@@ -62,4 +59,4 @@ ALTER TABLE punto ADD CONSTRAINT fk_pu_carnet FOREIGN KEY (car_id) references ca
 ALTER TABLE punto ADD CONSTRAINT fk_pu_historial FOREIGN KEY (h_id) references historial(h_id) ON DELETE CASCADE;
 ALTER TABLE reposicion ADD CONSTRAINT fk_re_fabrica FOREIGN KEY (f_id) references fabrica(f_id) ON DELETE CASCADE;
 ALTER TABLE reposicion ADD CONSTRAINT fk_re_inventario FOREIGN KEY (i_id) references inventario(i_id) ON DELETE CASCADE;
-ALTER TABLE reposicion ADD CONSTRAINT fk_re_orden FOREIGN KEY (o_id) references orden(o_id) ON DELETE CASCADE;
+ALTER TABLE reposicion ADD CONSTRAINT fk_re_orden FOREIGN KEY (o_id) references orden(o_id) ON DELETE CASCADE

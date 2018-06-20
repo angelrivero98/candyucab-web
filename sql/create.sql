@@ -1,7 +1,7 @@
 ﻿DROP DATABASE IF EXISTS proyecto;
 CREATE DATABASE proyecto;
 \c proyecto;
-SET DATESTYLE TO ISO,DMY;
+
 CREATE TABLE clientenatural (
   cn_id SERIAL,
   cn_rif varchar(15) NOT NULL UNIQUE,
@@ -71,7 +71,7 @@ CREATE TABLE lugar (
   l_nombre varchar(40) NOT NULL,
   fk_lugar integer,
   CONSTRAINT pk_lugar PRIMARY KEY (l_id),
-  CONSTRAINT check_tipo CHECK(l_tipo in ('M','P','E'))
+  CONSTRAINT check_tipo CHECK(l_tipo in (''M'',''P'',''E''))
 );
 
 CREATE TABLE jur_lug(
@@ -80,7 +80,7 @@ CREATE TABLE jur_lug(
   cj_id integer NOT NULL,
   jl_tipo varchar(10) NOT NULL,
   CONSTRAINT pk_lugar_clientej PRIMARY KEY (jl_id),
-  CONSTRAINT check_tipodir CHECK(jl_tipo in ('fisica','fiscal'))
+  CONSTRAINT check_tipodir CHECK(jl_tipo in (''fisica'',''fiscal''))
 );
 
 CREATE TABLE departamento (
@@ -102,7 +102,7 @@ CREATE TABLE tienda (
   ti_tipo varchar(20) NOT NULL,
   ti_nombre varchar(40) NOT NULL,
   l_id integer NOT NULL,
-  CONSTRAINT check_tipo_tienda CHECK (ti_tipo IN ('Mini Candy Shop','Candy Shop')),
+  CONSTRAINT check_tipo_tienda CHECK (ti_tipo IN (''Mini Candy Shop'',''Candy Shop'')),
   CONSTRAINT pk_tienda PRIMARY KEY (ti_id)
 );
 
