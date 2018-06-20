@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../static/estilo1.css">
+    <title>Inicio de Sesión</title>
+  </head>
+  <body style="background-color:#e06666;">
+    {%block content%}
+    <div class="container" style="background-color:white; ">
+
+
+          <form class="" action="" method="POST" style="margin: 0 auto; width:40% ">
+            {{form.hidden_tag()}}
+            <fieldset class="form-group">
+              <img src="../static/dulce.png" alt="" class="rounded mx-auto d-block">
+            <h2 class="border-bottom mb-4">Registro:Segunda Parte</h2>
+
+            <div class="form-group">
+              {{ form.telefonos.label(class="form-control-label") }}
+
+              {% for telefono in form.telefonos %}
+                {% if loop.index < (num_tlf+1) %}
+
+                  <div class="col">
+                        {% if telefono.errors%}
+                          {{telefono(class="form-control form-control-lg is-invalid")}}
+                            <div class="invalid-feddback">
+                          {%for error in telefono.errors%}
+                            <span>{{error}}</span>
+                          {%endfor%}
+                          </div>
+                          {% else %}
+                          {{ telefono(class="form-control form-control-lg") }}
+                          {%endif%}
+                  </div>
+
+                  {% endif %}
+
+              {% endfor %}
+            </div>
+            <div class="form-group">
+              {{ form.personas.label(class="form-control-label") }}
+              {% for persona in form.personas %}
+                {% if loop.index < (num_per+1) %}
+              <div class="form-row">
+              <div class="col">
+
+                    {{ persona.nombre.label(class="form-control-label") }}
+                    {% if persona.nombre.errors%}
+                      {{persona.nombre(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feddback">
+                      {%for error in persona.nombre.errors%}
+                        <span>{{error}}</span>
+                      {%endfor%}
+                      </div>
+                      {% else %}
+                      {{ persona.nombre(class="form-control form-control-lg") }}
+                      {%endif%}
+              </div>
+              <div class="col">
+                    {{persona.apellido.label(class="form-control-label")}}
+                    {% if persona.apellido.errors%}
+                      {{persona.apellido(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feddback">
+                      {%for error in persona.apellido.errors%}
+                        <span>{{error}}</span>
+                      {%endfor%}
+                      </div>
+                      {% else %}
+                      {{ persona.apellido(class="form-control form-control-lg") }}
+                      {%endif%}
+              </div>
+              </div>
+              {%endif%}
+              {% endfor %}
+            </div>
+
+            </fieldset>
+            <div class="form-group">
+              {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+          </form>
+
+    </div>
+{%endblock content%}
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/estilo1.js"></script>
+  </body>
+</html>

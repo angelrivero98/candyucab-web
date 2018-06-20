@@ -1730,8 +1730,7 @@ INSERT INTO fabrica (f_nombre,l_id) VALUES ('Candy Factory',1221);
 INSERT INTO rol_per (r_id,per_id) VALUES
 (1,1),(2,2),(3,3),(4,4),(5,5);
 
-INSERT INTO presupuesto (pre_femision,pre_nombre) VALUES ('15-06-2018','Cliente Solidario'),('16-06-2018','Chico Increible'),
-('17-06-2018','presupuesto boleta'),('18-06-2018','THICC'),('19-06-2018','presu');
+INSERT INTO presupuesto (pre_femision) VALUES ('15-06-2018'),('16-06-2018'),('17-06-2018'),('18-06-2018'),('19-06-2018');
 
 INSERT INTO asistencia (as_fecha_entrada, as_fecha_salida,e_id) VALUES
 (to_timestamp('01-06-2018 06:08', 'DD-MM-YYYY HH24:MI'),to_timestamp('01-06-2018 17:54', 'DD-MM-YYYY HH24:MI'),1),
