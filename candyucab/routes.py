@@ -1,8 +1,12 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
-from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm
+from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm
 from candyucab import app,bcrypt
 from candyucab.user import User
-import json
+import secrets
+import os
+import pyexcel as p
+from PIL import Image
 import psycopg2
 from candyucab.db import Database
 from flask_login import login_user,current_user,logout_user,login_required
@@ -12,6 +16,199 @@ from flask_login import login_user,current_user,logout_user,login_required
 @app.route("/home")
 def home():
    return render_template('home.html')
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _,f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path,'static/images',picture_fn)
+    output_size = (125,125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+@app.route("/asistencia",methods=['GET','POST'])
+def asistencia():
+    form = AsistenciaForm()
+    db = Database()
+    cur = db.cursor_dict()
+    if form.validate_on_submit():
+        records = p.iget_records(file_name=form.excel.data.filename)
+        for record in records:
+            if record['CEDULA'] != '':
+                cur.execute("SELECT e_id from empleado WHERE e_ci=%s;",(int(float(record['CEDULA'])),))
+                id = cur.fetchone()
+                insert = "to_timestamp({}, 'DD-MM-YYYY HH24:MI')"
+                if record['FECHA_HORA_SALIDA'] != '' and record['FECHA_HORA_ENTRADA'] != '':
+                    try:
+                        cur.execute("""INSERT INTO asistencia (as_fecha_entrada,as_fecha_salida,e_id) VALUES
+                            (to_timestamp(%s, 'DD-MM-YYYY HH24:MI'),to_timestamp(%s, 'DD-MM-YYYY HH24:MI'),%s);""",
+                            (record['FECHA_HORA_ENTRADA'],record['FECHA_HORA_SALIDA'],id['e_id'],))
+                    except:
+                        print("ERROR inserting into asistencia")
+                        db.retroceder()
+                    db.actualizar()
+        return redirect(url_for('home'))
+
+    return render_template('asistencia.html',form=form)
+
+@app.route("/tiendas/registro",methods=['GET','POST'])
+def create_tienda():
+    form = TiendaForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                    E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                    P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                    """,(form.estados.data,form.municipios.data,form.parroquias.data,))
+        direccion = cur.fetchone()
+        if int(form.tipo.data) == 1:
+            tipo = 'Candy Shop'
+        else:
+            tipo = 'Mini Candy Shop'
+        try:
+            cur.execute("""INSERT INTO tienda (ti_nombre,ti_tipo,l_id)
+                        VALUES (%s, %s,%s);""",
+                        (form.nombre.data,tipo,direccion['l_id'],))
+        except:
+            print("ERROR inserting into tienda")
+            db.retroceder()
+        db.actualizar()
+        flash('Su tienda se ha creado exitosamente','success')
+        return redirect(url_for('tiendas'))
+    return render_template('createTienda.html',form=form)
+
+@app.route("/tiendas/<int:ti_id>/delete",methods=['GET','POST'])
+def delete_tienda(ti_id):
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("DELETE FROM tienda WHERE ti_id = %s;",(ti_id,))
+    except:
+        print("ERROR deleting into tienda")
+        db.retroceder()
+    db.actualizar()
+    return redirect(url_for('tiendas'))
+
+@app.route("/tiendas/<int:ti_id>/update",methods=['GET','POST'])
+def update_tienda(ti_id):
+    form = UpdateTiendaForm()
+    db =Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT * FROM tienda WHERE ti_id =%s;",(ti_id,))
+    tienda = cur.fetchone()
+    if form.validate_on_submit():
+        cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                    E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                    P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                    """,(form.estados.data,form.municipios.data,form.parroquias.data,))
+        direccion = cur.fetchone()
+        if direccion == None:
+            direccion = tienda
+        if int(form.tipo.data) == 1:
+            tipo = 'Candy Shop'
+        else:
+            tipo = 'Mini Candy Shop'
+
+        try:
+            cur.execute("""UPDATE tienda SET ti_nombre=%s,ti_tipo=%s,l_id=%s WHERE ti_id=%s;""",
+                        (form.nombre.data,tipo,direccion['l_id'],ti_id,))
+        except:
+            print("ERROR updating into tienda")
+            db.retroceder()
+        db.actualizar()
+        flash('Su tienda se ha actualizado exitosamente','success')
+        return redirect(url_for('tiendas'))
+    elif request.method == 'GET':
+        form.nombre.data = tienda['ti_nombre']
+    return render_template('createTienda.html',form=form,ti_id = ti_id)
+
+@app.route("/tiendas",methods=['GET','POST'])
+def tiendas():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT T.*,L.l_nombre AS dir FROM tienda T,lugar L WHERE L.l_id=T.l_id ORDER BY T.ti_id;")
+    tiendas = cur.fetchall()
+    db.cerrar()
+    return render_template('tiendas.html',tiendas=tiendas)
+
+@app.route("/productos/<int:p_id>/update",methods=['GET','POST'])
+def update_producto(p_id):
+    form = ProductoForm()
+    db =Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT * FROM producto WHERE p_id =%s;",(p_id,))
+    producto = cur.fetchone()
+    if form.validate_on_submit():
+        if form.picture.data :
+            picture_file = save_picture(form.picture.data)
+            try:
+                cur.execute("""UPDATE producto SET p_nombre = %s,p_imagen=%s,p_desc=%s,p_precio=%s,tp_id =%s WHERE p_id =%s;""",
+                (form.nombre.data,picture_file,form.desc.data,form.precio.data,form.tp.data,p_id))
+            except:
+                print("ERROR updating into producto")
+                db.retroceder()
+            db.actualizar()
+        else:
+            try:
+                cur.execute("""UPDATE producto SET p_nombre = %s,p_desc=%s,p_precio=%s,tp_id =%s WHERE p_id=%s;""",
+                (form.nombre.data,form.desc.data,form.precio.data,form.tp.data,p_id))
+            except:
+                print("ERROR updating into producto")
+                db.retroceder()
+            db.actualizar()
+        flash('Su producto se ha actualizado exitosamente','success')
+        return redirect(url_for('productos'))
+    elif request.method == 'GET':
+        form.nombre.data = producto['p_nombre']
+        form.desc.data = producto['p_desc']
+        form.precio.data = producto['p_precio']
+    return render_template('createProducto.html',form=form,p_id = p_id)
+
+@app.route("/productos/<int:p_id>/delete",methods=['GET','POST'])
+def delete_producto(p_id):
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("DELETE FROM producto WHERE p_id = %s;",(p_id,))
+    except:
+        print("ERROR deleting into producto")
+        db.retroceder()
+    db.actualizar()
+    return redirect(url_for('productos'))
+
+@app.route("/productos",methods=['GET','POST'])
+def productos():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT T.tp_nombre,P.* FROM producto P,tipo_producto T WHERE P.tp_id = T.tp_id;")
+    productos = cur.fetchall()
+    return render_template('productos.html',productos = productos)
+
+@app.route("/productos/registro",methods=['GET','POST'])
+def create_producto():
+    form = ProductoForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            db = Database()
+            cur = db.cursor_dict()
+            try:
+                cur.execute("""INSERT INTO producto (p_nombre,p_imagen,p_desc,p_precio,tp_id)
+                            VALUES (%s, %s,%s,%s,%s);""",
+                            (form.nombre.data,picture_file,form.desc.data,form.precio.data,form.tp.data))
+            except:
+                print("ERROR inserting into producto")
+                db.retroceder()
+            db.actualizar()
+            flash('Su producto se ha creado exitosamente','success')
+        else:
+            flash('Su producto no se ha guardado porque no se suministro imagen','danger')
+        return redirect(url_for('productos'))
+    return render_template('createProducto.html',form=form)
 
 @app.route("/clientes",methods=['GET','POST'])
 def clientes():
@@ -153,9 +350,319 @@ def delete_cliente(c_id,tipo):
         flash('Tu cliente ha sido eliminado','success')
         return redirect(url_for('clientes'))
 
-@app.route("/register")
+@app.route("/clientes/<int:c_id>/<string:tipo>/carnet",methods=['GET','POST'])
+def carnet(c_id,tipo):
+    db = Database()
+    cur = db.cursor_dict()
+    if tipo == 'cj':
+        cur.execute("""SELECT C.car_num,J.cj_demcom,J.cj_rif,ti_nombre FROM carnet C,clientejuridico J,tienda
+                    WHERE J.ti_cod = ti_id AND J.cj_id=%s AND J.cj_id=C.cj_id;""",(c_id,))
+        cliente = cur.fetchone()
+        return render_template('carnet.html',cliente=cliente,tipo = 'cj')
+    else:
+        cur.execute("""SELECT C.car_num,N.cn_nom1,N.cn_ap1,N.cn_ci,ti_nombre FROM carnet C,clientenatural N,tienda
+                    WHERE N.ti_cod = ti_id AND N.cn_id=%s AND N.cn_id=C.cn_id;""",(c_id,))
+        cliente = cur.fetchone()
+        return render_template('carnet.html',cliente=cliente,tipo = 'cn')
+
+@app.route("/clientes/register/<string:tipo>",methods=['GET','POST'])  #Registro de tienda
+def registro(tipo):
+    db = Database()
+    cur = db.cursor_dict()
+    if tipo == 'cj':
+        form = TiendaJForm()
+        if form.validate_on_submit():
+            db = Database()
+            cur = db.cursor_dict()
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados1.data,form.municipios1.data,form.parroquias1.data,))
+            dirFiscal = cur.fetchone()
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
+            dirFisica = cur.fetchone()
+            cur = db.cursor()
+            try:
+                cur.execute("""INSERT INTO clientejuridico (cj_rif, cj_email,cj_demcom,cj_razsoc,cj_capdis,cj_pagweb,ti_cod)
+                VALUES (%s, %s,%s,%s,%s,%s,%s) RETURNING cj_id;""",
+                (form.rif.data,form.email.data,form.demcom.data,form.razsoc.data,form.capdis.data,form.pagweb.data,form.tienda.data,))
+            except:
+                print("ERROR inserting into clientejuridico")
+                db.retroceder()
+            cj = cur.fetchone()[0]
+            db.actualizar()
+            try:
+                cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
+                VALUES (%s, %s,%s);""",
+                (dirFiscal['l_id'],cj,'fiscal',))
+            except:
+                print("ERROR inserting into lugar_clientej fiscal")
+                db.retroceder()
+            #dirFisica
+            try:
+                cur.execute("""INSERT INTO jur_lug (l_id,cj_id,jl_tipo)
+                VALUES (%s, %s,%s);""",
+                (dirFisica['l_id'],cj,'fisica',))
+            except:
+                print("ERROR inserting into lugar_clientej fisica")
+                db.retroceder()
+            db.actualizar()
+            if form.carnet.data == True:
+                cur = db.cursor_dict()
+                cur.execute("SELECT C.car_num,C.d_id from carnet C, departamento D where D.ti_cod = %s AND C.d_id = D.d_id ORDER BY C.car_num DESC LIMIT 1;",(form.tienda.data,))
+                carnet_num = cur.fetchone()
+                num = carnet_num['car_num'][3:]
+                if int(form.tienda.data) < 10:
+                    carnet = "0{}-{}"
+                    if int(num)+1 < 10:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"0000000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+
+                    elif int (num)+1 <100:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"000000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 1000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"00000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 10000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"0000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 100000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 1000000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"00"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 10000000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"0"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                else:
+                    carnet = "{}-{}"
+                    if int(num)+1 < 10:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"0000000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int (num)+1 <100:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"000000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 1000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"00000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 10000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"0000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 100000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"000"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 1000000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"00"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 10000000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cj_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"0"+str(int(num)+1)),cj,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                db.actualizar()
+                return redirect(url_for('carnet',c_id = cj,tipo = 'cj'))
+
+            flash('Su cuenta se ha creado exitosamente','success')
+            return redirect(url_for('clientes'))
+        return render_template('TiendaJ.html',title='Register',form=form)
+    elif tipo == 'cn':
+        form = TiendaNForm()
+        if form.validate_on_submit():
+            db = Database()
+            cur = db.cursor_dict()
+            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                        """,(form.estados.data,form.municipios.data,form.parroquias.data,))
+            direccion = cur.fetchone()
+            cur = db.cursor()
+            try:
+                cur.execute("""INSERT INTO clientenatural (cn_rif, cn_email,cn_nom1,cn_nom2,cn_ap1,cn_ap2,l_id,cn_ci,ti_cod)
+                VALUES (%s, %s,%s,%s,%s,%s,%s,%s,%s) RETURNING cn_id;""",
+                (form.rif.data,form.email.data,form.nom1.data,form.nom2.data,form.ap1.data,form.ap2.data,direccion['l_id'],form.ci.data,form.tienda.data))
+            except:
+                print("ERROR inserting into clientenatural")
+                db.retroceder()
+
+            cn = cur.fetchone()[0]
+            db.actualizar()
+            if form.carnet.data == True:
+                cur = db.cursor_dict()
+                cur.execute("SELECT C.car_num,C.d_id from carnet C, departamento D where D.ti_cod = %s AND C.d_id = D.d_id ORDER BY C.car_num DESC LIMIT 1;",(form.tienda.data,))
+                carnet_num = cur.fetchone()
+                num = carnet_num['car_num'][3:]
+                if int(form.tienda.data) < 10:
+                    carnet = "0{}-{}"
+                    if int(num)+1 < 10:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"0000000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+
+                    elif int (num)+1 <100:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"000000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 1000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"00000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 10000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"0000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 100000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 1000000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"00"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 10000000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s);""",
+                            (carnet.format(form.tienda.data,"0"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                else:
+                    carnet = "{}-{}"
+                    if int(num)+1 < 10:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"0000000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int (num)+1 <100:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"000000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 1000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"00000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 10000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"0000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 100000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"000"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 1000000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"00"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                    elif int(num)+1 < 10000000:
+                        try:
+                            cur.execute("""INSERT INTO carnet (car_num,cn_id,d_id) VALUES (%s,%s,%s)""",
+                            (carnet.format(form.tienda.data,"0"+str(int(num)+1)),cn,carnet_num['d_id'],))
+                        except:
+                            print("ERROR inserting into carnet")
+                            db.retroceder()
+                db.actualizar()
+                return redirect(url_for('carnet',c_id = cn,tipo = 'cn'))
+
+            flash('Su cuenta se ha creado exitosamente','success')
+            return redirect(url_for('clientes'))
+        return render_template('TiendaN.html',title='Register',form=form) #Registro tienda fisica
+
+@app.route("/register")  #Registro online
 def register():
-   return render_template('register.html')
+   return render_template('register.html')  #Registro online
 
 @app.route("/new_tlf",methods=['GET','POST'])
 @login_required
@@ -317,12 +824,20 @@ def login():
         user_type = cur.fetchone()
         if user_type:
             user = User(user_type)
-            if user and bcrypt.check_password_hash(user.u_password,form.password.data):
-                login_user(user,remember=form.remember.data)
-                next_page = request.args.get('next')
-                return redirect(url_for('home'))
+            if user.u_id > 328:
+                if user and bcrypt.check_password_hash(user.u_password,form.password.data):
+                    login_user(user,remember=form.remember.data)
+                    next_page = request.args.get('next')
+                    return redirect(url_for('home'))
+                else:
+                    flash('Contraseña Incorrecta','danger')
             else:
-                flash('Contraseña Incorrecta','danger')
+                if user and user.u_password == form.password.data:
+                    login_user(user,remember=form.remember.data)
+                    next_page = request.args.get('next')
+                    return redirect(url_for('home'))
+                else:
+                    flash('Contraseña Incorrecta','danger')
         else:
             flash('Usuario no encontrado','danger')
     return render_template('login.html',title='Login',form=form)
