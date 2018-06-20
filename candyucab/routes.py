@@ -1,6 +1,6 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
 from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm
-from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm,TarjetaDebito,TarjetaCredito,ChequeForm,DiarioDulce,DescuentoForm
+from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm,TarjetaDebito,TarjetaCredito,ChequeForm,DiarioDulce,DescuentoForm,EstatusForm
 from candyucab import app,bcrypt
 from candyucab.user import User
 import secrets
@@ -30,6 +30,40 @@ def save_picture(form_picture):
     i.save(picture_path)
 
     return picture_fn
+
+@app.route("/pedidos/<int:ped_id>/update",methods=['GET','POST'])
+def update_estatus(ped_id):
+    form = EstatusForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""INSERT INTO  ped_est (ped_id,es_id) VALUES (%s,%s)""",
+                        (ped_id,form.estatus.data,))
+        except:
+            print("ERROR insertin into ped_est")
+            db.retroceder()
+        db.actualizar()
+        return redirect(url_for('pedidos'))
+    return render_template('updateEstatus.html',form=form)
+
+
+@app.route("/pedidos",methods=['GET','POST'])
+def pedidos():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT P.ped_id,P.ped_fentrega,T.ti_nombre,E.es_tipo FROM pedido P, departamento D, estatus E,ped_est PD,Tienda T
+                    WHERE P.d_id = D.d_id AND E.es_id=PD.es_id AND P.ped_id = PD.ped_id AND D.d_id=T.ti_id;""")
+    tiendas = cur.fetchall()
+    cur.execute(""" SELECT P.ped_id,P.ped_fentrega,CJ.cj_rif as rif,E.es_tipo FROM pedido P,clientejuridico CJ,estatus E,ped_est PD
+	               WHERE P.cj_id =CJ.cj_id AND E.es_id=PD.es_id AND P.ped_id = PD.ped_id
+	               UNION
+	               SELECT P.ped_id, P.ped_fentrega,CN.cn_rif,E.es_tipo FROM pedido P,clientenatural CN,estatus E,ped_est PD
+	               WHERE P.cn_id =CN.cn_id AND E.es_id=PD.es_id AND P.ped_id = PD.ped_id
+	               ORDER BY ped_id;""")
+    clientes = cur.fetchall()
+    return render_template('pedidos.html',tiendas = tiendas,clientes=clientes)
+
 
 @app.route("/ofertas/<int:dd_id>/<int:e_id>/registro",methods=['GET','POST'])
 def create_oferta(dd_id,e_id):
@@ -1023,13 +1057,44 @@ def nombre_tienda():
 
     return jsonify({'nombre_tiendas': nomArray})
 
+
 @app.route("/cliente_home",methods=['GET','POST'])
 def cliente_home():
     return render_template('cliente_home.html')
 
-@app.route("/inventario", methods=['GET', 'POST'])
-def inventario():
-    return render_template('inventario.html')
+
+@app.route("/inventario/<int:ti_id>/<string:nombret>", methods=['GET', 'POST'])
+def inventario(ti_id, nombret):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT p_nombre,p_precio,i_cant, p_imagen, p.p_id, i.i_id from producto as p, inventario as i where i.ti_id=%s and p.p_id=i.p_id;""",(ti_id,))
+    productos = cur.fetchall()
+    db.cerrar()
+    proArray = []
+    for producto in productos:
+        proArray.append(producto)
+
+    print(proArray)
+    return render_template('inventario.html', nombret=nombret, productos=productos)
+
+@app.route("/presupuesto/<int:u_id>/<int:pid>/<int:iid>", methods=['GET', 'POST'])
+def presupuesto(u_id, pid, iid):
+    cantidadp = request.form['cantidadp']
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("""INSERT INTO presupuesto (pre_femision) VALUES (%s) RETURNING pre_id;""",(time.strftime("%d-%m-%Y"),))
+        preid = cur.fetchone()
+        cur.execute("""INSERT INTO compravirtual (cv_cant, pre_id, u_id, p_id, i_id) VALUES (%s, %s, %s, %s, %s);""",(cantidadp,preid[0],u_id,pid,iid,))
+
+    except:
+        print('error')
+        db.retroceder()
+
+
+    db.actualizar()
+    print(preid[0])
+    return redirect(url_for('cliente_home'))
 
 @app.route("/logout")
 def logout():

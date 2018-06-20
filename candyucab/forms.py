@@ -31,10 +31,24 @@ def productos():
     cur.execute("SELECT p_id,p_nombre FROM producto;")
     return cur.fetchall()
 
+def estatus():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT es_id,es_tipo FROM estatus;")
+    return cur.fetchall()
+
 
 class NonValidatingSelectField(SelectField):
     def pre_validate(self, form):
         pass
+
+class EstatusForm(FlaskForm):
+    estatus = NonValidatingSelectField('Estatus',choices=tuple(estatus()))
+    submit=SubmitField('Cambiar')
+    def validate_producto(self,estatus):
+        x =str(estatus.data)
+        if x == 'None':
+            raise ValidationError('Este campo no puede dejarse vacio')
 
 class TarjetaCredito(FlaskForm):
     fvenc = DateField ('Fecha de vencimiento',format='%Y-%m-%d')
@@ -564,3 +578,4 @@ class TiendaNForm(FlaskForm):
             x =str(parroquias.data)
             if x == 'None':
                 raise ValidationError('Este campo no puede dejarse vacio')
+
