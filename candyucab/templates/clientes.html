@@ -1,6 +1,14 @@
 {%extends "layout.html"%}
 {%block content%}
-<h3>Cliente Juridicos</h3>
+<div class="form-group">
+  <h3>Clientes</h3>
+  <p class="">
+      <a href="{{ url_for('registro',tipo = 'cn') }}">Registrar Cliente Natural<a>
+  </p>
+  <p class="">
+      <a href="{{ url_for('registro',tipo = 'cj') }}">Registrar Cliente Juridico<a>
+  </p>
+</div>
 
 <table class="table table-hover table-sm table-responsive">
   <thead>

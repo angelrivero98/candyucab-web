@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,FormField,SelectField
+from flask_wtf.file import FileField,FileAllowed
+from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,FormField,SelectField,TextAreaField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,ValidationError,Optional,InputRequired
 from candyucab.db import Database
 import psycopg2,psycopg2.extras
@@ -22,9 +23,53 @@ def tipo_productos():
     cur.execute("SELECT * FROM tipo_producto;")
     return cur.fetchall()
 
+
 class NonValidatingSelectField(SelectField):
     def pre_validate(self, form):
         pass
+
+class UpdateTiendaForm(FlaskForm):
+    nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    estados = NonValidatingSelectField('Estado',choices=tuple(estados()))
+    municipios = NonValidatingSelectField('Municipio',choices=[])
+    parroquias = NonValidatingSelectField('Parroquia',choices=[])
+    tipo = NonValidatingSelectField('Tipo de tienda',choices=[(2,'Mini Candy Shop'),(1,'Candy Shop')])
+    submit=SubmitField('Actualizar')
+
+class TiendaForm(FlaskForm):
+    nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    estados = NonValidatingSelectField('Estado',choices=tuple(estados()))
+    municipios = NonValidatingSelectField('Municipio',choices=[])
+    parroquias = NonValidatingSelectField('Parroquia',choices=[])
+    tipo = NonValidatingSelectField('Tipo de tienda',choices=[(2,'Mini Candy Shop'),(1,'Candy Shop')])
+    submit=SubmitField('Registrar')
+
+    def validate_estados(self,estados):
+        x =str(estados.data)
+        if x == 'None':
+            raise ValidationError('Este campo no puede dejarse vacio')
+
+    def validate_municipios(self,municipios):
+        x =str(municipios.data)
+        if x == 'None':
+            raise ValidationError('Este campo no puede dejarse vacio')
+
+    def validate_parroquias(self,parroquias):
+        x =str(parroquias.data)
+        if x == 'None':
+            raise ValidationError('Este campo no puede dejarse vacio')
+
+class AsistenciaForm(FlaskForm):
+    excel = FileField('Ingrese el archivo excel',validators=[FileAllowed(['xlsx','xls'])])
+    submit=SubmitField('Registar asistencia')
+
+class ProductoForm(FlaskForm):
+    picture = FileField('Ingrese foto del caramelo',validators=[FileAllowed(['jpg','png'])])
+    nombre = StringField('Nombre',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    desc = TextAreaField('Descripcion del caramelo',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    tp = NonValidatingSelectField('Tipo de producto',choices=tuple(tipo_productos()))
+    precio = IntegerField('Precio del producto',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    submit=SubmitField('Añadir Producto')
 
 class LoginForm(FlaskForm):
     username = StringField('Username',validators=[DataRequired()])
@@ -241,13 +286,6 @@ class TiendaJForm(FlaskForm):
         carnet =BooleanField('Desea generar carnet?')
         tienda = NonValidatingSelectField('Seleccione la tienda',choices=tuple(tiendas()))
         submit=SubmitField('Registrar Cliente')
-
-        def validate_username(self,username):
-            db = Database()
-            cur = db.cursor_dict()
-            cur.execute("SELECT u_username from usuario WHERE u_username = %s;",(username.data,))
-            if cur.fetchone():
-                raise ValidationError('El nombre de usuario ya esta tomado')
 
         def validate_email(self,email):
             db = Database()
