@@ -192,6 +192,7 @@ CREATE TABLE pro_diario (
 CREATE TABLE presupuesto (
   pre_id SERIAL,
   pre_femision DATE NOT NULL DEFAULT CURRENT_DATE,
+  pre_nombre varchar(40) NOT NULL,
   CONSTRAINT pk_presupuesto PRIMARY KEY (pre_id)
 );
 
@@ -249,6 +250,7 @@ CREATE TABLE comprafisica (
 CREATE TABLE compravirtual (
   cv_id SERIAL,
   cv_cant numeric(10) NOT NULL,
+  cv_fcompra DATE NOT NULL DEFAULT CURRENT_DATE,
   pre_id integer NOT NULL,
   u_id integer NOT NULL,
   pre2_id integer,
@@ -295,8 +297,6 @@ CREATE TABLE orden (
 CREATE TABLE estatus (
   es_id SERIAL,
   es_tipo varchar(20),
-  o_id integer,
-  ped_id integer,
   CONSTRAINT pk_estatus PRIMARY KEY (es_id)
 );
 
@@ -306,7 +306,7 @@ CREATE TABLE pedido (
   pv_id integer,
   cn_id integer,
   cj_id integer,
-  d_id integer NOT NULL,
+  d_id integer,
   CONSTRAINT pk_pedido PRIMARY KEY (ped_id)
 );
 
@@ -348,4 +348,20 @@ CREATE TABLE pagofisico (
   td_id integer,
   ch_id integer,
   CONSTRAINT pk_pagofisico PRIMARY KEY (pf_id)
+);
+
+CREATE TABLE or_est (
+  oe_id SERIAL,
+  oe_fecha DATE NOT NULL DEFAULT CURRENT_DATE,
+  o_id integer NOT NULL,
+  es_id integer NOT NULL,
+  CONSTRAINT pk_orden_estatus PRIMARY KEY (oe_id)
+);
+
+CREATE TABLE ped_est (
+  pe_id SERIAL,
+  pe_fecha DATE NOT NULL DEFAULT CURRENT_DATE,
+  ped_id integer NOT NULL,
+  es_id integer NOT NULL,
+  CONSTRAINT pk_pedido_estatus PRIMARY KEY (pe_id)
 );
