@@ -1,10 +1,12 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
 from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm
-from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm
+from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm,TarjetaDebito,TarjetaCredito,ChequeForm,DiarioDulce,DescuentoForm
 from candyucab import app,bcrypt
 from candyucab.user import User
 import secrets
 import os
+import datetime
+from datetime import date,timedelta
 import pyexcel as p
 from PIL import Image
 import psycopg2
@@ -29,6 +31,76 @@ def save_picture(form_picture):
 
     return picture_fn
 
+@app.route("/ofertas/<int:dd_id>/<int:e_id>/registro",methods=['GET','POST'])
+def create_oferta(dd_id,e_id):
+    form = DiarioDulce()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""INSERT INTO pro_diario (pd_descuento,dd_id,p_id)
+                            VALUES (%s,%s,%s);""",(form.descuento.data/100,dd_id,form.producto.data))
+        except:
+            print("ERROR inserting into pro_diario")
+            db.retroceder()
+        db.actualizar()
+        flash('Su oferta se ha creado exitosamente','success')
+        return redirect(url_for('ofertas',e_id=e_id))
+    return render_template('createOferta.html',form=form,e_id=e_id)
+
+@app.route("/ofertas/update/<int:pd_id>/<int:e_id>",methods=['GET','POST'])
+def update_oferta(pd_id,e_id):
+    form = DescuentoForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""UPDATE pro_diario SET pd_descuento = %s WHERE pd_id=%s;""",
+                        (form.descuento.data/100,pd_id,))
+        except:
+            print("ERROR updating into pro_diario")
+            db.retroceder()
+        db.actualizar()
+        return redirect(url_for('ofertas',e_id=e_id))
+    return render_template('createOferta.html',form=form,pd_id=pd_id,e_id=e_id)
+
+
+@app.route("/ofertas/delete/<int:pd_id>/<int:e_id>",methods=['GET','POST'])
+def delete_oferta(pd_id,e_id):
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("""DELETE FROM pro_diario WHERE pd_id=%s;""",(pd_id,))
+    except:
+        print("ERROR deleting into pro_diario")
+        db.retroceder()
+    db.actualizar()
+    return redirect(url_for('ofertas',e_id=e_id))
+
+@app.route("/ofertas/<int:e_id>",methods=['GET','POST'])
+def ofertas(e_id):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT * FROM diariodulce WHERE dd_femision = CURRENT_DATE;")
+    diario = cur.fetchone()
+    if diario:
+        cur.execute("SELECT P.p_nombre,P.p_precio, PD.* from pro_diario PD,producto P where PD.dd_id = %s AND P.p_id=PD.p_id;",(diario['dd_id'],))
+        productos = cur.fetchall()
+        return render_template('ofertas.html',productos=productos,dd_id=diario['dd_id'],e_id=e_id)
+    else:
+        end_date = datetime.datetime.strptime(date.today().strftime("%d-%m-%Y"), "%d-%m-%Y") + timedelta(days=20)
+        cur = db.cursor()
+        try:
+            cur.execute("""INSERT INTO diariodulce (dd_ffinal,e_id)
+                            VALUES (%s,%s) RETURNING dd_id;""",(end_date.date(),e_id))
+        except:
+            print("ERROR inserting into diariodulce")
+            db.retroceder()
+        diario = cur.fetchone()[0]
+        db.actualizar()
+        return render_template('ofertas.html',dd_id=diario,e_id=e_id)
+
+
 @app.route("/asistencia",methods=['GET','POST'])
 def asistencia():
     form = AsistenciaForm()
@@ -40,7 +112,6 @@ def asistencia():
             if record['CEDULA'] != '':
                 cur.execute("SELECT e_id from empleado WHERE e_ci=%s;",(int(float(record['CEDULA'])),))
                 id = cur.fetchone()
-                insert = "to_timestamp({}, 'DD-MM-YYYY HH24:MI')"
                 if record['FECHA_HORA_SALIDA'] != '' and record['FECHA_HORA_ENTRADA'] != '':
                     try:
                         cur.execute("""INSERT INTO asistencia (as_fecha_entrada,as_fecha_salida,e_id) VALUES
@@ -664,18 +735,123 @@ def registro(tipo):
 def register():
    return render_template('register.html')  #Registro online
 
-@app.route("/new_tlf",methods=['GET','POST'])
+@app.route("/metodo")
 @login_required
-def new_tlf():
+def metodo():
+   return render_template('metodo.html')
+
+@app.route("/credito/<string:tipo>/<int:c_id>",methods=['GET','POST'])
+@login_required
+def credito(tipo,c_id):
+    form = TarjetaCredito()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        if tipo == 'cj':
+            try:
+                cur.execute("""INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,cj_id)
+                            VALUES (%s, %s,%s,%s,%s);""",
+                (form.numero.data,form.fvenc.data,form.codigo.data,form.nombre.data,c_id,))
+            except:
+                print("ERROR inserting into tarjetacredito cj")
+                db.retroceder()
+            db.actualizar()
+        elif tipo == 'cn':
+            try:
+                cur.execute("""INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,cn_id)
+                            VALUES (%s, %s,%s,%s,%s);""",
+                (form.numero.data,form.fvenc.data,form.codigo.data,form.nombre.data,c_id,))
+            except:
+                print("ERROR inserting into tarjetacredito cn")
+                db.retroceder()
+            db.actualizar()
+        flash('Su tarjeta de credito se ha guardado exitosamente','success')
+        return redirect(url_for('cliente_home'))
+
+    return render_template('credito.html',title='Tarjeta Credito',form=form)
+
+@app.route("/debito/<string:tipo>/<int:c_id>",methods=['GET','POST'])
+@login_required
+def debito(tipo,c_id):
+    form = TarjetaDebito()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        if int(form.banco.data) == 1:
+            banco = 'Mercantil'
+        elif int(form.banco.data) == 2:
+            banco = 'BOD'
+        elif int(form.banco.data) == 3:
+            banco = 'Banesco'
+        elif int(form.banco.data) == 4:
+            banco = 'Banco Plaza'
+        elif int(form.banco.data) == 5:
+            banco = 'Provincial'
+
+        if tipo == 'cj':
+            try:
+                cur.execute("""INSERT INTO tarjetadebito (td_num,td_banco,td_fvenc,td_ncompl,cj_id)
+                            VALUES (%s, %s,%s,%s,%s);""",
+                (form.numero.data,banco,form.fvenc.data,form.nombre.data,c_id,))
+            except:
+                print("ERROR inserting into tarjetadebito cj")
+                db.retroceder()
+            db.actualizar()
+        elif tipo == 'cn':
+            try:
+                cur.execute("""INSERT INTO tarjetadebito (td_num,td_banco,td_fvenc,td_ncompl,cn_id)
+                        VALUES (%s, %s,%s,%s,%s);""",
+                        (form.numero.data,banco,form.fvenc.data,form.nombre.data,c_id,))
+            except:
+                print("ERROR inserting into tarjetadebito cn")
+                db.retroceder()
+            db.actualizar()
+            flash('Su tarjeta de debito se ha guardado exitosamente','success')
+        return redirect(url_for('cliente_home'))
+    return render_template('debito.html',title='Tarjeta Debito',form=form)
+
+@app.route("/cheque/<string:tipo>/<int:c_id>",methods=['GET','POST'])
+@login_required
+def cheque(tipo,c_id):
+    form = ChequeForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        if tipo == 'cj':
+            try:
+                cur.execute("""INSERT INTO cheque (ch_num,ch_faplicar,ch_ncompl,cj_id)
+                            VALUES (%s, %s,%s,%s);""",
+                (form.numero.data,form.faplicar.data,form.nombre.data,c_id,))
+            except:
+                print("ERROR inserting into cheque cj")
+                db.retroceder()
+            db.actualizar()
+        elif tipo == 'cn':
+            try:
+                cur.execute("""INSERT INTO cheque (ch_num,ch_faplicar,ch_ncompl,cn_id)
+                            VALUES (%s, %s,%s,%s);""",
+                (form.numero.data,form.faplicar.data,form.nombre.data,c_id,))
+            except:
+                print("ERROR inserting into cheque cn")
+                db.retroceder()
+            db.actualizar()
+        flash('Su cheque se ha guardado exitosamente','success')
+        return redirect(url_for('cliente_home'))
+
+    return render_template('cheque.html',title='Cheque',form=form)
+
+@app.route("/new_tlf/<string:tipo>/<int:c_id>",methods=['GET','POST'])
+@login_required
+def new_tlf(tipo,c_id):
     form = TlfForm()
     if form.validate_on_submit():
         db = Database()
         cur = db.cursor_dict()
-        if current_user.cj_id != 0:
+        if tipo == 'cj':
             try:
                 cur.execute("""INSERT INTO telefono (t_num,cj_id)
                             VALUES (%s, %s);""",
-                (form.numero.data,current_user.cj_id,))
+                (form.numero.data,c_id,))
             except:
                 print("ERROR inserting into telefono")
                 db.retroceder()
@@ -684,7 +860,7 @@ def new_tlf():
             try:
                 cur.execute("""INSERT INTO telefono (t_num,cn_id)
                             VALUES (%s, %s);""",
-                (form.numero.data,current_user.cn_id,))
+                (form.numero.data,c_id,))
             except:
                 print("ERROR inserting into telefono")
                 db.retroceder()
@@ -694,9 +870,9 @@ def new_tlf():
 
     return render_template('new_tlf.html',title='Nuevo Telefono',form=form)
 
-@app.route("/new_persona",methods=['GET','POST'])
+@app.route("/new_persona/<int:c_id>",methods=['GET','POST'])
 @login_required
-def new_persona():
+def new_persona(c_id):
     form = PersonaContactoForm()
     if form.validate_on_submit():
         db = Database()
@@ -704,7 +880,7 @@ def new_persona():
         try:
             cur.execute("""INSERT INTO personadecontacto (pc_nombre,pc_apellido,cj_id)
             VALUES (%s, %s,%s);""",
-            (form.nombre.data,form.apellido.data,current_user.cj_id,))
+            (form.nombre.data,form.apellido.data,c_id,))
         except:
             print("ERROR inserting into telefono")
             db.retroceder()
@@ -764,7 +940,7 @@ def registerJ():
         try:
             cur.execute("""INSERT INTO usuario (u_username, u_password,cj_id)
             VALUES (%s, %s,%s);""",
-            (form.username.data,hashed_pw,cj))
+            (form.username.data,form.password.data,cj))
         except:
             print("ERROR inserting into user")
             db.retroceder()
@@ -802,7 +978,7 @@ def registerN():
         try:
             cur.execute("""INSERT INTO usuario (u_username, u_password,cn_id)
             VALUES (%s, %s,%s);""",
-            (form.username.data,hashed_pw,cn))
+            (form.username.data,form.password.data,cn))
         except:
             print("ERROR inserting into user")
             db.retroceder()
@@ -824,24 +1000,15 @@ def login():
         user_type = cur.fetchone()
         if user_type:
             user = User(user_type)
-            if user.u_id > 328:
-                if user and bcrypt.check_password_hash(user.u_password,form.password.data):
-                    login_user(user,remember=form.remember.data)
-                    next_page = request.args.get('next')
-                    return redirect(url_for('home'))
-                else:
-                    flash('Contraseña Incorrecta','danger')
+            if user and user.u_password == form.password.data:
+                login_user(user,remember=form.remember.data)
+                next_page = request.args.get('next')
+                return redirect(url_for('home'))
             else:
-                if user and user.u_password == form.password.data:
-                    login_user(user,remember=form.remember.data)
-                    next_page = request.args.get('next')
-                    return redirect(url_for('home'))
-                else:
-                    flash('Contraseña Incorrecta','danger')
+                flash('Contraseña Incorrecta','danger')
         else:
             flash('Usuario no encontrado','danger')
     return render_template('login.html',title='Login',form=form)
-
 
 @app.route('/nombre_tienda',methods=['GET','POST'])
 def nombre_tienda():
@@ -855,7 +1022,6 @@ def nombre_tienda():
         nomArray.append(nombre)
 
     return jsonify({'nombre_tiendas': nomArray})
-
 
 @app.route("/cliente_home",methods=['GET','POST'])
 def cliente_home():

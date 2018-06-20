@@ -44,9 +44,11 @@
     <section class="botones_entrada row text-center">
       {% if current_user.is_authenticated %}
         <a href="{{url_for('logout')}}" class="col-6 entrada">Cerrar Sesion</a>
-        <a href="{{url_for('new_tlf')}}" class="col-6 entrada">Agregar Telefono</a>
         {% if current_user.cj_id != None%}
-          <a href="{{url_for('new_persona')}}" class="col-6 entrada">Agregar Persona De Contacto</a>
+          <a href="{{url_for('new_persona',c_id=current_user.cj_id)}}" class="col-6 entrada">Agregar Persona De Contacto</a>
+          <a href="{{url_for('new_tlf',tipo = 'cj',c_id=current_user.cj_id)}}" class="col-6 entrada">Agregar Telefono</a>
+        {%else%}
+          <a href="{{url_for('new_tlf',tipo = 'cn',c_id=current_user.cn_id)}}" class="col-6 entrada">Agregar Telefono</a>
         {%endif%}
        {% else %}
        <a href="{{url_for('login')}}" class="col-6 entrada">Entrar</a>

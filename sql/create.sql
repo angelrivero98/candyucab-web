@@ -183,7 +183,7 @@ CREATE TABLE inventario (
 
 CREATE TABLE pro_diario (
   pd_id SERIAL,
-  pd_descuento numeric(2,1) NOT NULL,
+  pd_descuento numeric(2,3) NOT NULL,
   dd_id integer NOT NULL,
   p_id integer,
   CONSTRAINT pk_pro_diario PRIMARY KEY (pd_id)
@@ -192,6 +192,7 @@ CREATE TABLE pro_diario (
 CREATE TABLE presupuesto (
   pre_id SERIAL,
   pre_femision DATE NOT NULL DEFAULT CURRENT_DATE,
+  pre_nombre varchar(40) NOT NULL,
   CONSTRAINT pk_presupuesto PRIMARY KEY (pre_id)
 );
 
@@ -249,6 +250,7 @@ CREATE TABLE comprafisica (
 CREATE TABLE compravirtual (
   cv_id SERIAL,
   cv_cant numeric(10) NOT NULL,
+  cv_fcompra DATE NOT NULL DEFAULT CURRENT_DATE,
   pre_id integer NOT NULL,
   u_id integer NOT NULL,
   pre2_id integer,
