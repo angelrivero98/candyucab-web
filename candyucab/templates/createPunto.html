@@ -16,18 +16,10 @@
                 {%endfor%}
               {%endif%}
         {% endwith%}
-      {% if pd_id %}
+
       <div class="form-group">
-      {{ render_field(form.descuento) }}
+      {{ render_field(form.precio) }}
     </div>
-    {%else%}
-    <div class="form-group">
-      {{ render_field(form.producto) }}
-    </div>
-    <div class="form-group">
-      {{ render_field(form.descuento) }}
-    </div>
-    {%endif%}
 <div class="form-group">
   {{ form.submit(class="btn btn-primary btn-block") }}
 </div>
@@ -35,9 +27,9 @@
 
 </form>
 <p class="cuerpo no_esta mt-3">
-    <a href="{{ url_for('ofertas',e_id=e_id) }}">Ver Ofertas<a>
+    <a href="{{ url_for('puntos') }}">Ver Puntos<a>
 </p>
-{% if pd_id %}
+{% if h_id %}
 <div class="form-col">
   <button class="btn btn-danger btn-sm m-1" type="button" data-toggle="modal" data-target="#deleteModal">Delete</button>
 </div>
@@ -45,14 +37,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Eliminar Oferta?</h5>
+        <h5 class="modal-title" id="deleteModalLabel">Eliminar Punto?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <form class="" action="{{ url_for('delete_oferta',pd_id = pd_id,e_id=e_id)}}" method="POST">
+        <form class="" action="{{ url_for('delete_puntos',h_id = h_id)}}" method="POST">
           <input class="btn btn-danger" type="submit" name="" value="Delete">
         </form>
       </div>

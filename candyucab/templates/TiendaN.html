@@ -1,21 +1,12 @@
+{%extends "layout2.html"%}
 {% from "_render_field.html" import render_field %}
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css' )}}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='estilo1.css' )}}">
-    <title>Registro</title>
-  </head>
-  <body style="background-color:#e06666;">
-    {%block content%}
-    <div class="container" style="background-color:white; ">
-          <form class="" action="" method="POST" style="margin: 0 auto; width:40% ">
+{% block content %}
+          <form class="formulario" method="POST">
             {{form.hidden_tag()}}
-            <fieldset class="form-group">
-              <img src="../static/dulce.png" alt="" class="rounded mx-auto d-block">
-            <h2 class="border-bottom mb-4">Registro:Cliente Natural</h2>
+            <div class="text-center cabecera p-0">
+                <h1>Ingrese datos</h1>
+            </div>
+              <fieldset class="form-group cuerpo mt-3">
             <div class="form-group">
             {{ render_field(form.rif) }}
           </div>
@@ -62,21 +53,15 @@
           {{form.carnet(class="form-check-input")}}
           {{form.carnet.label(class="form-check-label")}}
         </div>
+        <div class="form-group">
+          {{ form.submit(class="btn btn-primary btn-block") }}
+        </div>
             </fieldset>
-              <div class="form-group">
-          {{ form.submit(class="btn btn-outline-info") }}
-          </div>
           </form>
-          <div class="border-top pt-3">
-            <small class="text-muted">
-              Tienes cuenta? <a class="ml-2" href="{{url_for('login')}}">Ingresar</a>
-            </small>
-
-          </div>
-    </div>
+          <p class="cuerpo no_esta mt-3">
+              <a href="{{ url_for('clientes') }}">Ver Clientes<a>
+          </p>
     {%endblock content%}
     <script src="{{ url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='registroN.js' )}}"></script>
-  </body>
-</html>

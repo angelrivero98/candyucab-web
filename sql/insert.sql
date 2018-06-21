@@ -1680,8 +1680,8 @@ INSERT INTO historial (h_precio,h_fecha) VALUES
 (60,'06-06-2018'),
 (70,'07-06-2018'),
 (80,'08-06-2018'),
-(90,'06-06-2018'),
-(100,'07-06-2018');
+(90,'09-06-2018'),
+(100,'10-06-2018');
 
 INSERT INTO diariodulce (dd_femision,dd_ffinal,e_id) VALUES
 ('06-03-2018','26-03-2018',1),

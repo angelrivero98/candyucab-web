@@ -42,6 +42,18 @@ class NonValidatingSelectField(SelectField):
     def pre_validate(self, form):
         pass
 
+class PrecioForm(FlaskForm):
+    precio = IntegerField('Precio',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    submit=SubmitField('Actualizar')
+
+class TiendaSelect(FlaskForm):
+    tienda = NonValidatingSelectField('Estatus',choices=tuple(tiendas()))
+    submit=SubmitField('Mostrar')
+    def validate_producto(self,tienda):
+        x =str(tienda.data)
+        if x == 'None':
+            raise ValidationError('Este campo no puede dejarse vacio')
+
 class EstatusForm(FlaskForm):
     estatus = NonValidatingSelectField('Estatus',choices=tuple(estatus()))
     submit=SubmitField('Cambiar')
@@ -578,4 +590,3 @@ class TiendaNForm(FlaskForm):
             x =str(parroquias.data)
             if x == 'None':
                 raise ValidationError('Este campo no puede dejarse vacio')
-

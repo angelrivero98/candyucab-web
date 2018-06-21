@@ -1,6 +1,6 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
 from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm
-from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm,TarjetaDebito,TarjetaCredito,ChequeForm,DiarioDulce,DescuentoForm,EstatusForm
+from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm,TarjetaDebito,TarjetaCredito,ChequeForm,DiarioDulce,DescuentoForm,EstatusForm,PrecioForm,TiendaSelect
 from candyucab import app,bcrypt
 from candyucab.user import User
 import secrets
@@ -31,6 +31,61 @@ def save_picture(form_picture):
 
     return picture_fn
 
+@app.route("/puntos/<int:h_id>/update",methods=['GET','POST'])
+def update_puntos(h_id):
+    form = PrecioForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""UPDATE historial SET h_precio = %s WHERE h_id=%s;""",
+                        (form.precio.data,h_id,))
+        except:
+            print("ERROR updating into historial")
+            db.retroceder()
+        db.actualizar()
+        return redirect(url_for('puntos'))
+    return render_template('createPunto.html',form=form,h_id=h_id)
+
+@app.route("/puntos/<int:h_id>/delete",methods=['GET','POST'])
+def delete_puntos(h_id):
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("""DELETE FROM  historial WHERE h_id=%s;""",(h_id,))
+    except:
+        print("ERROR deleting into historial ")
+        db.retroceder()
+    db.actualizar()
+    flash('Su precio del punto se ha eliminado exitosamente','success')
+    return redirect(url_for('puntos'))
+
+@app.route("/puntos/create",methods=['GET','POST'])
+def create_puntos():
+    form = PrecioForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""INSERT INTO historial (h_precio)
+                            VALUES (%s);""",(form.precio.data,))
+        except:
+            print("ERROR inserting into historial ")
+            db.retroceder()
+        db.actualizar()
+        flash('Su precio del punto se ha creado exitosamente','success')
+        return redirect(url_for('puntos'))
+    return render_template('createPunto.html',form=form)
+
+@app.route("/puntos",methods=['GET','POST'])
+def puntos():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT *  FROM historial  ORDER BY h_id;")
+    puntos = cur.fetchall()
+    db.cerrar()
+    return render_template('puntos.html',puntos=puntos)
+
 @app.route("/pedidos/<int:ped_id>/update",methods=['GET','POST'])
 def update_estatus(ped_id):
     form = EstatusForm()
@@ -47,6 +102,23 @@ def update_estatus(ped_id):
         return redirect(url_for('pedidos'))
     return render_template('updateEstatus.html',form=form)
 
+@app.route("/pedidos/tiendas",methods=['GET','POST'])
+def pedidos_tiendas():
+    form = TiendaSelect()
+    if form.validate_on_submit():
+        return redirect(url_for('pedidos_tienda',ti_id=form.tienda.data))
+    return render_template('tiendaSelect.html',form=form)
+
+@app.route("/pedidos/<int:ti_id>",methods=['GET','POST'])
+def pedidos_tienda(ti_id):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT P.ped_id,P.ped_fentrega,T.ti_nombre,E.es_tipo FROM pedido P, departamento D, estatus E,
+                    (SELECT P.ped_id,MAX(PD.pe_id) as pe_id from ped_est PD,pedido P WHERE P.ped_id = PD.ped_id
+                     GROUP BY P.ped_id) as PD1,Tienda T,ped_est PD2 WHERE P.d_id = D.d_id AND E.es_id=PD2.es_id AND
+                     P.ped_id = PD1.ped_id AND D.ti_cod=T.ti_id AND PD2.pe_id=PD1.pe_id AND T.ti_id=%s;""",(ti_id,))
+    tiendas = cur.fetchall()
+    return render_template('pedidosTienda.html',tiendas = tiendas)
 
 @app.route("/pedidos",methods=['GET','POST'])
 def pedidos():
@@ -55,7 +127,7 @@ def pedidos():
     cur.execute("""SELECT P.ped_id,P.ped_fentrega,T.ti_nombre,E.es_tipo FROM pedido P, departamento D, estatus E,
                     (SELECT P.ped_id,MAX(PD.pe_id) as pe_id from ped_est PD,pedido P WHERE P.ped_id = PD.ped_id
                      GROUP BY P.ped_id) as PD1,Tienda T,ped_est PD2 WHERE P.d_id = D.d_id AND E.es_id=PD2.es_id AND
-                     P.ped_id = PD1.ped_id AND D.d_id=T.ti_id AND PD2.pe_id=PD1.pe_id;""")
+                     P.ped_id = PD1.ped_id AND D.ti_cod=T.ti_id AND PD2.pe_id=PD1.pe_id;""")
     tiendas = cur.fetchall()
     cur.execute(""" SELECT P.ped_id,P.ped_fentrega,CJ.cj_rif as rif,E.es_tipo FROM pedido P,clientejuridico CJ,estatus E,
                 (SELECT P.ped_id,MAX(PD.pe_id) as pe_id from ped_est PD,pedido P WHERE P.ped_id = PD.ped_id
@@ -325,11 +397,12 @@ def create_producto():
 def clientes():
     db = Database()
     cur = db.cursor_dict()
-    cur.execute("SELECT C.*,L.l_nombre AS dir FROM clientenatural C,lugar L WHERE L.l_id=C.l_id;")
+    cur.execute("SELECT C.*,L.l_nombre AS dir FROM clientenatural C,lugar L WHERE L.l_id=C.l_id ORDER BY C.cn_id DESC;")
     cn = cur.fetchall()
     cur.execute("""SELECT C.*,fisica.l_nombre as fisica,fiscal.l_nombre as fiscal FROM clientejuridico C,jur_lug FL,jur_lug FA ,lugar as fiscal,lugar as fisica
-                        WHERE (C.cj_id = FL.cj_id  OR C.cj_id = FA.cj_id)
-                        AND (FL.l_id=fiscal.l_id AND FL.jl_tipo='fiscal')  AND (FA.l_id=fisica.l_id AND FA.jl_tipo='fisica') ;""")
+                        WHERE C.cj_id = FL.cj_id  AND C.cj_id = FA.cj_id
+                        AND FL.l_id=fiscal.l_id AND FL.jl_tipo='fiscal'  AND FA.l_id=fisica.l_id AND FA.jl_tipo='fisica'
+						ORDER BY C.cj_id DESC;""")
     cj = cur.fetchall()
     db.cerrar()
     return render_template('clientes.html',title = 'Clientes',cj = cj,cn = cn)
@@ -365,12 +438,20 @@ def update_cliente(c_id,tipo):
     db = Database()
     cur = db.cursor_dict()
     if tipo == 'cj':
-        cur.execute("SELECT * FROM clientejuridico",(c_id,))
+        cur.execute("SELECT * FROM clientejuridico WHERE cj_id = %s",(c_id,))
         cliente = cur.fetchone()
         form = UpdateJForm()
         form.current_rif.data = cliente['cj_rif']
         form.current_email.data = cliente['cj_email']
         if form.validate_on_submit():
+            try:
+                cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
+                (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
+            except:
+                print("ERROR updating into clientejuridico")
+                db.retroceder()
+            db.actualizar()
+
             cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
                         E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
                         P.l_nombre = %s AND P.fk_lugar = M.l_id;
@@ -381,13 +462,21 @@ def update_cliente(c_id,tipo):
                         P.l_nombre = %s AND P.fk_lugar = M.l_id;
                         """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
             dirFisica = cur.fetchone()
+            if dirFisica != None:
+                try:
+                    cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fisica';""",
+                    (dirFisica['l_id'],c_id,))
+                except:
+                    print("ERROR updating into lugar_clientej fisica")
+                    db.retroceder()
 
-            try:
-                cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
-                (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
-            except:
-                print("ERROR updating into clientejuridico")
-                db.retroceder()
+            if dirFiscal != None:
+                try:
+                    cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fiscal';""",
+                    (dirFiscal['l_id'],c_id,))
+                except:
+                    print("ERROR updating into lugar_clientej fiscal")
+                    db.retroceder()
             db.actualizar()
             flash('Tu cliente ha sido actualizada','success')
             return redirect(url_for('clientes'))
@@ -401,7 +490,7 @@ def update_cliente(c_id,tipo):
         return render_template('clienteJ.html',form = form,c_id = c_id)
     elif tipo == 'cn':
 
-        cur.execute("SELECT * FROM clientenatural",(c_id,))
+        cur.execute("SELECT * FROM clientenatural WHERE cn_id = %s",(c_id,))
         cliente = cur.fetchone()
         form = UpdateNForm()
         form.current_rif.data = cliente['cn_rif']

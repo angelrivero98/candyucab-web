@@ -47,8 +47,21 @@
         {% if current_user.cj_id != None%}
           <a href="{{url_for('new_persona',c_id=current_user.cj_id)}}" class="col-6 entrada">Agregar Persona De Contacto</a>
           <a href="{{url_for('new_tlf',tipo = 'cj',c_id=current_user.cj_id)}}" class="col-6 entrada">Agregar Telefono</a>
-        {%else%}
+          <a href="{{url_for('metodo')}}" class="col-6 entrada">Agregar Metodo de Pago</a>
+        {%endif%}
+        {% if current_user.cn_id != None%}
+          <a href="{{url_for('metodo')}}" class="col-6 entrada">Agregar Metodo de Pago</a>
           <a href="{{url_for('new_tlf',tipo = 'cn',c_id=current_user.cn_id)}}" class="col-6 entrada">Agregar Telefono</a>
+        {%endif%}
+        {% if current_user.e_id != None%}
+          <a href="{{url_for('tiendas')}}" class="col-6 entrada">Tiendas</a>
+          <a href="{{url_for('clientes')}}" class="col-6 entrada">Clientes</a>
+          <a href="{{url_for('productos')}}" class="col-6 entrada">Productos</a>
+          <a href="{{url_for('asistencia')}}" class="col-6 entrada">Asistencia</a>
+          <a href="{{url_for('ofertas',e_id=current_user.e_id)}}" class="col-6 entrada">Diario Dulce</a>
+          <a href="{{url_for('pedidos')}}" class="col-6 entrada">Estatus Pedidos</a>
+          <a href="{{url_for('pedidos_tiendas')}}" class="col-6 entrada">Pedido Por Tienda</a>
+          <a href="{{url_for('puntos')}}" class="col-6 entrada">Puntos</a>
         {%endif%}
        {% else %}
        <a href="{{url_for('login')}}" class="col-6 entrada">Entrar</a>

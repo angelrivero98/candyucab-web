@@ -6,7 +6,7 @@
       <a href="{{ url_for('registro',tipo = 'cn') }}">Registrar Cliente Natural<a>
   </p>
  <p class="">
--      <a href="{{ url_for('registro',tipo = 'cj') }}">Registrar Cliente Juridico<a>
+  <a href="{{ url_for('registro',tipo = 'cj') }}">Registrar Cliente Juridico<a>
   </p>
 </div>
 <h3>Cliente Juridicos</h3>
@@ -54,13 +54,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
       {% for cliente in cn %}
+      <tr>
       <td>{{cliente['cn_rif']}}</td><td> <a class="mr-2" href="{{ url_for('update_cliente',c_id= cliente['cn_id'],tipo='cn') }}">{{cliente['cn_email']}}</a></td>
       <td>{{cliente['cn_nom1']}}</td><td>{{cliente['cn_nom2']}}</td>
       <td>{{cliente['cn_ap1']}}</td><td>{{cliente['cn_ap2']}}</td><td>{{cliente['dir']}}</td><td>{{cliente['cn_ci']}}</td>
+      </tr>
     {% endfor %}
-    </tr>
   </tbody>
 </table>
 
