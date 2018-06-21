@@ -4,7 +4,7 @@ $('document').ready(function () {
            $.each(field, function (j, campo) {
                $('#cuerpot').append(
                "<tr id="+"t"+campo[3] +">" +
-               "<td><a class='tabla_link' href='/inventario'>" + campo[0] +"</td>"+
+               "<td><a class='tabla_link' href='/inventario/"+campo[3]+"/"+campo[0]+"'>" + campo[0] +"</td>"+
                "<td>" + campo[1] +"</td>"+
                "<td>" + campo[2] +"</td>"+
                "</tr>"

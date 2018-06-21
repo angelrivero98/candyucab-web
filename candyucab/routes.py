@@ -1063,13 +1063,44 @@ def nombre_tienda():
 
     return jsonify({'nombre_tiendas': nomArray})
 
+
 @app.route("/cliente_home",methods=['GET','POST'])
 def cliente_home():
     return render_template('cliente_home.html')
 
-@app.route("/inventario", methods=['GET', 'POST'])
-def inventario():
-    return render_template('inventario.html')
+
+@app.route("/inventario/<int:ti_id>/<string:nombret>", methods=['GET', 'POST'])
+def inventario(ti_id, nombret):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT p_nombre,p_precio,i_cant, p_imagen, p.p_id, i.i_id from producto as p, inventario as i where i.ti_id=%s and p.p_id=i.p_id;""",(ti_id,))
+    productos = cur.fetchall()
+    db.cerrar()
+    proArray = []
+    for producto in productos:
+        proArray.append(producto)
+
+    print(proArray)
+    return render_template('inventario.html', nombret=nombret, productos=productos)
+
+@app.route("/presupuesto/<int:u_id>/<int:pid>/<int:iid>", methods=['GET', 'POST'])
+def presupuesto(u_id, pid, iid):
+    cantidadp = request.form['cantidadp']
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("""INSERT INTO presupuesto (pre_femision) VALUES (%s) RETURNING pre_id;""",(time.strftime("%d-%m-%Y"),))
+        preid = cur.fetchone()
+        cur.execute("""INSERT INTO compravirtual (cv_cant, pre_id, u_id, p_id, i_id) VALUES (%s, %s, %s, %s, %s);""",(cantidadp,preid[0],u_id,pid,iid,))
+
+    except:
+        print('error')
+        db.retroceder()
+
+
+    db.actualizar()
+    print(preid[0])
+    return redirect(url_for('cliente_home'))
 
 @app.route("/logout")
 def logout():

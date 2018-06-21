@@ -578,3 +578,4 @@ class TiendaNForm(FlaskForm):
             x =str(parroquias.data)
             if x == 'None':
                 raise ValidationError('Este campo no puede dejarse vacio')
+

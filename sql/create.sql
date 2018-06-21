@@ -1,4 +1,4 @@
-﻿DROP DATABASE IF EXISTS proyecto;
+﻿﻿DROP DATABASE IF EXISTS proyecto;
 CREATE DATABASE proyecto;
 \c proyecto;
 SET DATESTYLE TO ISO,DMY;
