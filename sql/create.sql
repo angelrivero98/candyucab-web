@@ -192,7 +192,7 @@ CREATE TABLE pro_diario (
 CREATE TABLE presupuesto (
   pre_id SERIAL,
   pre_femision DATE NOT NULL DEFAULT CURRENT_DATE,
-  pre_nombre varchar(40) NOT NULL,
+  pre_nombre varchar(40),
   CONSTRAINT pk_presupuesto PRIMARY KEY (pre_id)
 );
 
