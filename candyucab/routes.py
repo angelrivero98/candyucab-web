@@ -1,6 +1,6 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
 from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm
-from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm,TarjetaDebito,TarjetaCredito,ChequeForm,DiarioDulce,DescuentoForm
+from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm,TarjetaDebito,TarjetaCredito,ChequeForm,DiarioDulce,DescuentoForm,EstatusForm
 from candyucab import app,bcrypt
 from candyucab.user import User
 import secrets
@@ -30,6 +30,46 @@ def save_picture(form_picture):
     i.save(picture_path)
 
     return picture_fn
+
+@app.route("/pedidos/<int:ped_id>/update",methods=['GET','POST'])
+def update_estatus(ped_id):
+    form = EstatusForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""INSERT INTO  ped_est (ped_id,es_id) VALUES (%s,%s)""",
+                        (ped_id,form.estatus.data,))
+        except:
+            print("ERROR insertin into ped_est")
+            db.retroceder()
+        db.actualizar()
+        return redirect(url_for('pedidos'))
+    return render_template('updateEstatus.html',form=form)
+
+
+@app.route("/pedidos",methods=['GET','POST'])
+def pedidos():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT P.ped_id,P.ped_fentrega,T.ti_nombre,E.es_tipo FROM pedido P, departamento D, estatus E,
+                    (SELECT P.ped_id,MAX(PD.pe_id) as pe_id from ped_est PD,pedido P WHERE P.ped_id = PD.ped_id
+                     GROUP BY P.ped_id) as PD1,Tienda T,ped_est PD2 WHERE P.d_id = D.d_id AND E.es_id=PD2.es_id AND
+                     P.ped_id = PD1.ped_id AND D.d_id=T.ti_id AND PD2.pe_id=PD1.pe_id;""")
+    tiendas = cur.fetchall()
+    cur.execute(""" SELECT P.ped_id,P.ped_fentrega,CJ.cj_rif as rif,E.es_tipo FROM pedido P,clientejuridico CJ,estatus E,
+                (SELECT P.ped_id,MAX(PD.pe_id) as pe_id from ped_est PD,pedido P WHERE P.ped_id = PD.ped_id
+                GROUP BY P.ped_id) as PD1,ped_est PD2
+	               WHERE P.cj_id =CJ.cj_id AND E.es_id=PD2.es_id AND P.ped_id = PD1.ped_id AND PD1.pe_id = PD2.pe_id
+	               UNION
+	               SELECT P.ped_id, P.ped_fentrega,CN.cn_rif,E.es_tipo FROM pedido P,clientenatural CN,estatus E,
+                   (SELECT P.ped_id,MAX(PD.pe_id) as pe_id from ped_est PD,pedido P WHERE P.ped_id = PD.ped_id
+                   GROUP BY P.ped_id) as PD1,ped_est PD2
+	               WHERE P.cn_id =CN.cn_id AND E.es_id=PD2.es_id AND P.ped_id = PD1.ped_id AND PD1.pe_id = PD2.pe_id
+	               ORDER BY ped_id;""")
+    clientes = cur.fetchall()
+    return render_template('pedidos.html',tiendas = tiendas,clientes=clientes)
+
 
 @app.route("/ofertas/<int:dd_id>/<int:e_id>/registro",methods=['GET','POST'])
 def create_oferta(dd_id,e_id):

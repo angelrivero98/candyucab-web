@@ -4107,3 +4107,15 @@ INSERT INTO usuario (u_username, u_password,e_id) VALUES
 ('rosario99','%_XEJG2m!7',162),
 ('emunoz','zLB6NRXt)*',163),
 ('ttaboada','k0qK9P9$$U',164);
+
+INSERT INTO pedido (ped_fentrega,d_id) VALUES
+('20-06-2018',3),('19-06-2018',3),('18-06-2018',3),('17-06-2018',3),('15-06-2018',3);
+
+INSERT INTO pedido (ped_fentrega,cj_id) VALUES
+('10-06-2018',1),('09-06-2018',2),('08-06-2018',3),('07-06-2018',4),('05-06-2018',5);
+
+INSERT INTO pedido (ped_fentrega,cn_id) VALUES
+('02-06-2018',1),('01-06-2018',2),('08-06-2018',3),('27-06-2018',4),('14-06-2018',5);
+
+INSERT INTO ped_est (ped_id,es_id) VALUES
+(1,1),(2,2),(3,2),(4,2),(5,2),(6,1),(7,2),(8,2),(9,2),(10,2),(11,3),(12,3),(13,3),(14,3),(15,3);
