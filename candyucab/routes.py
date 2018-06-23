@@ -6,6 +6,7 @@ from candyucab.user import User
 import secrets
 import os
 import datetime
+import time
 from datetime import date,timedelta
 import pyexcel as p
 from PIL import Image
@@ -1175,13 +1176,13 @@ def inventario(ti_id, nombret):
 @app.route("/presupuesto/<int:u_id>/<int:pid>/<int:iid>", methods=['GET', 'POST'])
 def presupuesto(u_id, pid, iid):
     cantidadp = request.form['cantidadp']
+
     db = Database()
     cur = db.cursor_dict()
     try:
         cur.execute("""INSERT INTO presupuesto (pre_femision) VALUES (%s) RETURNING pre_id;""",(time.strftime("%d-%m-%Y"),))
         preid = cur.fetchone()
         cur.execute("""INSERT INTO compravirtual (cv_cant, pre_id, u_id, p_id, i_id) VALUES (%s, %s, %s, %s, %s);""",(cantidadp,preid[0],u_id,pid,iid,))
-
     except:
         print('error')
         db.retroceder()
@@ -1190,6 +1191,86 @@ def presupuesto(u_id, pid, iid):
     db.actualizar()
     print(preid[0])
     return redirect(url_for('cliente_home'))
+
+@app.route("/compras/<int:u_id>", methods=['GET', 'POST'])
+def compras(u_id):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT distinct p.p_nombre, cv.cv_cant ,cv.cv_cant * p.p_precio FROM producto p, compravirtual cv, presupuesto pr WHERE cv.u_id=%s and cv.p_id=p.p_id and pr.pre_id is not null""", (u_id,))
+    comprasv = cur.fetchall()
+    cur.execute("""SELECT  SUM(cv.cv_cant * p.p_precio) FROM producto p, compravirtual cv, presupuesto pr WHERE cv.u_id=%s and cv.p_id=p.p_id and pr.pre_id=cv.pre_id""", (u_id,))
+    total = cur.fetchone()
+    db.cerrar()
+
+    return render_template('compras.html', comprasv=comprasv, total=total)
+
+@app.route("/pagando/<string:tipo>/<int:c_id>/<int:u_id>", methods=['GET','POST'])
+def pagando(tipo, c_id, u_id):
+    db = Database()
+    cur = db.cursor_dict()
+    print(u_id)
+    cur.execute("SELECT cv.cv_id from compravirtual cv, presupuesto pr where cv.pre_id=pr.pre_id and cv.u_id=%s;",(u_id,))
+    pagospen = cur.fetchall()
+    print(pagospen)
+    if tipo=='cj':
+        cur.execute("SELECT tc_id from tarjetacredito where cj_id=%s;", (c_id,))
+        tarjeta=cur.fetchone()
+        if tarjeta:
+            for pago in pagospen:
+                cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id) values (%s, %s, %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],))
+                print(pago['cv_id'])
+            db.actualizar()
+            flash('Su compra ha sido exitosa', 'success')
+            return redirect(url_for('cliente_home'))
+        else:
+            return redirect(url_for('credito', tipo=tipo, c_id=c_id))
+
+    else:
+        cur.execute("SELECT tc_id from tarjetacredito where cn_id=%s;", (c_id,))
+        tarjeta=cur.fetchone()
+        if tarjeta:
+            for pago in pagospen:
+                cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id) values (%s, %s, %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id']))
+
+            db.actualizar()
+            flash('Su compra ha sido exitosa', 'success')
+            return redirect(url_for('cliente_home'))
+        else:
+            return redirect(url_for('credito', tipo=tipo, c_id=c_id))
+
+
+@app.route("/comprafisica/<int:i_id>", methods=['GET', 'POST'])
+def comprafisica(i_id):
+    cantidadp = request.form['cantidadp']
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("INSERT INTO comprafisica(cf_cant, i_id) VALUES (%s, %s);",(cantidadp,i_id,))
+    except:
+        db.retroceder
+
+
+    db.actualizar()
+    cur.execute("SELECT t.ti_nombre, t.ti_id from tienda t, inventario i where i_id=%s and i.ti_id=t.ti_id;",(i_id,))
+    nombret=cur.fetchone()
+    return redirect(url_for('inventario',nombret=nombret['ti_nombre'], ti_id=nombret['ti_id']))
+
+@app.route("/caja/<string:tipo>/<int:c_id>/<int:u_id>", methods=['GET','POST'])
+def caja(tipo, c_id, u_id):
+    db = Database()
+    cur = db.cursor_dict()
+    print(u_id)
+    cur.execute("SELECT cv.cv_id from compravirtual cv, presupuesto pr where cv.pre_id=pr.pre_id and cv.u_id=%s;",(u_id,))
+    pagospen = cur.fetchall()
+    for pago in pagospen:
+        cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id) values (%s, %s, %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],))
+        print(pago['cv_id'])
+    db.actualizar()
+    flash('Su compra ha sido exitosa', 'success')
+    return redirect(url_for('cliente_home'))
+
+
+
 
 @app.route("/logout")
 def logout():

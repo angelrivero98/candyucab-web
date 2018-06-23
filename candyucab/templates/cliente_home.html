@@ -21,7 +21,7 @@
             <a id="nombre" href="#">{{ current_user.u_username }}</a>
         {% endif  %}
             <a href="#">Perfil</a>
-            <a href="#">Compras</a>
+            <a href="{{ url_for('compras', u_id=current_user.u_id) }}">Compras</a>
             <a href="#">Puntos</a>
             <a href="#">Productos</a>
             <a href="#">Acerca</a>

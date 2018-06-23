@@ -40,3 +40,5 @@ DROP TABLE reposicion CASCADE;
 DROP TABLE pagofisico CASCADE;
 DROP TABLE or_est CASCADE;
 DROP TABLE ped_est CASCADE;
+\c postgres
+DROP DATABASE proyecto;

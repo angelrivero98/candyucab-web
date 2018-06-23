@@ -44,7 +44,7 @@ ALTER TABLE compravirtual ADD CONSTRAINT fk_cv_usuario FOREIGN KEY (u_id) refere
 ALTER TABLE compravirtual ADD CONSTRAINT fk_cv_producto FOREIGN KEY (p_id) references producto(p_id) ON DELETE CASCADE;
 ALTER TABLE pagovirtual ADD CONSTRAINT fk_pv_comprav FOREIGN KEY (cv_id) references compravirtual(cv_id) ON DELETE CASCADE;
 ALTER TABLE pagovirtual ADD CONSTRAINT fk_pv_tarjetac FOREIGN KEY (tc_id) references tarjetacredito(tc_id) ON DELETE CASCADE;
-ALTER TABLE pagovirtual ADD CONSTRAINT fk_pv_orden FOREIGN KEY (o_id) references orden(o_id) ON DELETE CASCADE;
+ALTER TABLE orden ADD CONSTRAINT fk_pv_orden FOREIGN KEY (pv_id) references pagovirtual(pv_id) ON DELETE CASCADE;
 ALTER TABLE factura ADD CONSTRAINT fk_f_pagov FOREIGN KEY (pv_id) references pagovirtual(pv_id) ON DELETE CASCADE;
 ALTER TABLE carnet ADD CONSTRAINT fk_car_clientej FOREIGN KEY (cj_id) references clientejuridico(cj_id) ON DELETE CASCADE;
 ALTER TABLE carnet ADD CONSTRAINT fk_car_clienten FOREIGN KEY (cn_id) references clientenatural(cn_id) ON DELETE CASCADE;
@@ -65,3 +65,4 @@ ALTER TABLE ped_est ADD CONSTRAINT fk_pedido_estatus_pedido FOREIGN KEY (ped_id)
 ALTER TABLE ped_est ADD CONSTRAINT fk_pedido_estatus_estatus FOREIGN KEY (es_id) references estatus(es_id) ON DELETE CASCADE;
 ALTER TABLE or_est ADD CONSTRAINT fk_orden_estatus_orden FOREIGN KEY (o_id) references orden(o_id) ON DELETE CASCADE;
 ALTER TABLE or_est ADD CONSTRAINT fk_or_est_estatus FOREIGN KEY (es_id) references estatus(es_id) ON DELETE CASCADE;
+SELECT setval('tienda_ti_id_seq',(SELECT MAx(ti_id) from tienda)+1);

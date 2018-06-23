@@ -241,6 +241,7 @@ CREATE TABLE producto (
 CREATE TABLE comprafisica (
   cf_id SERIAL,
   cf_fcompra DATE NOT NULL DEFAULT CURRENT_DATE,
+  cf_cant integer NOT NULL,
   cj_id integer,
   cn_id integer,
   i_id integer NOT NULL,
@@ -265,7 +266,6 @@ CREATE TABLE pagovirtual (
   pv_fpago DATE NOT NULL,
   cv_id integer NOT NULL,
   tc_id integer,
-  o_id integer NOT NULL,
   CONSTRAINT pk_pvirtual PRIMARY KEY (pv_id)
 );
 
@@ -291,6 +291,7 @@ CREATE TABLE orden (
   o_monto_total numeric(20),
   d_id integer NOT NULL,
   i_id integer NOT NULL,
+  pv_id integer NOT NULL,
   CONSTRAINT pk_orden PRIMARY KEY (o_id)
 );
 
