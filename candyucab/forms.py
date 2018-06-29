@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField,FileAllowed
-from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,FormField,SelectField,TextAreaField
+from wtforms import StringField,PasswordField,SubmitField,BooleanField,IntegerField,FieldList,FormField,SelectField,TextAreaField,SelectMultipleField,widgets
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,ValidationError,Optional,InputRequired
 from candyucab.db import Database
@@ -37,10 +37,62 @@ def estatus():
     cur.execute("SELECT es_id,es_tipo FROM estatus;")
     return cur.fetchall()
 
+def roles():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT r_id,r_tipo FROM rol;")
+    return cur.fetchall()
+
+def permisos():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT per_id,per_funcion from permiso WHERE per_funcion like '%cliente' OR per_funcion like '%usuario'
+                OR per_funcion like '%tienda' OR per_funcion like '%diariodulce'
+                OR per_funcion like '%punto' OR per_funcion like '%rol' OR per_funcion like '%producto';""")
+    return cur.fetchall()
 
 class NonValidatingSelectField(SelectField):
     def pre_validate(self, form):
         pass
+
+class NonValidatingSelectMultipleField(SelectMultipleField):
+    def pre_validate(self, form):
+        pass
+
+class MultiCheckboxField(NonValidatingSelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+class UsuarioForm(FlaskForm):
+    ci = IntegerField('Cedula del empleado',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    username=StringField('Nombre de Usuario',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=20)])
+    password = PasswordField('Contraseña',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    rol = NonValidatingSelectField('Rol',choices=tuple(roles()))
+    submit=SubmitField('Actualizar')
+
+    def validate_username(self,username):
+        db = Database()
+        cur = db.cursor_dict()
+        cur.execute("SELECT u_username from usuario WHERE u_username = %s;",(username.data,))
+        if cur.fetchone():
+            raise ValidationError('El nombre de usuario ya esta tomado')
+
+    def validate_ci(self,ci):
+        db = Database()
+        cur = db.cursor_dict()
+        cur.execute("SELECT e_ci from empleado WHERE e_ci = %s;",(ci.data,))
+        if cur.fetchone() == None:
+            raise ValidationError('El empleado no existe')
+
+    def validate_rol(self,rol):
+        x =str(rol.data)
+        if x == 'None':
+            raise ValidationError('Este campo no puede dejarse vacio')
+
+class RolForm(FlaskForm):
+    nombre = StringField('Nombre del Rol',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=60)])
+    permisos = MultiCheckboxField('Permisos', choices=tuple(permisos()))
+    submit=SubmitField('Actualizar')
 
 class PrecioForm(FlaskForm):
     precio = IntegerField('Precio',validators=[DataRequired(message='Este campo no puede dejarse vacio')])

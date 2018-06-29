@@ -1,5 +1,5 @@
 from flask import render_template,url_for,flash,redirect,request,abort,jsonify
-from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm
+from candyucab.forms import RegistrationJForm,LoginForm,PersonaContactoForm,TlfForm,RegistrationNForm,UpdateJForm,UpdateNForm,TiendaJForm,TiendaNForm,UsuarioForm,RolForm
 from candyucab.forms import  ProductoForm,TiendaForm,UpdateTiendaForm,AsistenciaForm,TarjetaDebito,TarjetaCredito,ChequeForm,DiarioDulce,DescuentoForm,EstatusForm,PrecioForm,TiendaSelect
 from candyucab import app,bcrypt
 from candyucab.user import User
@@ -31,6 +31,108 @@ def save_picture(form_picture):
     i.save(picture_path)
 
     return picture_fn
+
+@app.route("/rol/<int:r_id>/update",methods=['GET','POST'])
+def update_rol(r_id):
+    pass
+
+@app.route("/rol/create",methods=['GET','POST'])
+def create_rol():
+    form = RolForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""INSERT INTO rol (r_tipo)
+            VALUES (%s) RETURNING r_id;""",
+            (form.nombre.data,))
+        except:
+            print("ERROR inserting into rol")
+            db.retroceder()
+
+        rol = cur.fetchone()[0]
+        db.actualizar()
+        for permiso in form.permisos.data:
+            try:
+                cur.execute("""INSERT INTO rol_per (r_id, per_id)
+                VALUES (%s, %s);""",
+                (rol,int(permiso)))
+            except:
+                print("ERROR inserting into rol_per")
+                db.retroceder()
+
+        db.actualizar()
+        flash('Su rol se ha creado exitosamente','success')
+        return redirect(url_for('rol'))
+    return render_template('createRol.html',form=form)
+
+@app.route("/rol",methods=['GET','POST'])
+def rol():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT r.*,p.per_funcion from rol r,rol_per rp,permiso p
+                where p.per_id = rp.per_id AND r.r_id=rp.r_id ORDER BY r.r_id DESC;""")
+    roles = cur.fetchall()
+    db.cerrar()
+    return render_template('roles.html',roles=roles)
+
+@app.route("/usuarios/<int:u_id>/update",methods=['GET','POST'])
+def update_usuario(u_id):
+    form = UsuarioForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("""UPDATE usuario SET u_username = %s,u_password WHERE u_id=%s;""",
+                        (form.username.data,form.password.data,))
+        except:
+            print("ERROR updating into usuario")
+            db.retroceder()
+        db.actualizar()
+        return redirect(url_for('usuarios'))
+    return render_template('createUsuario.html',form=form,u_id=u_id)
+
+@app.route("/usuario/<int:u_id>/delete",methods=['GET','POST'])
+def delete_usuario(u_id):
+    db = Database()
+    cur = db.cursor_dict()
+    try:
+        cur.execute("""DELETE FROM  usuario WHERE e_id=%s;""",(e_id,))
+    except:
+        print("ERROR deleting into usuario ")
+        db.retroceder()
+    db.actualizar()
+    flash('Su usuario eliminado exitosamente','success')
+    return redirect(url_for('puntos'))
+
+@app.route("/usuario/create",methods=['GET','POST'])
+def create_usuario():
+    form = UsuarioForm()
+    if form.validate_on_submit():
+        db = Database()
+        cur = db.cursor_dict()
+        cur.execute("""SELECT e_id from empleado
+                        WHERE e_ci=%s;""",(form.ci.data,))
+        empleado=cur.fetchone()
+        try:
+            cur.execute("""INSERT INTO usuario (u_username,u_password,e_id)
+                            VALUES (%s,%s,%s);""",(form.username.data,form.password.data,empleado['e_id']))
+        except:
+            print("ERROR inserting into usuario ")
+            db.retroceder()
+        db.actualizar()
+        flash('Su usuario se ha creado exitosamente','success')
+        return redirect(url_for('usuarios'))
+    return render_template('createUsuario.html',form=form)
+
+@app.route("/usuarios",methods=['GET','POST'])
+def usuarios():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT *  FROM usuario  ORDER BY u_id;")
+    usuarios = cur.fetchall()
+    db.cerrar()
+    return render_template('usuarios.html',usuarios=usuarios)
 
 @app.route("/puntos/<int:h_id>/update",methods=['GET','POST'])
 def update_puntos(h_id):
