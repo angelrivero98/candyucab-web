@@ -1239,21 +1239,128 @@ def pagando(tipo, c_id, u_id):
             return redirect(url_for('credito', tipo=tipo, c_id=c_id))
 
 
-@app.route("/comprafisica/<int:i_id>", methods=['GET', 'POST'])
-def comprafisica(i_id):
+@app.route("/zaratustra/<int:i_id>/<int:precio>", methods=['GET', 'POST'])
+def zaratustra(i_id,precio):
     cantidadp = request.form['cantidadp']
+    return render_template('zaratustra.html', i_id=i_id, cantidadp=cantidadp, precio=precio)
+
+
+@app.route("/datos_compra/<int:i_id>/<int:cantidadp>/<int:precio>", methods=['GET', 'POST'])
+def datos_compra(i_id, cantidadp,precio):
+    return render_template('datos_compra.html', i_id=i_id, cantidadp=cantidadp,precio=precio)
+
+
+@app.route("/elegir/<int:cf_id>/<int:precio>/<string:tipo>/<int:cid>/<string:op>", methods=['GET','POST'])
+def elegir(cf_id,precio,tipo,cid,op):
+    medios=0
+    if op=='tc':
+        db = Database()
+        cur = db.cursor_dict()
+        if tipo=='cj':
+            cur.execute("SELECT tc_num,tc_id FROM tarjetacredito WHERE cj_id=%s",(cid,))
+            medios = cur.fetchall()
+            db.cerrar()
+        if tipo=='cn':
+            cur.execute("SELECT tc_num,tc_id FROM tarjetacredito WHERE cn_id=%s", (cid,))
+            medios = cur.fetchall()
+            db.cerrar()
+    elif op=='td':
+        db = Database()
+        cur = db.cursor_dict()
+        if tipo == 'cj':
+            cur.execute("SELECT td_num,td_banco,td_id FROM tarjetadebito WHERE cj_id=%s", (cid,))
+            medios = cur.fetchall()
+            db.cerrar()
+        if tipo == 'cn':
+            cur.execute("SELECT td_num, td_banco, td_id FROM tarjetadebito WHERE cn_id=%s", (cid,))
+            medios = cur.fetchall()
+            db.cerrar()
+    elif op=='ch':
+        db = Database()
+        cur = db.cursor_dict()
+        if tipo == 'cj':
+            cur.execute("SELECT ch_num, ch_id FROM cheque WHERE cj_id=%s", (cid,))
+            medios = cur.fetchall()
+            db.cerrar()
+        if tipo == 'cn':
+            cur.execute("SELECT ch_num, ch_id FROM cheque WHERE cn_id=%s", (cid,))
+            medios = cur.fetchall()
+            db.cerrar()
+
+    return render_template('elegir.html', cf_id=cf_id, precio=precio, tipo=tipo, cid=cid, op=op,medios=medios)
+
+
+@app.route("/comprafisica/<int:i_id>/<string:tipo>/<int:cantidadp>/<int:precio>", methods=['GET', 'POST'])
+def comprafisica(i_id,tipo, cantidadp, precio):
+    cfid=0
+    if tipo=='s':
+        db = Database()
+        cur = db.cursor_dict()
+        nombrec=request.form['nombrec']
+        cur.execute("SELECT cn_id FROM usuario WHERE u_username=%s;", (nombrec,))
+        cnid = cur.fetchone()
+        cur.execute("SELECT cj_id FROM usuario WHERE u_username=%s;", (nombrec,))
+        cjid = cur.fetchone()
+        if cnid[0]==None and cjid[0]==None:
+            print("error")
+        elif cnid[0]==None and cjid[0]!=None:
+            try:
+                cur.execute("INSERT INTO comprafisica (cf_cant, cj_id, i_id) VALUES (%s,%s,%s) RETURNING cf_id;",(cantidadp,cjid[0],i_id,))
+                cfid = cur.fetchone()
+            except:
+                db.retroceder()
+
+            db.actualizar()
+            db.cerrar()
+            return redirect(url_for('elegir',cf_id=cfid[0],precio=precio*cantidadp,tipo='cj',cid=cjid[0],op='n'))
+
+        elif cnid[0]!=None and cjid[0]==None:
+            try:
+                cur.execute("INSERT INTO comprafisica (cf_cant, cn_id, i_id) VALUES (%s,%s,%s) RETURNING cf_id;",(cantidadp, cnid[0], i_id,))
+                cfid = cur.fetchone()
+            except:
+                db.retroceder()
+
+            db.actualizar()
+            db.cerrar()
+            return redirect(url_for('elegir', cf_id=cfid[0], precio=precio*cantidadp, tipo='cn', cid=cnid[0],op='n'))
+
+
+
+    else:
+        db = Database()
+        cur = db.cursor_dict()
+        try:
+            cur.execute("INSERT INTO comprafisica(cf_cant, i_id) VALUES (%s, %s) RETURNING cf_id;",(cantidadp,i_id,))
+            cfid = cur.fetchone()
+        except:
+            db.retroceder()
+
+
+        db.actualizar()
+
+        return redirect(url_for('pagandof',cf_id=cfid[0], op="n", mid=0, precio=precio*cantidadp))
+
+@app.route("/pagandof/<int:cf_id>/<string:op>/<int:mid>/<int:precio>", methods=['GET', 'POST'])
+def pagandof(cf_id,op,mid,precio):
     db = Database()
     cur = db.cursor_dict()
-    try:
-        cur.execute("INSERT INTO comprafisica(cf_cant, i_id) VALUES (%s, %s);",(cantidadp,i_id,))
-    except:
-        db.retroceder
+    if op=='n':
 
+        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id) VALUES (%s,%s)",(precio,cf_id))
+        db.actualizar()
 
-    db.actualizar()
-    cur.execute("SELECT t.ti_nombre, t.ti_id from tienda t, inventario i where i_id=%s and i.ti_id=t.ti_id;",(i_id,))
-    nombret=cur.fetchone()
-    return redirect(url_for('inventario',nombret=nombret['ti_nombre'], ti_id=nombret['ti_id']))
+    elif op=='tc':
+        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id,tc_id) VALUES (%s,%s,%s)", (precio, cf_id,mid))
+        db.actualizar()
+    elif op=='td':
+        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id,td_id) VALUES (%s,%s,%s)", (precio, cf_id,mid))
+        db.actualizar()
+    elif op=='ch':
+        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id,ch_id) VALUES (%s,%s,%s)", (precio, cf_id,mid))
+        db.actualizar()
+
+    return redirect(url_for('cliente_home'))
 
 @app.route("/caja/<string:tipo>/<int:c_id>/<int:u_id>", methods=['GET','POST'])
 def caja(tipo, c_id, u_id):
