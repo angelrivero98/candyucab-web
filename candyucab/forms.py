@@ -37,18 +37,14 @@ def estatus():
     cur.execute("SELECT es_id,es_tipo FROM estatus;")
     return cur.fetchall()
 
-def roles():
-    db = Database()
-    cur = db.cursor_dict()
-    cur.execute("SELECT r_id,r_tipo FROM rol;")
-    return cur.fetchall()
-
 def permisos():
     db = Database()
     cur = db.cursor_dict()
     cur.execute("""SELECT per_id,per_funcion from permiso WHERE per_funcion like '%cliente' OR per_funcion like '%usuario'
                 OR per_funcion like '%tienda' OR per_funcion like '%diariodulce'
-                OR per_funcion like '%punto' OR per_funcion like '%rol' OR per_funcion like '%producto';""")
+                OR per_funcion like '%punto' OR per_funcion like '%rol'
+                OR per_funcion in ('CREATE producto','DELETE producto','UPDATE producto','READ producto')
+                OR per_funcion='UPDATE estatus';""")
     return cur.fetchall()
 
 class NonValidatingSelectField(SelectField):
@@ -63,11 +59,39 @@ class MultiCheckboxField(NonValidatingSelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
+class UsuarioCForm(FlaskForm):
+    username=StringField('Nombre de Usuario',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=20)])
+    password = PasswordField('Contraseña',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    submit=SubmitField('Actualizar')
+    current_username = StringField()
+
+    def validate_username(self,username):
+        db = Database()
+        cur = db.cursor_dict()
+        if self.current_username.data != username.data:
+            cur.execute("SELECT u_username from usuario WHERE u_username = %s;",(username.data,))
+            if cur.fetchone():
+                raise ValidationError('El username ya esta tomada')
+
+class UpdateUsuarioForm(FlaskForm):
+    username=StringField('Nombre de Usuario',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=20)])
+    password = PasswordField('Contraseña',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    rol = NonValidatingSelectField('Rol')
+    submit=SubmitField('Actualizar')
+    current_username = StringField()
+    def validate_username(self,username):
+        db = Database()
+        cur = db.cursor_dict()
+        if self.current_username.data != username.data:
+            cur.execute("SELECT u_username from usuario WHERE u_username = %s;",(username.data,))
+            if cur.fetchone():
+                raise ValidationError('El username ya esta tomado')
+
 class UsuarioForm(FlaskForm):
     ci = IntegerField('Cedula del empleado',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
     username=StringField('Nombre de Usuario',validators=[DataRequired(message='Este campo no puede dejarse vacio'),Length(min=1,max=20)])
     password = PasswordField('Contraseña',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
-    rol = NonValidatingSelectField('Rol',choices=tuple(roles()))
+    rol = NonValidatingSelectField('Rol')
     submit=SubmitField('Actualizar')
 
     def validate_username(self,username):
@@ -75,7 +99,7 @@ class UsuarioForm(FlaskForm):
         cur = db.cursor_dict()
         cur.execute("SELECT u_username from usuario WHERE u_username = %s;",(username.data,))
         if cur.fetchone():
-            raise ValidationError('El nombre de usuario ya esta tomado')
+            raise ValidationError('El username ya esta tomado')
 
     def validate_ci(self,ci):
         db = Database()

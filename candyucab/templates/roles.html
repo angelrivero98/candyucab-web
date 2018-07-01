@@ -15,7 +15,7 @@
     </tr>
   </thead>
   <tbody>
-      {% for rol in roles %}
+    {% for rol in roles %}
       <tr>
       <th scope="row"> <a  class="mr-2" href="{{ url_for('update_rol',r_id=rol['r_id']) }}">{{rol['r_tipo']}} </a></th>
       <td>{{rol['per_funcion']}}</td>
