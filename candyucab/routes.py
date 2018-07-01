@@ -1250,8 +1250,8 @@ def datos_compra(i_id, cantidadp,precio):
     return render_template('datos_compra.html', i_id=i_id, cantidadp=cantidadp,precio=precio)
 
 
-@app.route("/elegir/<int:cf_id>/<int:precio>/<string:tipo>/<int:cid>/<string:op>", methods=['GET','POST'])
-def elegir(cf_id,precio,tipo,cid,op):
+@app.route("/elegir/<int:cf_id>/<int:precio>/<string:tipo>/<int:cid>/<string:op>/<int:car_id>", methods=['GET','POST'])
+def elegir(cf_id,precio,tipo,cid,op,car_id):
     medios=0
     if op=='tc':
         db = Database()
@@ -1287,7 +1287,7 @@ def elegir(cf_id,precio,tipo,cid,op):
             medios = cur.fetchall()
             db.cerrar()
 
-    return render_template('elegir.html', cf_id=cf_id, precio=precio, tipo=tipo, cid=cid, op=op,medios=medios)
+    return render_template('elegir.html', cf_id=cf_id, precio=precio, tipo=tipo, cid=cid, op=op,medios=medios, car_id=car_id)
 
 
 @app.route("/comprafisica/<int:i_id>/<string:tipo>/<int:cantidadp>/<int:precio>", methods=['GET', 'POST'])
@@ -1311,8 +1311,15 @@ def comprafisica(i_id,tipo, cantidadp, precio):
                 db.retroceder()
 
             db.actualizar()
+
+            cur.execute("SELECT car_id FROM carnet WHERE cj_id=%s;",(cjid[0],))
+            carnet = cur.fetchone()
+            if carnet[0]!=None:
+                db.cerrar()
+                return redirect(url_for('elegir', cf_id=cfid[0], precio=precio * cantidadp, tipo='cj', cid=cjid[0], op='n', car_id=carnet[0]))
+
             db.cerrar()
-            return redirect(url_for('elegir',cf_id=cfid[0],precio=precio*cantidadp,tipo='cj',cid=cjid[0],op='n'))
+            return redirect(url_for('elegir',cf_id=cfid[0],precio=precio*cantidadp,tipo='cj',cid=cjid[0],op='n',car_id=0))
 
         elif cnid[0]!=None and cjid[0]==None:
             try:
@@ -1322,8 +1329,16 @@ def comprafisica(i_id,tipo, cantidadp, precio):
                 db.retroceder()
 
             db.actualizar()
+
+            cur.execute("SELECT car_id FROM carnet WHERE cn_id=%s;", (cnid[0],))
+            carnet = cur.fetchone()
+            if carnet[0]!=None:
+                db.cerrar()
+                return redirect(url_for('elegir', cf_id=cfid[0], precio=precio * cantidadp, tipo='cn', cid=cnid[0], op='n', car_id=carnet[0]))
+
+
             db.cerrar()
-            return redirect(url_for('elegir', cf_id=cfid[0], precio=precio*cantidadp, tipo='cn', cid=cnid[0],op='n'))
+            return redirect(url_for('elegir', cf_id=cfid[0], precio=precio*cantidadp, tipo='cn', cid=cnid[0],op='n', car_id=0))
 
 
 
@@ -1339,26 +1354,42 @@ def comprafisica(i_id,tipo, cantidadp, precio):
 
         db.actualizar()
 
-        return redirect(url_for('pagandof',cf_id=cfid[0], op="n", mid=0, precio=precio*cantidadp))
+        return redirect(url_for('pagandof',cf_id=cfid[0], op="n", mid=0, precio=precio*cantidadp, car_id=0))
 
-@app.route("/pagandof/<int:cf_id>/<string:op>/<int:mid>/<int:precio>", methods=['GET', 'POST'])
-def pagandof(cf_id,op,mid,precio):
+@app.route("/pagandof/<int:cf_id>/<string:op>/<int:mid>/<int:precio>/<int:car_id>", methods=['GET', 'POST'])
+def pagandof(cf_id,op,mid,precio,car_id):
     db = Database()
     cur = db.cursor_dict()
     if op=='n':
 
-        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id) VALUES (%s,%s)",(precio,cf_id))
+        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id) VALUES (%s,%s);",(precio,cf_id))
         db.actualizar()
 
     elif op=='tc':
-        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id,tc_id) VALUES (%s,%s,%s)", (precio, cf_id,mid))
+        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id,tc_id) VALUES (%s,%s,%s) RETURNING pf_id;", (precio, cf_id,mid))
+        pfid = cur.fetchone()
         db.actualizar()
+        if car_id!=0:
+            cur.execute("SELECT MAX(h_id) from historial;")
+            h_id=cur.fetchone()
+            cur.execute("INSERT INTO punto (pf_id,car_id,h_id) VALUES (%s,%s,%s);",(pfid[0],car_id,h_id[0]))
+            db.actualizar()
     elif op=='td':
-        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id,td_id) VALUES (%s,%s,%s)", (precio, cf_id,mid))
+        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id,td_id) VALUES (%s,%s,%s);", (precio, cf_id,mid))
         db.actualizar()
+        if car_id!=0:
+            cur.execute("SELECT MAX(h_id) from historial;")
+            h_id=cur.fetchone()
+            cur.execute("INSERT INTO punto (pf_id,car_id,h_id) VALUES (%s,%s,%s);",(pfid[0],car_id,h_id[0]))
+            db.actualizar()
     elif op=='ch':
-        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id,ch_id) VALUES (%s,%s,%s)", (precio, cf_id,mid))
+        cur.execute("INSERT INTO pagofisico (pf_monto,cf_id,ch_id) VALUES (%s,%s,%s);", (precio, cf_id,mid))
         db.actualizar()
+        if car_id!=0:
+            cur.execute("SELECT MAX(h_id) from historial;")
+            h_id=cur.fetchone()
+            cur.execute("INSERT INTO punto (pf_id,car_id,h_id) VALUES (%s,%s,%s);",(pfid[0],car_id,h_id[0]))
+            db.actualizar()
 
     return redirect(url_for('cliente_home'))
 
