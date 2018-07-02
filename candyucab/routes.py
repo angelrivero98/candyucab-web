@@ -38,9 +38,18 @@ def roles():
     cur.execute("SELECT r_id,r_tipo FROM rol;")
     return cur.fetchall()
 
+@app.route("/marca")
+def marca_tdc():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute(""" SELECT tc_marca,COUNT(*) AS cantidad from tarjetacredito GROUP BY tc_marca
+                    ORDER BY COUNT(*) DESC LIMIT 1;""")
+    marca = cur.fetchone()
+    return render_template('marca.html',marca=marca)
+
 @app.route("/reportes")
 def reportes():
-    pass
+    return render_template('reportes.html')
 
 @app.route("/diariodulce")
 def diariodulce():
