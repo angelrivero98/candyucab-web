@@ -158,23 +158,24 @@ for _ in range(41):
 myfile.close()
 
 myfile = open("metodos.txt","a")
-myfile.write("INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,cn_id) VALUES ")
+myfile.write("INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,tc_marca,cn_id) VALUES ")
 myfile.write("\n")
-insert = "({},'{}',{},'{}',{}),"
+tipo_marca = ['VISA','MASTERCARD','AMERICAN EXPRESS','DINERS CLUB']
+insert = "({},'{}',{},'{}','{}',{}),"
 for _ in range(82):
     myfile.write(insert.format(fake.credit_card_number(),
                 fake.credit_card_expire(start="now", end="+10y", date_format="%d-%m-%Y"),
-                fake.credit_card_security_code(),fake.name(),str(_+1)))
+                fake.credit_card_security_code(),fake.name(),tipo_marca[random.randint(0,3)],str(_+1)))
     myfile.write("\n")
 
 myfile.write("\n")
-myfile.write("INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,cj_id) VALUES ")
+myfile.write("INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,tc_marca,cj_id) VALUES ")
 myfile.write("\n")
 insert = "({},'{}',{},'{}',{}),"
 for _ in range(82):
     myfile.write(insert.format(fake.credit_card_number(),
                 fake.credit_card_expire(start="now", end="+10y", date_format="%d-%m-%Y"),
-                fake.credit_card_security_code(),fake.name(),str(_+1)))
+                fake.credit_card_security_code(),fake.name(),tipo_marca[random.randint(0,3)],str(_+1)))
     myfile.write("\n")
 
 myfile.close()

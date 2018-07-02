@@ -202,6 +202,7 @@ CREATE TABLE tarjetacredito (
   tc_num numeric(40) NOT NULL,
   tc_codseg numeric(5) NOT NULL,
   tc_fvenc DATE NOT NULL,
+  tc_marca varchar(30) NOT NULL,
   cj_id integer,
   cn_id integer,
   CONSTRAINT pk_tarjetac PRIMARY KEY (tc_id)
