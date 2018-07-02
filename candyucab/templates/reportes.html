@@ -15,14 +15,6 @@
         <!-- Button to close the overlay navigation -->
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 
-        <!-- Overlay content -->
-        <div class="overlay-content">
-            <a href="#">Servicios</a>
-            <a href="#">Contacto</a>
-            <a href="#">Empleados</a>
-            <a href="#">Sobre Nosotros</a>
-        </div>
-
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -42,19 +34,7 @@
     </section>
 
     <section class="botones_entrada row text-center">
-      {% if current_user.is_authenticated %}
-        <a href="{{url_for('logout')}}" class="col-6 entrada">Cerrar Sesion</a>
-        {% if current_user.cj_id != None%}
-          <a href="{{url_for('new_persona',c_id=current_user.cj_id)}}" class="col-6 entrada">Agregar Persona De Contacto</a>
-          <a href="{{url_for('new_tlf',tipo = 'cj',c_id=current_user.cj_id)}}" class="col-6 entrada">Agregar Telefono</a>
-          <a href="{{url_for('metodo')}}" class="col-6 entrada">Agregar Metodo de Pago</a>
-        {%endif%}
-        {% if current_user.cn_id != None%}
-          <a href="{{url_for('metodo')}}" class="col-6 entrada">Agregar Metodo de Pago</a>
-          <a href="{{url_for('new_tlf',tipo = 'cn',c_id=current_user.cn_id)}}" class="col-6 entrada">Agregar Telefono</a>
-        {%endif%}
-        {% if current_user.e_id != None%}
-          <a href="{{url_for('tiendas')}}" class="col-6 entrada">Tiendas</a>
+          <a href="{{url_for('marca_tdc')}}" class="col-6 entrada">Marca de TDC con mayor usuarios</a>
           <a href="{{url_for('clientes')}}" class="col-6 entrada">Clientes</a>
           <a href="{{url_for('productos')}}" class="col-6 entrada">Productos</a>
           <a href="{{url_for('asistencia')}}" class="col-6 entrada">Asistencia</a>
@@ -65,12 +45,8 @@
           <a href="{{url_for('cliente_home')}}" class="col-6 entrada">Caja</a>
           <a href="{{url_for('rol')}}" class="col-6 entrada">Roles</a>
           <a href="{{url_for('usuarios')}}" class="col-6 entrada">Usuarios</a>
-          <a href="{{url_for('reportes)}}" class="col-6 entrada">Reportes</a>
-        {%endif%}
-       {% else %}
-       <a href="{{url_for('login')}}" class="col-6 entrada">Entrar</a>
-       <a href="{{url_for('register')}}" class="col-6 registro">Registrarse</a>
-      {% endif %}
+
+
 
 </section>
 
