@@ -38,6 +38,23 @@ def roles():
     cur.execute("SELECT r_id,r_tipo FROM rol;")
     return cur.fetchall()
 
+@app.route("/reportes")
+def reportes():
+    pass
+
+@app.route("/diariodulce")
+def diariodulce():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT P.p_nombre,P.p_precio, P.p_imagen,(P.p_precio-P.p_precio*PD.pd_descuento) AS descuento
+                    from pro_diario PD,producto P,diariodulce D where
+                    PD.dd_id = D.dd_id AND P.p_id=PD.p_id
+                    AND CURRENT_DATE between D.dd_femision and D.dd_ffinal; """)
+    productos = cur.fetchall()
+    db.cerrar()
+    return render_template('diariodulce.html',productos=productos)
+
+
 @app.route("/rol/<int:r_id>/delete",methods=['GET','POST'])
 def delete_rol(r_id):
     if current_user.is_authenticated:
