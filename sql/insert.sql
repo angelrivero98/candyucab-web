@@ -4127,7 +4127,7 @@ INSERT INTO comprafisica (cf_fcompra, cf_cant,cj_id,i_id) VALUES ('03-06-2018' ,
 INSERT INTO compravirtual (cv_cant, cv_fcompra,pre_id,u_id,p_id,i_id) VALUES (1,'03-06-2018',1,1,1,1),
 (2,'04-06-2018',2,2,2,2),(3,'03-06-2018',3,3,3,3),(4,'09-06-2018',4,4,4,4),(1,'10-06-2018',5,5,5,5);
 
-INSERT INTO pagovirtual (pv_fpago,cv_id,tc_id) VALUES ('03-06-2018',1,1),
-('04-06-2018',2,2),('05-06-2018',3,3),('06-06-2018',4,4),('07-06-2018',5,5);
+INSERT INTO pagovirtual (pv_fpago,cv_id,tc_id, pv_monto) VALUES ('03-06-2018',1,1,100),
+('04-06-2018',2,2,150),('05-06-2018',3,3,911),('06-06-2018',4,4,2001),('07-06-2018',5,5,666);
 
 INSERT INTO pagofisico (pf_monto, cf_id) VALUES (100,1),(200,2),(300,3),(400,4),(500,5);
