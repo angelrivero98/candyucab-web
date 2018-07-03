@@ -38,7 +38,28 @@ def roles():
     cur.execute("SELECT r_id,r_tipo FROM rol;")
     return cur.fetchall()
 
-@app.route("/marca")
+@app.route("/reporte/tipoProducto")
+def tipo_Producto():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute(""" SELECT TP.tp_id,COUNT(P.*) AS cantidad,TP.tp_nombre from producto P,tipo_producto TP
+                    WHERE TP.tp_id = P.tp_id GROUP BY TP.tp_id,TP.tp_nombre
+                    ORDER BY COUNT(*) DESC LIMIT 1;""")
+    tipoProducto = cur.fetchone()
+    return render_template('ReporteTipoProducto.html',tipoProducto=tipoProducto)
+
+@app.route("/reporte/asistencia")
+def r_asistencia():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT  A.as_fecha_entrada::date AS dia,concat(EXTRACT(HOUR FROM A.as_fecha_entrada),':',EXTRACT(minute FROM A.as_fecha_entrada) ) AS entrada ,
+                    concat(EXTRACT(HOUR FROM A.as_fecha_salida),':',EXTRACT(minute FROM A.as_fecha_salida) ) AS salida ,
+                    E.e_ci,E.e_nombre,E.e_apellido,T.ti_nombre from empleado E,tienda T, asistencia A
+                    where E.e_id=A.e_id AND T.ti_id = E.ti_id ; ;""")
+    empleados = cur.fetchone()
+    return render_template('ReporteAsistencia.html',empleados=empleados)
+
+@app.route("/reporte/marca")
 def marca_tdc():
     db = Database()
     cur = db.cursor_dict()
