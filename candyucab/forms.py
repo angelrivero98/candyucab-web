@@ -143,6 +143,7 @@ class TarjetaCredito(FlaskForm):
     nombre = StringField('Nombre Completo',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
     numero = IntegerField('Numero',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
     codigo = IntegerField('Codigo de seguridad',validators=[DataRequired(message='Este campo no puede dejarse vacio')])
+    marca = NonValidatingSelectField('Marca',choices=[('VISA','VISA'),('MASTERCARD','MASTERCARD'),('AMERICAN EXPRESS','AMERICAN EXPRESS'),('DINERS CLUB','DINERS CLUB')])
     submit=SubmitField('Registrar')
 
     def validate_codigo(self,codigo):

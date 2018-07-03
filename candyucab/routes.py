@@ -913,120 +913,142 @@ def parroquia(municipio,estado):
 
 @app.route("/clientes/<int:c_id>/<string:tipo>",methods=['GET','POST'])
 def update_cliente(c_id,tipo):
-    db = Database()
-    cur = db.cursor_dict()
-    if tipo == 'cj':
-        cur.execute("SELECT * FROM clientejuridico WHERE cj_id = %s",(c_id,))
-        cliente = cur.fetchone()
-        form = UpdateJForm()
-        form.current_rif.data = cliente['cj_rif']
-        form.current_email.data = cliente['cj_email']
-        if form.validate_on_submit():
-            try:
-                cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
-                (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
-            except:
-                print("ERROR updating into clientejuridico")
-                db.retroceder()
-            db.actualizar()
+    if current_user.is_authenticated:
+        db = Database()
+        cur = db.cursor_dict()
+        cur.execute(""" SELECT p.per_funcion from rol r, rol_per rp,permiso p where r.r_id = %s AND rp.r_id = r.r_id
+                        AND p.per_id =rp.per_id AND p.per_funcion = %s;""",(current_user.r_id,'UPDATE cliente'))
+        permiso = cur.fetchone()
+        if permiso:
+            db = Database()
+            cur = db.cursor_dict()
+            if tipo == 'cj':
+                cur.execute("SELECT * FROM clientejuridico WHERE cj_id = %s",(c_id,))
+                cliente = cur.fetchone()
+                form = UpdateJForm()
+                form.current_rif.data = cliente['cj_rif']
+                form.current_email.data = cliente['cj_email']
+                if form.validate_on_submit():
+                    try:
+                        cur.execute("""UPDATE clientejuridico SET cj_rif = %s,cj_email = %s,cj_capdis = %s,cj_demcom = %s,cj_razsoc=%s ,cj_pagweb = %s WHERE cj_id= %s;""",
+                        (form.rif.data, form.email.data,form.capdis.data,form.demcom.data,form.razsoc.data,form.pagweb.data,c_id))
+                    except:
+                        print("ERROR updating into clientejuridico")
+                        db.retroceder()
+                    db.actualizar()
 
-            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
-                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
-                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
-                        """,(form.estados1.data,form.municipios1.data,form.parroquias1.data,))
-            dirFiscal = cur.fetchone()
-            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
-                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
-                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
-                        """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
-            dirFisica = cur.fetchone()
-            if dirFisica != None:
-                try:
-                    cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fisica';""",
-                    (dirFisica['l_id'],c_id,))
-                except:
-                    print("ERROR updating into lugar_clientej fisica")
-                    db.retroceder()
+                    cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                                E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                                P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                                """,(form.estados1.data,form.municipios1.data,form.parroquias1.data,))
+                    dirFiscal = cur.fetchone()
+                    cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                                E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                                P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                                """,(form.estados2.data,form.municipios2.data,form.parroquias2.data,))
+                    dirFisica = cur.fetchone()
+                    if dirFisica != None:
+                        try:
+                            cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fisica';""",
+                            (dirFisica['l_id'],c_id,))
+                        except:
+                            print("ERROR updating into lugar_clientej fisica")
+                            db.retroceder()
 
-            if dirFiscal != None:
-                try:
-                    cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fiscal';""",
-                    (dirFiscal['l_id'],c_id,))
-                except:
-                    print("ERROR updating into lugar_clientej fiscal")
-                    db.retroceder()
-            db.actualizar()
-            flash('Tu cliente ha sido actualizada','success')
-            return redirect(url_for('clientes'))
-        elif request.method == 'GET':
-            form.rif.data = cliente['cj_rif']
-            form.email.data = cliente['cj_email']
-            form.capdis.data = cliente['cj_capdis']
-            form.demcom.data = cliente['cj_demcom']
-            form.razsoc.data = cliente['cj_razsoc']
-            form.pagweb.data = cliente['cj_pagweb']
-        return render_template('clienteJ.html',form = form,c_id = c_id)
-    elif tipo == 'cn':
+                    if dirFiscal != None:
+                        try:
+                            cur.execute("""UPDATE jur_lug SET l_id = %s WHERE cj_id = %s AND jl_tipo = 'fiscal';""",
+                            (dirFiscal['l_id'],c_id,))
+                        except:
+                            print("ERROR updating into lugar_clientej fiscal")
+                            db.retroceder()
+                    db.actualizar()
+                    flash('Tu cliente ha sido actualizada','success')
+                    return redirect(url_for('clientes'))
+                elif request.method == 'GET':
+                    form.rif.data = cliente['cj_rif']
+                    form.email.data = cliente['cj_email']
+                    form.capdis.data = cliente['cj_capdis']
+                    form.demcom.data = cliente['cj_demcom']
+                    form.razsoc.data = cliente['cj_razsoc']
+                    form.pagweb.data = cliente['cj_pagweb']
+                return render_template('clienteJ.html',form = form,c_id = c_id)
+            elif tipo == 'cn':
 
-        cur.execute("SELECT * FROM clientenatural WHERE cn_id = %s",(c_id,))
-        cliente = cur.fetchone()
-        form = UpdateNForm()
-        form.current_rif.data = cliente['cn_rif']
-        form.current_email.data = cliente['cn_email']
-        form.current_ci.data = cliente['cn_ci']
-        if form.validate_on_submit():
-            cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
-                        E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
-                        P.l_nombre = %s AND P.fk_lugar = M.l_id;
-                        """,(form.estados.data,form.municipios.data,form.parroquias.data,))
-            direccion = cur.fetchone()
-            if direccion == None:
-                direccion = cliente
-            try:
-                cur.execute("""UPDATE clientenatural SET cn_rif = %s,cn_email = %s,cn_nom1 = %s,cn_nom2 = %s,cn_ap1=%s, cn_ap2=%s,cn_ci = %s,l_id = %s WHERE cn_id= %s;""",
-                (form.rif.data, form.email.data,form.nom1.data,form.nom2.data,form.ap1.data,form.ap2.data,form.ci.data,direccion['l_id'],c_id))
-            except:
-                print("ERROR updating into clientenatural")
-                db.retroceder()
-            db.actualizar()
-            flash('Tu cliente ha sido actualizada','success')
-            return redirect(url_for('clientes'))
-        elif request.method == 'GET':
-            form.rif.data = cliente['cn_rif']
-            form.email.data = cliente['cn_email']
-            form.nom1.data = cliente['cn_nom1']
-            form.nom2.data = cliente['cn_nom2']
-            form.ap1.data = cliente['cn_ap1']
-            form.ap2.data = cliente['cn_ap2']
-            form.ci.data = cliente['cn_ci']
+                cur.execute("SELECT * FROM clientenatural WHERE cn_id = %s",(c_id,))
+                cliente = cur.fetchone()
+                form = UpdateNForm()
+                form.current_rif.data = cliente['cn_rif']
+                form.current_email.data = cliente['cn_email']
+                form.current_ci.data = cliente['cn_ci']
+                if form.validate_on_submit():
+                    cur.execute("""SELECT P.l_id from lugar E, lugar M , lugar P where
+                                E.l_id = %s AND E.l_tipo = 'E' AND M.l_nombre = %s AND M.fk_lugar= E.l_id AND
+                                P.l_nombre = %s AND P.fk_lugar = M.l_id;
+                                """,(form.estados.data,form.municipios.data,form.parroquias.data,))
+                    direccion = cur.fetchone()
+                    if direccion == None:
+                        direccion = cliente
+                    try:
+                        cur.execute("""UPDATE clientenatural SET cn_rif = %s,cn_email = %s,cn_nom1 = %s,cn_nom2 = %s,cn_ap1=%s, cn_ap2=%s,cn_ci = %s,l_id = %s WHERE cn_id= %s;""",
+                        (form.rif.data, form.email.data,form.nom1.data,form.nom2.data,form.ap1.data,form.ap2.data,form.ci.data,direccion['l_id'],c_id))
+                    except:
+                        print("ERROR updating into clientenatural")
+                        db.retroceder()
+                    db.actualizar()
+                    flash('Tu cliente ha sido actualizada','success')
+                    return redirect(url_for('clientes'))
+                elif request.method == 'GET':
+                    form.rif.data = cliente['cn_rif']
+                    form.email.data = cliente['cn_email']
+                    form.nom1.data = cliente['cn_nom1']
+                    form.nom2.data = cliente['cn_nom2']
+                    form.ap1.data = cliente['cn_ap1']
+                    form.ap2.data = cliente['cn_ap2']
+                    form.ci.data = cliente['cn_ci']
 
-        return render_template('clienteN.html',form = form,c_id = c_id)
+                return render_template('clienteN.html',form = form,c_id = c_id)
+        else:
+            return render_template('error.html')
+    else:
+        return render_template('error.html')
 
 @app.route("/clientes/<int:c_id>/<string:tipo>/delete",methods=['GET','POST'])
 def delete_cliente(c_id,tipo):
-    db = Database()
-    cur = db.cursor_dict()
-    if tipo == 'cj':
-        try:
-            cur.execute("DELETE FROM clientejuridico WHERE cj_id = %s;",(c_id,))
-        except:
-            print("ERROR deleting clientejuridico")
-            db.retroceder()
-        db.actualizar()
-        db.cerrar()
-        flash('Tu cliente ha sido eliminado','success')
-        return redirect(url_for('clientes'))
-    elif tipo == 'cn':
-        print(c_id)
-        try:
-            cur.execute("DELETE FROM clientenatural WHERE cn_id = %s;",(c_id,))
-        except:
-            print("ERROR deleting clientenatural")
-            db.retroceder()
-        db.actualizar()
-        db.cerrar()
-        flash('Tu cliente ha sido eliminado','success')
-        return redirect(url_for('clientes'))
+    if current_user.is_authenticated:
+        db = Database()
+        cur = db.cursor_dict()
+        cur.execute(""" SELECT p.per_funcion from rol r, rol_per rp,permiso p where r.r_id = %s AND rp.r_id = r.r_id
+                        AND p.per_id =rp.per_id AND p.per_funcion = %s;""",(current_user.r_id,'DELETE cliente'))
+        permiso = cur.fetchone()
+        if permiso:
+            db = Database()
+            cur = db.cursor_dict()
+            if tipo == 'cj':
+                try:
+                    cur.execute("DELETE FROM clientejuridico WHERE cj_id = %s;",(c_id,))
+                except:
+                    print("ERROR deleting clientejuridico")
+                    db.retroceder()
+                db.actualizar()
+                db.cerrar()
+                flash('Tu cliente ha sido eliminado','success')
+                return redirect(url_for('clientes'))
+            elif tipo == 'cn':
+                print(c_id)
+                try:
+                    cur.execute("DELETE FROM clientenatural WHERE cn_id = %s;",(c_id,))
+                except:
+                    print("ERROR deleting clientenatural")
+                    db.retroceder()
+                db.actualizar()
+                db.cerrar()
+                flash('Tu cliente ha sido eliminado','success')
+                return redirect(url_for('clientes'))
+        else:
+            return render_template('error.html')
+    else:
+        return render_template('error.html')
 
 @app.route("/clientes/<int:c_id>/<string:tipo>/carnet",methods=['GET','POST'])
 def carnet(c_id,tipo):
@@ -1365,18 +1387,18 @@ def credito(tipo,c_id):
         cur = db.cursor_dict()
         if tipo == 'cj':
             try:
-                cur.execute("""INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,cj_id)
+                cur.execute("""INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,tc_marca,cj_id)
                             VALUES (%s, %s,%s,%s,%s);""",
-                (form.numero.data,form.fvenc.data,form.codigo.data,form.nombre.data,c_id,))
+                (form.numero.data,form.fvenc.data,form.codigo.data,form.nombre.data,form.marca.data,c_id,))
             except:
                 print("ERROR inserting into tarjetacredito cj")
                 db.retroceder()
             db.actualizar()
         elif tipo == 'cn':
             try:
-                cur.execute("""INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,cn_id)
+                cur.execute("""INSERT INTO tarjetacredito (tc_num,tc_fvenc,tc_codseg,tc_ncompl,tc_marca,cn_id)
                             VALUES (%s, %s,%s,%s,%s);""",
-                (form.numero.data,form.fvenc.data,form.codigo.data,form.nombre.data,c_id,))
+                (form.numero.data,form.fvenc.data,form.codigo.data,form.nombre.data,form.marca.data,c_id,))
             except:
                 print("ERROR inserting into tarjetacredito cn")
                 db.retroceder()
