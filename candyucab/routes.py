@@ -1712,6 +1712,7 @@ def presupuesto(u_id, pid, iid):
         cur.execute("""INSERT INTO presupuesto (pre_femision) VALUES (%s) RETURNING pre_id;""",(time.strftime("%d-%m-%Y"),))
         preid = cur.fetchone()
         cur.execute("""INSERT INTO compravirtual (cv_cant, pre_id, u_id, p_id, i_id) VALUES (%s, %s, %s, %s, %s);""",(cantidadp,preid[0],u_id,pid,iid,))
+        cur.execute("UPDATE inventario SET i_cant=i_cant - %s WHERE i_id=%s",(cantidadp,iid,))
     except:
         print('error')
         db.retroceder()
@@ -1733,39 +1734,149 @@ def compras(u_id):
 
     return render_template('compras.html', comprasv=comprasv, total=total)
 
-@app.route("/pagando/<string:tipo>/<int:c_id>/<int:u_id>", methods=['GET','POST'])
-def pagando(tipo, c_id, u_id):
+
+@app.route("/proust/<int:cant>/<string:tipo>/<int:car_id>/<string:tipop>/<int:c_id>/<int:u_id>/<string:op>", methods=['GET', 'POST'])
+def proust(cant,tipo,car_id,tipop,c_id,u_id,op):
+    if tipo=='r':
+        pusar = int(request.form['cantpu'])
+        if pusar > cant:
+            print("error")
+            return redirect(url_for('cliente_home'))
+        else:
+            return redirect(url_for('pagando',tipo=tipop,c_id=c_id,u_id=u_id,op='s',pusar=pusar))
+    return render_template('proust.html', cant=cant,tipo=tipo,car_id=car_id,tipop=tipop,c_id=c_id,u_id=u_id,op=op)
+
+
+@app.route("/pagando/<string:tipo>/<int:c_id>/<int:u_id>/<string:op>/<int:pusar>", methods=['GET','POST'])
+def pagando(tipo, c_id, u_id,op,pusar):
     db = Database()
     cur = db.cursor_dict()
     print(u_id)
-    cur.execute("SELECT cv.cv_id from compravirtual cv, presupuesto pr where cv.pre_id=pr.pre_id and cv.u_id=%s;",(u_id,))
+    cur.execute("SELECT cv.cv_id, cv.cv_cant * p.p_precio from compravirtual cv, presupuesto pr, producto p where cv.pre_id=pr.pre_id and cv.u_id=%s and p.p_id=cv.p_id;",(u_id,))
     pagospen = cur.fetchall()
     print(pagospen)
     if tipo=='cj':
         cur.execute("SELECT tc_id from tarjetacredito where cj_id=%s;", (c_id,))
         tarjeta=cur.fetchone()
-        if tarjeta:
-            for pago in pagospen:
-                cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id) values (%s, %s, %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],))
-                print(pago['cv_id'])
-            db.actualizar()
-            flash('Su compra ha sido exitosa', 'success')
-            return redirect(url_for('cliente_home'))
-        else:
-            return redirect(url_for('credito', tipo=tipo, c_id=c_id))
+        cur.execute("SELECT car_id FROM carnet WHERE cj_id=%s;",(c_id,))
+        carnet = cur.fetchone()
+        if carnet[0]!=None and op=='n':
+            cur.execute("SELECT COUNT(*) FROM punto WHERE car_id=%s;",(carnet[0],))
+            puntos = cur.fetchone()
+            if puntos[0]!=None:
+                return redirect(url_for('proust', cant=puntos[0], tipo='n', car_id=carnet[0], tipop=tipo, c_id=c_id,u_id=u_id,op=op))
+
+        if op=='s':
+            cur.execute("SELECT COUNT(*) FROM punto WHERE car_id=%s;", (carnet[0],))
+            puntos = cur.fetchone()
+            cur.execute("SELECT pu.pu_id, h.h_precio FROM punto pu, historial h WHERE pu.car_id=%s and h.h_id=pu.h_id;",(carnet[0],))
+            epicuro = cur.fetchall()
+            preciopunto= 0
+            i=0
+            for hedonista in epicuro:
+                preciopunto += hedonista[1]
+                i+=1
+                if i >= puntos[0]:
+                    break
+
+            if tarjeta:
+                trudat = False
+                for pago in pagospen:
+                    if trudat == False:
+                        cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s - %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],pago[1],preciopunto,))
+                        print(pago['cv_id'])
+                        trudat = True
+                    else:
+                        preciopunto = 0
+                        trudat=False
+
+                j=0
+                for gorgias in epicuro:
+                   cur.execute("DELETE FROM punto WHERE pu_id=%s", (gorgias[0],))
+                   j+=1
+                   if j>=puntos[0]:
+                       break
+
+                db.actualizar()
+                flash('Su compra ha sido exitosa', 'success')
+                return redirect(url_for('cliente_home'))
+            else:
+                return redirect(url_for('credito', tipo=tipo, c_id=c_id))
+
+        if op=='p':
+            if tarjeta:
+                for pago in pagospen:
+                    cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],pago[1],))
+                    print(pago['cv_id'])
+                db.actualizar()
+                flash('Su compra ha sido exitosa', 'success')
+                return redirect(url_for('cliente_home'))
+            else:
+                return redirect(url_for('credito', tipo=tipo, c_id=c_id))
 
     else:
         cur.execute("SELECT tc_id from tarjetacredito where cn_id=%s;", (c_id,))
         tarjeta=cur.fetchone()
-        if tarjeta:
-            for pago in pagospen:
-                cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id) values (%s, %s, %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id']))
+        cur.execute("SELECT car_id FROM carnet WHERE cn_id=%s;", (c_id,))
+        carnet = cur.fetchone()
+        if carnet[0] != None and op == 'n':
+            cur.execute("SELECT COUNT(*) FROM punto WHERE car_id=%s;", (carnet[0],))
+            puntos = cur.fetchone()
+            print(puntos)
+            if puntos[0] != None:
+                return redirect(
+                    url_for('proust', cant=puntos[0], tipo='n', car_id=carnet[0], tipop=tipo, c_id=c_id, u_id=u_id,
+                            op=op))
 
-            db.actualizar()
-            flash('Su compra ha sido exitosa', 'success')
-            return redirect(url_for('cliente_home'))
-        else:
-            return redirect(url_for('credito', tipo=tipo, c_id=c_id))
+        if op == 's':
+            cur.execute("SELECT COUNT(*) FROM punto WHERE car_id=%s;", (carnet[0],))
+            puntos = cur.fetchone()
+            cur.execute("SELECT pu.pu_id, h.h_precio FROM punto pu, historial h WHERE pu.car_id=%s and h.h_id=pu.h_id;",(carnet[0],))
+            epicuro = cur.fetchall()
+            preciopunto = 0
+            i = 0
+            for hedonista in epicuro:
+                preciopunto += hedonista[1]
+                i += 1
+                if i >= puntos[0]:
+                    break
+
+            if tarjeta:
+                trudat = False
+                for pago in pagospen:
+                    if trudat == False:
+                        cur.execute(
+                            "INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s - %s);",
+                            (time.strftime('%d-%m-%Y'), pago['cv_id'], tarjeta['tc_id'], pago[1], preciopunto,))
+                        print(pago['cv_id'])
+                        trudat = True
+                    else:
+                        preciopunto = 0
+                        trudat = False
+
+                j = 0
+                for gorgias in epicuro:
+                    cur.execute("DELETE FROM punto WHERE pu_id=%s", (gorgias[0],))
+                    j += 1
+                    if j >= puntos[0]:
+                        break
+
+                db.actualizar()
+                flash('Su compra ha sido exitosa', 'success')
+                return redirect(url_for('cliente_home'))
+            else:
+                return redirect(url_for('credito', tipo=tipo, c_id=c_id))
+
+        if op=='p':
+            if tarjeta:
+                for pago in pagospen:
+                    cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],pago[1]))
+
+                db.actualizar()
+                flash('Su compra ha sido exitosa', 'success')
+                return redirect(url_for('cliente_home'))
+            else:
+                return redirect(url_for('credito', tipo=tipo, c_id=c_id))
 
 
 @app.route("/zaratustra/<int:i_id>/<int:precio>", methods=['GET', 'POST'])
