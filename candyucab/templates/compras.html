@@ -62,11 +62,11 @@
         </tbody>
     </table>
     {% if current_user.cj_id != None %}
-    <form action="{{url_for('pagando', tipo='cj', c_id=current_user.cj_id, u_id=current_user.u_id)}}" method="POST">
+    <form action="{{url_for('pagando', tipo='cj', c_id=current_user.cj_id, u_id=current_user.u_id,op='n',pusar=0)}}" method="POST">
         <input type="submit" class="btn btn-primary pagar" value="Pagar">
     </form>
     {% else %}
-    <form action="{{url_for('pagando', tipo='cn', c_id=current_user.cn_id, u_id=current_user.u_id)}}" method="POST">
+    <form action="{{url_for('pagando', tipo='cn', c_id=current_user.cn_id, u_id=current_user.u_id,op='n',pusar=0)}}" method="POST">
         <input type="submit" class="btn btn-primary pagar" value="Pagar">
     </form>
     {% endif %}

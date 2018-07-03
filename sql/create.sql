@@ -202,7 +202,6 @@ CREATE TABLE tarjetacredito (
   tc_num numeric(40) NOT NULL,
   tc_codseg numeric(5) NOT NULL,
   tc_fvenc DATE NOT NULL,
-  tc_marca varchar(30) NOT NULL,
   cj_id integer,
   cn_id integer,
   CONSTRAINT pk_tarjetac PRIMARY KEY (tc_id)
@@ -265,6 +264,7 @@ CREATE TABLE pagovirtual (
   pv_id SERIAL,
   pv_puntos numeric(10),
   pv_fpago DATE NOT NULL,
+  pv_monto numeric(10) NOT NULL,
   cv_id integer NOT NULL,
   tc_id integer,
   CONSTRAINT pk_pvirtual PRIMARY KEY (pv_id)
