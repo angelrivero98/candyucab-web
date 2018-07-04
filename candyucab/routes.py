@@ -1708,14 +1708,22 @@ def presupuesto(u_id, pid, iid):
 
     db = Database()
     cur = db.cursor_dict()
-    try:
-        cur.execute("""INSERT INTO presupuesto (pre_femision) VALUES (%s) RETURNING pre_id;""",(time.strftime("%d-%m-%Y"),))
-        preid = cur.fetchone()
-        cur.execute("""INSERT INTO compravirtual (cv_cant, pre_id, u_id, p_id, i_id) VALUES (%s, %s, %s, %s, %s);""",(cantidadp,preid[0],u_id,pid,iid,))
-        cur.execute("UPDATE inventario SET i_cant=i_cant - %s WHERE i_id=%s",(cantidadp,iid,))
-    except:
-        print('error')
-        db.retroceder()
+
+    cur.execute("""INSERT INTO presupuesto (pre_femision) VALUES (%s) RETURNING pre_id;""",(time.strftime("%d-%m-%Y"),))
+    preid = cur.fetchone()
+    cur.execute("""INSERT INTO compravirtual (cv_cant, pre_id, u_id, p_id, i_id) VALUES (%s, %s, %s, %s, %s);""",(cantidadp,preid[0],u_id,pid,iid,))
+    cur.execute("UPDATE inventario SET i_cant=i_cant - %s WHERE i_id=%s RETURNING i_cant;",(cantidadp,iid,))
+    cantact = cur.fetchone()
+    if cantact[0] < 100:
+        cur.execute("INSERT INTO orden (o_fecha,i_id) VALUES (%s,%s) RETURNING o_id;",(time.strftime("%d-%m-%Y"),iid,))
+        miosid = cur.fetchone()
+        cur.execute("INSERT INTO reposicion (o_id, i_id) VALUES (%s,%s);",(miosid[0],iid,))
+
+    cur.execute("SELECT i_id from reposicion where i_id=%s;",(iid,))
+    diezk = cur.fetchone()
+    print(diezk)
+    if diezk!=None:
+        cur.execute("UPDATE inventario SET i_cant=i_cant + 10000 WHERE i_id=%s;",(iid,))
 
 
     db.actualizar()
@@ -1783,8 +1791,10 @@ def pagando(tipo, c_id, u_id,op,pusar):
                 trudat = False
                 for pago in pagospen:
                     if trudat == False:
-                        cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s - %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],pago[1],preciopunto,))
-                        print(pago['cv_id'])
+                        cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s - %s) RETURNING pv_id;",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],pago[1],preciopunto,))
+                        pvid = cur.fetchone()
+                        cur.execute("INSERT INTO factura (pv_id,f_femision) VALUES (%s,%s);",
+                                    (pvid[0], time.strftime("%d-%m-%Y"),))
                         trudat = True
                     else:
                         preciopunto = 0
@@ -1806,8 +1816,9 @@ def pagando(tipo, c_id, u_id,op,pusar):
         if op=='p':
             if tarjeta:
                 for pago in pagospen:
-                    cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],pago[1],))
-                    print(pago['cv_id'])
+                    cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s) RETURNING pv_id;",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],pago[1],))
+                    pvid = cur.fetchone()
+                    cur.execute("INSERT INTO factura (pv_id,f_femision) VALUES (%s,%s);",(pvid[0],time.strftime("%d-%m-%Y"),))
                 db.actualizar()
                 flash('Su compra ha sido exitosa', 'success')
                 return redirect(url_for('cliente_home'))
@@ -1846,9 +1857,11 @@ def pagando(tipo, c_id, u_id,op,pusar):
                 for pago in pagospen:
                     if trudat == False:
                         cur.execute(
-                            "INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s - %s);",
+                            "INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s - %s) RETURNING pv_id;",
                             (time.strftime('%d-%m-%Y'), pago['cv_id'], tarjeta['tc_id'], pago[1], preciopunto,))
-                        print(pago['cv_id'])
+                        pvid = cur.fetchone()
+                        cur.execute("INSERT INTO factura (pv_id,f_femision) VALUES (%s,%s);",
+                                    (pvid[0], time.strftime("%d-%m-%Y"),))
                         trudat = True
                     else:
                         preciopunto = 0
@@ -1870,8 +1883,9 @@ def pagando(tipo, c_id, u_id,op,pusar):
         if op=='p':
             if tarjeta:
                 for pago in pagospen:
-                    cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s);",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],pago[1]))
-
+                    cur.execute("INSERT into pagovirtual (pv_fpago, cv_id, tc_id, pv_monto) values (%s, %s, %s, %s) RETURNING pv_id;",(time.strftime('%d-%m-%Y'),pago['cv_id'],tarjeta['tc_id'],pago[1]))
+                    pvid = cur.fetchone()
+                    cur.execute("INSERT INTO factura (pv_id,f_femision) VALUES (%s,%s);",(pvid[0], time.strftime("%d-%m-%Y"),))
                 db.actualizar()
                 flash('Su compra ha sido exitosa', 'success')
                 return redirect(url_for('cliente_home'))
@@ -2048,6 +2062,13 @@ def caja(tipo, c_id, u_id):
     return redirect(url_for('cliente_home'))
 
 
+@app.route("/factura/<int:u_id>", methods=['GET','POST'])
+def factura(u_id):
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("SELECT p.p_nombre,cv.cv_cant, pv.pv_monto, f.f_femision FROM producto p,compravirtual cv, pagovirtual pv, factura f WHERE cv.u_id=%s and cv.cv_id=pv.cv_id and pv.pv_id=f.pv_id and p.p_id=cv.p_id;",(u_id,))
+    fac = cur.fetchall()
+    return render_template('factura.html', fac=fac)
 
 
 @app.route("/logout")
