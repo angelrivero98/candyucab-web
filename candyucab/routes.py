@@ -47,7 +47,7 @@ def roles():
 -                UNION
 -                SELECT COUNT(P.*) as cantidad, CA.car_id as car,J.cj_rif as rif from clientejuridico J, punto P , carnet CA
 -                where CA.cj_id = J.cj_id AND P.car_id = CA.car_id GROUP BY car,rif
--                ORDER BY cantidad  DESC LIMIT 10;  ;""")
+-                ORDER BY cantidad  DESC LIMIT 10;""")
 -    clientes = cur.fetchall()
 -    return render_template('ReporteClientePunto.html',clientes=clientes)
 
@@ -68,7 +68,7 @@ def r_asistencia():
     cur.execute("""SELECT  to_char(A.as_fecha_entrada::date,'DD-MM-YY') as dia,concat(EXTRACT(HOUR FROM A.as_fecha_entrada),':',EXTRACT(minute FROM A.as_fecha_entrada) ) AS entrada ,
                     concat(EXTRACT(HOUR FROM A.as_fecha_salida),':',EXTRACT(minute FROM A.as_fecha_salida) ) AS salida ,
                     E.e_ci,E.e_nombre,E.e_apellido,T.ti_nombre from empleado E,tienda T, asistencia A
-                    where E.e_id=A.e_id AND T.ti_id = E.ti_id ; ;""")
+                    where E.e_id=A.e_id AND T.ti_id = E.ti_id ;""")
     empleados = cur.fetchone()
     return render_template('ReporteAsistencia.html',empleados=empleados)
 
