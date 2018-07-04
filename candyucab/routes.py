@@ -38,6 +38,19 @@ def roles():
     cur.execute("SELECT r_id,r_tipo FROM rol;")
     return cur.fetchall()
 
+@app.route("/reporte/clientePunto")
+def clientePunto():
+    db = Database()
+    cur = db.cursor_dict()
+    cur.execute("""SELECT COUNT(P.*) as cantidad, CA.car_id AS car,C.cn_rif as rif  from clientenatural C, punto P , carnet CA
+                where CA.cn_id = C.cn_id AND P.car_id = CA.car_id GROUP BY car,rif
+                UNION
+                SELECT COUNT(P.*) as cantidad, CA.car_id as car,J.cj_rif as rif from clientejuridico J, punto P , carnet CA
+                where CA.cj_id = J.cj_id AND P.car_id = CA.car_id GROUP BY car,rif
+                ORDER BY cantidad  DESC LIMIT 10;  ;""")
+    clientes = cur.fetchall()
+    return render_template('ReporteClientePunto.html',clientes=clientes)
+
 @app.route("/reporte/tipoProducto")
 def tipo_Producto():
     db = Database()
@@ -52,11 +65,12 @@ def tipo_Producto():
 def r_asistencia():
     db = Database()
     cur = db.cursor_dict()
-    cur.execute("""SELECT  A.as_fecha_entrada::date AS dia,concat(EXTRACT(HOUR FROM A.as_fecha_entrada),':',EXTRACT(minute FROM A.as_fecha_entrada) ) AS entrada ,
+    cur.execute("""SELECT  to_char(A.as_fecha_entrada::date,'DD-MM-YY') as dia,concat(EXTRACT(HOUR FROM A.as_fecha_entrada),':',EXTRACT(minute FROM A.as_fecha_entrada) ) AS entrada ,
                     concat(EXTRACT(HOUR FROM A.as_fecha_salida),':',EXTRACT(minute FROM A.as_fecha_salida) ) AS salida ,
                     E.e_ci,E.e_nombre,E.e_apellido,T.ti_nombre from empleado E,tienda T, asistencia A
-                    where E.e_id=A.e_id AND T.ti_id = E.ti_id ; ;""")
-    empleados = cur.fetchone()
+                    where E.e_id=A.e_id AND T.ti_id = E.ti_id ;""")
+    empleados = cur.fetchall()
+
     return render_template('ReporteAsistencia.html',empleados=empleados)
 
 @app.route("/reporte/marca")
@@ -68,7 +82,7 @@ def marca_tdc():
     marca = cur.fetchone()
     return render_template('marca.html',marca=marca)
 
-@app.route("/reportes")
+@app.route("/reporte")
 def reportes():
     return render_template('reportes.html')
 
