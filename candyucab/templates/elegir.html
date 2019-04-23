@@ -36,9 +36,9 @@
     {% if op=='n' %}
     <h2>Elija el método de pago</h2>
    <div class="row proust">
-       <a id="tarc" class="col-4 btn btn-primary" href="{{ url_for('elegir',cf_id=cf_id,precio=precio,tipo=tipo,cid=cid,op='tc') }}">Tarjeta de Crédito</a>
-       <a id="tard" class="col-4 btn btn-primary" href="{{ url_for('elegir',cf_id=cf_id,precio=precio,tipo=tipo,cid=cid,op='td') }}">Tarjeta de Débito</a>
-       <a id="cheq" class="col-4 btn btn-primary" href="{{ url_for('elegir',cf_id=cf_id,precio=precio,tipo=tipo,cid=cid,op='ch') }}">Cheque</a>
+       <a id="tarc" class="col-4 btn btn-primary" href="{{ url_for('elegir',cf_id=cf_id,precio=precio,tipo=tipo,cid=cid,op='tc',car_id=car_id) }}">Tarjeta de Crédito</a>
+       <a id="tard" class="col-4 btn btn-primary" href="{{ url_for('elegir',cf_id=cf_id,precio=precio,tipo=tipo,cid=cid,op='td',car_id=car_id) }}">Tarjeta de Débito</a>
+       <a id="cheq" class="col-4 btn btn-primary" href="{{ url_for('elegir',cf_id=cf_id,precio=precio,tipo=tipo,cid=cid,op='ch',car_id=car_id) }}">Cheque</a>
    </div>
     {% elif op=='tc' %}
         <h2 class="titulo_tabla">Tarjetas de crédito</h2>
@@ -51,7 +51,7 @@
             <tbody id="cuerpot">
                 {% for medio in medios %}
                 <tr>
-                    <td><a href="{{ url_for('pagandof',cf_id=cf_id,op='tc',mid=medio[1],precio=precio) }}">{{ medio[0] }}</a></td>
+                    <td><a href="{{ url_for('pagandof',cf_id=cf_id,op='tc',mid=medio[1],precio=precio, car_id=car_id) }}">{{ medio[0] }}</a></td>
 
                 </tr>
                 {% endfor %}
@@ -69,7 +69,7 @@
             <tbody id="cuerpot">
                 {% for medio in medios %}
                 <tr>
-                    <td><a href="{{ url_for('pagandof',cf_id=cf_id,op='td',mid=medio[2],precio=precio) }}">{{ medio[0] }}</a></td>
+                    <td><a href="{{ url_for('pagandof',cf_id=cf_id,op='td',mid=medio[2],precio=precio,car_id=car_id) }}">{{ medio[0] }}</a></td>
                     <td>{{ medio[1] }}</td>
 
                 </tr>
@@ -87,7 +87,7 @@
             <tbody id="cuerpot">
                 {% for medio in medios %}
                 <tr>
-                    <td><a href="{{ url_for('pagandof',cf_id=cf_id,op='tc',mid=medio[1],precio=precio) }}">{{ medio[0] }}</a></td>
+                    <td><a href="{{ url_for('pagandof',cf_id=cf_id,op='tc',mid=medio[1],precio=precio,car_id=car_id) }}">{{ medio[0] }}</a></td>
 
                 </tr>
                 {% endfor %}

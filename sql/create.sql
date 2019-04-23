@@ -265,6 +265,7 @@ CREATE TABLE pagovirtual (
   pv_id SERIAL,
   pv_puntos numeric(10),
   pv_fpago DATE NOT NULL,
+  pv_monto numeric(10) NOT NULL,
   cv_id integer NOT NULL,
   tc_id integer,
   CONSTRAINT pk_pvirtual PRIMARY KEY (pv_id)
@@ -290,9 +291,9 @@ CREATE TABLE orden (
   o_id SERIAL,
   o_fecha DATE NOT NULL,
   o_monto_total numeric(20),
-  d_id integer NOT NULL,
-  i_id integer NOT NULL,
-  pv_id integer NOT NULL,
+  d_id integer,
+  i_id integer,
+  pv_id integer,
   CONSTRAINT pk_orden PRIMARY KEY (o_id)
 );
 
